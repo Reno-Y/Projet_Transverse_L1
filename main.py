@@ -1,23 +1,19 @@
 import pygame
-from Class import Startup, GameInfo
+from function import Startup, GameInfo, Menu
 
+TILE_SIZE = 32  # Résolution des textures
+
+# initialisation de pygame et de la clock
 pygame.init()
 pygame.mixer.init()
+clock = pygame.time.Clock()
 
+# récupération de la taille de l'écran ainsi que l'initialisation de la fenêtre
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
-screen = pygame.display.set_mode((width, height - 60))
-clock = pygame.time.Clock()  # horloge pour limiter les fps
+screen = pygame.display.set_mode((width, height))
 
-GameInfo()
-Startup(width, height)
+GameInfo()  # logo et titre du jeu
+Startup()  # écran de démarrage
+Menu()
 
-run = True
-while run:  # boucle principale
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-
-    pygame.display.update()
-    clock.tick(60)  # limite les fps à 60
-pygame.quit()
