@@ -47,6 +47,7 @@ def Startup():
 
 def Menu():
     background = pygame.image.load('Assets/background/summer/summer.png')
+    background = pygame.transform.scale(background, (width, height))
     menu_music = pygame.mixer.Sound("sound/music/theme_of_love.mp3")
     menu_music.play(-1)
 
@@ -55,7 +56,8 @@ def Menu():
         background.set_alpha(i)
         screen.blit(background, (0, 0))
         pygame.display.update()
-        time.sleep(0.00001)
+        time.sleep(0.000001)
+
     run = True
     while run:
         screen.fill((0, 0, 0))
@@ -66,6 +68,7 @@ def Menu():
             if event.type == pygame.QUIT:
                 run = False
         pygame.display.update()
+
 
 def Game(clock):
     run = True
