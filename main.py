@@ -1,5 +1,6 @@
 import pygame
 from function import Startup, GameInfo, Menu
+from Class import Spritesheet
 
 TILE_SIZE = 32  # Résolution des textures
 
@@ -14,6 +15,5 @@ screen = pygame.display.set_mode((width, height))
 
 GameInfo()  # logo et titre du jeu
 Startup()  # écran de démarrage
-Menu()
-
+Menu("Assets/background/summer")
 
