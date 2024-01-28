@@ -56,7 +56,16 @@ def Menu():
         screen.blit(background, (0, 0))
         pygame.display.update()
         time.sleep(0.00001)
+    run = True
+    while run:
+        screen.fill((0, 0, 0))
+        screen.blit(background, (0, 0))
+        pygame.display.update()
 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+        pygame.display.update()
 
 def Game(clock):
     run = True
