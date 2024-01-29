@@ -1,7 +1,6 @@
 import pygame
 import time
 import os
-import math
 from Class import Spritesheet, Parallax
 
 pygame.init()
