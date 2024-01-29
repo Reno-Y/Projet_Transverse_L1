@@ -74,7 +74,7 @@ def Game(clock):
     pygame.quit()
 
 
-def dialogue(text):
+def Dialogue(text):
     snip = font.render('', False, (255, 255, 255))
     text = 'Iron Lung'
     timer = pygame.time.Clock()
@@ -88,26 +88,51 @@ def Menu(folder):
     menu_music = pygame.mixer.Sound("sound/music/theme_of_love.mp3")
     menu_music.play(-1)
 
-
     bg_images = []
     for file in os.listdir(folder):
-        print(file)
         bg_image = pygame.image.load(os.path.join(folder, file)).convert_alpha()
-        bg_width = bg_image.get_rect().width
+
         bg_images.append(bg_image)
+
+    image1 = bg_images[0]
+    image1 = pygame.transform.scale(image1, (width, height))
+    bg_width = image1.get_rect().width
+
+
 
     tiles = math.ceil(width / bg_width) + 1
     scroll = 0
-    print(tiles)
-    print(width)
-    print(bg_width)
-    def draw_bg(scroll):
+
+    def DrawBg(scroll):
+
+        image1 = bg_images[0]
+        image1 = pygame.transform.scale(image1, (width, height))
+        image2 = bg_images[1]
+        image2 = pygame.transform.scale(image2, (width, height))
+        image3 = bg_images[2]
+        image3 = pygame.transform.scale(image3, (width, height))
+        image4 = bg_images[3]
+        image4 = pygame.transform.scale(image4, (width, height))
+
+
         speed = 0.5
-        for image in bg_images:
-            for i in range(0,tiles):
-                image = pygame.transform.scale(image, (width, height))
-                screen.blit(image, (bg_width * i - scroll * speed, 0))
-                speed += 1
+
+        for i in range(0,tiles):
+            screen.blit(image1, (i * bg_width + scroll*0.5, 0))
+
+
+
+        for i in range(0,tiles):
+            screen.blit(image2, (i * bg_width + scroll*1, 0))
+
+
+        for i in range(0,tiles):
+            screen.blit(image3, (i * bg_width + scroll*1.5, 0))
+
+
+
+        for i in range(0,tiles):
+            screen.blit(image4, (i * bg_width + scroll*2, 0))
 
 
 
@@ -115,11 +140,10 @@ def Menu(folder):
     while run:
         screen.fill((0, 0, 0))
 
-        draw_bg(scroll)
-        scroll += 5
+        DrawBg(scroll)
+        scroll -= 5
         if abs(scroll) > bg_width:
             scroll = 0
-
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -127,5 +151,3 @@ def Menu(folder):
 
         pygame.display.update()
     pygame.quit()
-
-
