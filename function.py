@@ -11,9 +11,10 @@ screen = pygame.display.set_mode((width, height))
 pygame.font.init()
 font = pygame.font.Font('Assets/font/hero-speak.ttf', 85)
 canvas = pygame.Surface((width, height))
+clock = pygame.time.Clock()
 
 
-def GameInfo():
+def gameinfo():
     """
     Logo et titre du jeu
     :return:
@@ -23,7 +24,7 @@ def GameInfo():
     pygame.display.set_icon(game_icon)
 
 
-def Startup():
+def startup():
     startup_logo = pygame.image.load('Assets/menu/Shinobi_studio.png')  # image de démarrage
     logo_size = startup_logo.get_rect().size
 
@@ -39,7 +40,7 @@ def Startup():
         screen.blit(startup_logo, centered_logo)
         pygame.display.update()
         time.sleep(0.001)
-    time.sleep(1.7)
+    time.sleep(1)
 
     for i in range(255, 0, -1):  # fait disparaitre l'image
         screen.fill((0, 0, 0))
@@ -60,7 +61,7 @@ def player???():
 """
 
 
-def Game(clock):
+def game(clock):
     run = True
     while run:  # boucle principale
         screen.fill((0, 0, 0))
@@ -74,7 +75,7 @@ def Game(clock):
     pygame.quit()
 
 
-def Dialogue(text):
+def dialogue(text):
     snip = font.render('', False, (255, 255, 255))
     text = 'Iron Lung'
     timer = pygame.time.Clock()
@@ -83,71 +84,58 @@ def Dialogue(text):
     done = False
 
 
-def Menu(folder):
-    global bg_width
+def menu(folder):
     menu_music = pygame.mixer.Sound("sound/music/theme_of_love.mp3")
     menu_music.play(-1)
+
+    background = pygame.image.load('Assets/menu/menu.png')
+    background = pygame.transform.scale(background, (width, height))
+
 
     bg_images = []
     for file in os.listdir(folder):
         bg_image = pygame.image.load(os.path.join(folder, file)).convert_alpha()
-
         bg_images.append(bg_image)
 
     image1 = bg_images[0]
     image1 = pygame.transform.scale(image1, (width, height))
     bg_width = image1.get_rect().width
 
-
-
-    tiles = math.ceil(width / bg_width) + 1
     scroll = 0
+    for i in range(255):  # fait apparaitre l'image
+        screen.fill((0, 0, 0))
+        background.set_alpha(i)
+        screen.blit(background, (0, 0))
+        pygame.display.update()
+        time.sleep(0.001)
 
-    def DrawBg(scroll):
+    def DrawBg(inf):
 
-        image1 = bg_images[0]
-        image1 = pygame.transform.scale(image1, (width, height))
-        image2 = bg_images[1]
-        image2 = pygame.transform.scale(image2, (width, height))
-        image3 = bg_images[2]
-        image3 = pygame.transform.scale(image3, (width, height))
-        image4 = bg_images[3]
-        image4 = pygame.transform.scale(image4, (width, height))
+        bg_images = []
+        for file in os.listdir(folder):
+            bg_image = pygame.image.load(os.path.join(folder, file)).convert_alpha()
+            bg_image = pygame.transform.scale(bg_image, (width, height))
+            bg_images.append(bg_image)
 
+        for i in range(inf):
+            speed = 1
+            for y in bg_images:
+                screen.blit(y, ((i * bg_width) - scroll * speed, 0))
+                speed += 1
 
-        speed = 0.5
-
-        for i in range(0,tiles):
-            screen.blit(image1, (i * bg_width + scroll*0.5, 0))
-
-
-
-        for i in range(0,tiles):
-            screen.blit(image2, (i * bg_width + scroll*1, 0))
-
-
-        for i in range(0,tiles):
-            screen.blit(image3, (i * bg_width + scroll*1.5, 0))
-
-
-
-        for i in range(0,tiles):
-            screen.blit(image4, (i * bg_width + scroll*2, 0))
-
-
-
+    inf = 0
     run = True
     while run:
         screen.fill((0, 0, 0))
-
-        DrawBg(scroll)
-        scroll -= 5
-        if abs(scroll) > bg_width:
-            scroll = 0
+        inf += 2
+        DrawBg(inf)
+        scroll += 5
 
         for event in pygame.event.get():
+            if pygame.key.get_pressed()[pygame.K_ESCAPE]:
+                run = False
             if event.type == pygame.QUIT:
                 run = False
-
+        clock.tick(60)
         pygame.display.update()
     pygame.quit()
