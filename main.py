@@ -13,7 +13,7 @@ clock = pygame.time.Clock()
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
 screen = pygame.display.set_mode((width, height))
 
-gameInfo()  # logo et titre du jeu
+gameinfo()  # logo et titre du jeu
 startup()  # écran de démarrage
 menu("Assets/background/summer")
 

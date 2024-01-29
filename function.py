@@ -19,7 +19,7 @@ def gameinfo():
     Logo et titre du jeu
     :return:
     """
-    pygame.display.set_caption('Iron Lung')
+    pygame.display.set_caption('Chronicles of Etheria')
     game_icon = pygame.image.load('Assets/menu/Shinobi_studio.png')
     pygame.display.set_icon(game_icon)
 
@@ -102,12 +102,11 @@ def menu(folder):
     bg_width = image1.get_rect().width
 
     scroll = 0
-    for i in range(255):  # fait apparaitre l'image
+    for i in range(0,256,10):  # fait apparaitre l'image
         screen.fill((0, 0, 0))
         background.set_alpha(i)
         screen.blit(background, (0, 0))
         pygame.display.update()
-        time.sleep(0.001)
 
     def DrawBg(inf):
 
