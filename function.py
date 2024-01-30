@@ -1,7 +1,7 @@
 import pygame
 import time
 import os
-from Class import Spritesheet, Parallax
+from Class import SpriteSheet
 
 pygame.init()
 pygame.mixer.init()
@@ -13,17 +13,13 @@ canvas = pygame.Surface((width, height))
 clock = pygame.time.Clock()
 
 
-def gameinfo():
-    """
-    Logo et titre du jeu
-    :return:
-    """
+def game_window_info():
     pygame.display.set_caption('Chronicles of Etheria')
     game_icon = pygame.image.load('Assets/menu/Shinobi_studio.png')
     pygame.display.set_icon(game_icon)
 
 
-def startup():
+def lunch_logo():
     startup_logo = pygame.image.load('Assets/menu/Shinobi_studio.png')  # image de démarrage
     logo_size = startup_logo.get_rect().size
 
@@ -49,75 +45,55 @@ def startup():
         time.sleep(0.001)
 
 
-
-
-def game(clock):
-    run = True
-    while run:  # boucle principale
-        screen.fill((0, 0, 0))
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-
-        pygame.display.update()
-        clock.tick(60)  # limite les fps à 60
-    pygame.quit()
-
-
-def dialogue(text):
-    snip = font.render('', False, (255, 255, 255))
-    text = 'Iron Lung'
-    timer = pygame.time.Clock()
-    counter = 0
-    speed = 3
-    done = False
-
-
-def menu(folder):
-    menu_music = pygame.mixer.Sound("sound/music/theme_of_love.mp3")
-    menu_music.play(-1)
-
-    background = pygame.image.load('Assets/menu/menu.png')
-    background = pygame.transform.scale(background, (width, height))
-
-
+def background_images_list(folder):
     bg_images = []
     for file in os.listdir(folder):
         bg_image = pygame.image.load(os.path.join(folder, file)).convert_alpha()
+        bg_image = pygame.transform.scale(bg_image, (width, height))
         bg_images.append(bg_image)
+    return bg_images
 
-    image1 = bg_images[0]
-    image1 = pygame.transform.scale(image1, (width, height))
-    bg_width = image1.get_rect().width
 
-    scroll = 0
-    for i in range(0,256,10):  # fait apparaitre l'image
+def menu_back_apparition():
+    background = pygame.image.load('Assets/menu/menu.png')
+    background = pygame.transform.scale(background, (width, height))
+
+    for i in range(0, 256, 10):  # fait apparaitre l'image
         screen.fill((0, 0, 0))
         background.set_alpha(i)
         screen.blit(background, (0, 0))
         pygame.display.update()
 
-    def DrawBg(inf):
 
-        bg_images = []
-        for file in os.listdir(folder):
-            bg_image = pygame.image.load(os.path.join(folder, file)).convert_alpha()
-            bg_image = pygame.transform.scale(bg_image, (width, height))
-            bg_images.append(bg_image)
+def menu_sound_and_apparition():
+    menu_music = pygame.mixer.Sound("sound/music/theme_of_love.mp3")
+    menu_music.play(-1)
+    menu_back_apparition()
 
-        for i in range(inf):
-            speed = 1
-            for y in bg_images:
-                screen.blit(y, ((i * bg_width) - scroll * speed, 0))
-                speed += 1
 
+def parallax(inf, scroll, folder):
+    bg_images = background_images_list(folder)
+    image1 = bg_images[0]
+    image1 = pygame.transform.scale(image1, (width, height))
+    bg_width = image1.get_rect().width
+
+    for i in range(inf):
+        speed = 1
+        for y in bg_images:
+            screen.blit(y, ((i * bg_width) - scroll * speed, 0))
+            speed += 1
+
+
+def main_menu(folder):
+    scroll = 0
     inf = 0
+    menu_sound_and_apparition()
+
     run = True
     while run:
         screen.fill((0, 0, 0))
         inf += 2
-        DrawBg(inf)
+        parallax(inf, scroll, folder)
         scroll += 5
 
         for event in pygame.event.get():

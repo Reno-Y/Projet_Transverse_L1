@@ -9,28 +9,14 @@ screen = pygame.display.set_mode((width, height))
 player_idle_sheet = pygame.image.load('Assets/character/player/idle.png').convert_alpha()
 
 
-class Spritesheet:
-    def __init__(self, filename):
-        self.sheet = filename
-        self.sprite_sheet = pygame.image.load(filename).convert_alpha()
+class SpriteSheet:
+    def __init__(self, image):
+        self.sheet = image
 
-    def get_image(self, x, y, w, h):
-        sprite = pygame.Surface((w, h))
-        sprite.set_colorkey((0, 0, 0))
-        sprite.blit(self.sprite_sheet, (0, 0), (x, y, w, h))
-        return sprite
+    def get(self, frame, image_width, image_height, scale):
+        image = pygame.Surface((image_width, image_height)).convert_alpha()
+        image.blit(self.sheet, (0, 0), (frame * image_width, 0, image_width, image_height))
+        image = pygame.transform.scale(image, (image_width * scale, image_height * scale))
+        image.set_colorkey((0, 0, 0))
+        return image
 
-
-class Parallax:
-    def __init__(self, folder):
-        self.folder = folder
-        self.images = []
-
-    def import_parallax(self, folder):
-
-        for file in os.listdir(folder):
-            self.images.append(pygame.image.load(os.path.join(folder, file)).convert_alpha())
-
-    def draw_bg(self):
-        for image in self.images:
-            screen.blit(image, (0, 0))
