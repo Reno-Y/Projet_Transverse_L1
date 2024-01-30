@@ -8,7 +8,7 @@ pygame.mixer.init()
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
 screen = pygame.display.set_mode((width, height))
 pygame.font.init()
-font = pygame.font.Font('Assets/font/hero-speak.ttf', 85)
+title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60)
 canvas = pygame.Surface((width, height))
 clock = pygame.time.Clock()
 
@@ -17,6 +17,11 @@ def game_window_info():
     pygame.display.set_caption('Chronicles of Etheria')
     game_icon = pygame.image.load('Assets/menu/Shinobi_studio.png')
     pygame.display.set_icon(game_icon)
+
+
+def draw_text(text, font, color, x, y):
+    img = font.render(text, True, color)
+    screen.blit(img, (x, y))
 
 
 def launch_logo():
@@ -89,17 +94,21 @@ def main_menu(folder):
     inf = 0
     menu_sound_and_apparition()
 
+    title_name = pygame.image.load('Assets/menu/Chronicles_of_Etheria.png').convert_alpha()
+    title_name= pygame.transform.scale(title_name, (width, height))
+    title_name.set_colorkey((255, 255, 255))
+
     princess_sheet = pygame.image.load('Assets/character/hime/walk.png').convert_alpha()
     princess = spritesheet(princess_sheet)
 
     princess_animation_list = []
     princess_animation_steps = 8
     last_update = pygame.time.get_ticks()
-    animation_cooldown = 150
+    animation_cooldown = 100
     frame = 0
 
     for i in range(princess_animation_steps):
-        princess_animation_list.append(princess.get_image(i, 128, 128, 2, (0,255,246)))
+        princess_animation_list.append(princess.get_image(i, 128, 128, 2, (0, 255, 246)))
 
     player_sheet = pygame.image.load('Assets/character/player/Run.png').convert_alpha()
     player_animation = spritesheet(player_sheet)
@@ -108,15 +117,19 @@ def main_menu(folder):
     player_animation_steps = 7
 
     for i in range(player_animation_steps):
-        player_animation_list.append(player_animation.get_image(i, 128, 128, 2.5, (0,255,246)))
+        player_animation_list.append(player_animation.get_image(i, 128, 128, 2.5, (0, 255, 246)))
+
 
 
     run = True
     while run:
+
         screen.fill((0, 0, 0))
         inf += 2
         parallax(inf, scroll, folder)
         scroll += 5
+
+        screen.blit(title_name, (0, 0))
 
         current_time = pygame.time.get_ticks()
         if current_time - last_update >= animation_cooldown:
@@ -125,7 +138,7 @@ def main_menu(folder):
             if frame >= len(princess_animation_list):
                 frame = 0
 
-        screen.blit(princess_animation_list[frame], (width-(width/4) , height - (height / 2.2)))
+        screen.blit(princess_animation_list[frame], (width - (width / 4), height - (height / 2.2)))
 
         if current_time - last_update >= animation_cooldown:
             last_update = current_time
@@ -133,15 +146,7 @@ def main_menu(folder):
             if frame >= len(player_animation_list):
                 frame = 0
 
-        screen.blit(player_animation_list[frame-1], ((width/4) -300 , height - (height / 1.95)))
-
-
-
-
-
-
-
-
+        screen.blit(player_animation_list[frame - 1], ((width / 4) - 300, height - (height / 1.95)))
 
         for event in pygame.event.get():
             if pygame.key.get_pressed()[pygame.K_ESCAPE]:
@@ -151,37 +156,3 @@ def main_menu(folder):
         clock.tick(60)
         pygame.display.update()
     pygame.quit()
-
-
-def princess_walk_animation():
-    princess_sheet = pygame.image.load('Assets/character/hime/walk.png').convert_alpha()
-    princess = spritesheet(princess_sheet)
-
-    princess_animation_list = []
-    princess_animation_steps = 8
-    last_update = pygame.time.get_ticks()
-    animation_cooldown = 150
-    frame = 0
-
-    for i in range(princess_animation_steps):
-        princess_animation_list.append(princess.get_image(i, 128, 128, 1.5))
-
-    run = True
-
-    while run:
-        screen.fill((0, 0, 0))
-
-        current_time = pygame.time.get_ticks()
-        if current_time - last_update >= animation_cooldown:
-            last_update = current_time
-            frame += 1
-            if frame >= len(princess_animation_list):
-                frame = 0
-
-        screen.blit(princess_animation_list[frame], (0, 0))
-
-        pygame.display.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
