@@ -1,7 +1,7 @@
 import pygame
 import time
 import os
-from Class import SpriteSheet
+from Class import spritesheet
 
 pygame.init()
 pygame.mixer.init()
@@ -19,7 +19,7 @@ def game_window_info():
     pygame.display.set_icon(game_icon)
 
 
-def lunch_logo():
+def launch_logo():
     startup_logo = pygame.image.load('Assets/menu/Shinobi_studio.png')  # image de démarrage
     logo_size = startup_logo.get_rect().size
 
@@ -89,12 +89,59 @@ def main_menu(folder):
     inf = 0
     menu_sound_and_apparition()
 
+    princess_sheet = pygame.image.load('Assets/character/hime/walk.png').convert_alpha()
+    princess = spritesheet(princess_sheet)
+
+    princess_animation_list = []
+    princess_animation_steps = 8
+    last_update = pygame.time.get_ticks()
+    animation_cooldown = 150
+    frame = 0
+
+    for i in range(princess_animation_steps):
+        princess_animation_list.append(princess.get_image(i, 128, 128, 2, (0,255,246)))
+
+    player_sheet = pygame.image.load('Assets/character/player/Run.png').convert_alpha()
+    player_animation = spritesheet(player_sheet)
+
+    player_animation_list = []
+    player_animation_steps = 7
+
+    for i in range(player_animation_steps):
+        player_animation_list.append(player_animation.get_image(i, 128, 128, 2.5, (0,255,246)))
+
+
     run = True
     while run:
         screen.fill((0, 0, 0))
         inf += 2
         parallax(inf, scroll, folder)
         scroll += 5
+
+        current_time = pygame.time.get_ticks()
+        if current_time - last_update >= animation_cooldown:
+            last_update = current_time
+            frame += 1
+            if frame >= len(princess_animation_list):
+                frame = 0
+
+        screen.blit(princess_animation_list[frame], (width-(width/4) , height - (height / 2.2)))
+
+        if current_time - last_update >= animation_cooldown:
+            last_update = current_time
+            frame += 1
+            if frame >= len(player_animation_list):
+                frame = 0
+
+        screen.blit(player_animation_list[frame-1], ((width/4) -300 , height - (height / 1.95)))
+
+
+
+
+
+
+
+
 
         for event in pygame.event.get():
             if pygame.key.get_pressed()[pygame.K_ESCAPE]:
@@ -104,3 +151,37 @@ def main_menu(folder):
         clock.tick(60)
         pygame.display.update()
     pygame.quit()
+
+
+def princess_walk_animation():
+    princess_sheet = pygame.image.load('Assets/character/hime/walk.png').convert_alpha()
+    princess = spritesheet(princess_sheet)
+
+    princess_animation_list = []
+    princess_animation_steps = 8
+    last_update = pygame.time.get_ticks()
+    animation_cooldown = 150
+    frame = 0
+
+    for i in range(princess_animation_steps):
+        princess_animation_list.append(princess.get_image(i, 128, 128, 1.5))
+
+    run = True
+
+    while run:
+        screen.fill((0, 0, 0))
+
+        current_time = pygame.time.get_ticks()
+        if current_time - last_update >= animation_cooldown:
+            last_update = current_time
+            frame += 1
+            if frame >= len(princess_animation_list):
+                frame = 0
+
+        screen.blit(princess_animation_list[frame], (0, 0))
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False

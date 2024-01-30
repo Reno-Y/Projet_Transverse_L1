@@ -1,8 +1,5 @@
 import pygame
-from function import lunch_logo, game_window_info, main_menu
-from Class import SpriteSheet
-
-TILE_SIZE = 32  # Résolution des textures
+from function import launch_logo, game_window_info, main_menu
 
 # initialisation de pygame et de la clock
 pygame.init()
@@ -15,7 +12,6 @@ screen = pygame.display.set_mode((width, height))
 
 
 game_window_info()  # logo et titre du jeu
-lunch_logo()  # écran de démarrage
-
+launch_logo()  # logo de démarrage
 main_menu("Assets/background/summer")
 
