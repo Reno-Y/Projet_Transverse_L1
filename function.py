@@ -49,15 +49,6 @@ def startup():
         time.sleep(0.001)
 
 
-"""""
-def player???():
-
-    sprite_sheet = Spritesheet('Assets/character/player/Run.png')
-    player1 = sprite_sheet.get_image(0, 0, 128, 128)
-
-
-        screen.blit(background, (0, 0))
-"""""
 
 
 def game(clock):
