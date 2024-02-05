@@ -1,7 +1,7 @@
 import pygame
 import time
 import os
-from Class import spritesheet
+from Class import Animation, Button
 
 pygame.init()
 pygame.mixer.init()
@@ -89,37 +89,25 @@ def parallax(inf, scroll, folder):
             speed += 1
 
 
+def title_name():
+    title_name = pygame.image.load('Assets/menu/Chronicles_of_Etheria.png').convert_alpha()
+    title_name = pygame.transform.scale(title_name, (width, height))
+    title_name.set_colorkey((255, 255, 255))
+    screen.blit(title_name, (0, 0))
+
+
 def main_menu(folder):
     scroll = 0
     inf = 0
     menu_sound_and_apparition()
+    player_walk = Animation(screen, width, height, 'Assets/character/player/Run.png', 2, 128,
+                            ((width / 4) - 300, height - (height / 1.95)))
+    princess_walk = Animation(screen, width, height, 'Assets/character/hime/walk.png', 2, 128,
+                              (width - (width / 4), height - (height / 1.95)))
+    start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
+    button_width, button_height = start_button.get_rect().width, start_button.get_rect().height
 
-    title_name = pygame.image.load('Assets/menu/Chronicles_of_Etheria.png').convert_alpha()
-    title_name= pygame.transform.scale(title_name, (width, height))
-    title_name.set_colorkey((255, 255, 255))
-
-    princess_sheet = pygame.image.load('Assets/character/hime/walk.png').convert_alpha()
-    princess = spritesheet(princess_sheet)
-
-    princess_animation_list = []
-    princess_animation_steps = 8
-    last_update = pygame.time.get_ticks()
-    animation_cooldown = 100
-    frame = 0
-
-    for i in range(princess_animation_steps):
-        princess_animation_list.append(princess.get_image(i, 128, 128, 2, (0, 255, 246)))
-
-    player_sheet = pygame.image.load('Assets/character/player/Run.png').convert_alpha()
-    player_animation = spritesheet(player_sheet)
-
-    player_animation_list = []
-    player_animation_steps = 7
-
-    for i in range(player_animation_steps):
-        player_animation_list.append(player_animation.get_image(i, 128, 128, 2.5, (0, 255, 246)))
-
-
+    start = Button((width / 2 - button_width * 3.5 / 2),(height / 2 - button_height * 3.5 / 2), start_button, 3.5)
 
     run = True
     while run:
@@ -128,27 +116,19 @@ def main_menu(folder):
         inf += 2
         parallax(inf, scroll, folder)
         scroll += 5
+        title_name()
 
-        screen.blit(title_name, (0, 0))
+        start.draw()
+        player_walk.update()
+        player_walk.draw()
+        princess_walk.update()
+        princess_walk.draw()
 
-        current_time = pygame.time.get_ticks()
-        if current_time - last_update >= animation_cooldown:
-            last_update = current_time
-            frame += 1
-            if frame >= len(princess_animation_list):
-                frame = 0
 
-        screen.blit(princess_animation_list[frame], (width - (width / 4), height - (height / 2.2)))
-
-        if current_time - last_update >= animation_cooldown:
-            last_update = current_time
-            frame += 1
-            if frame >= len(player_animation_list):
-                frame = 0
-
-        screen.blit(player_animation_list[frame - 1], ((width / 4) - 300, height - (height / 1.95)))
+        pygame.display.flip()
 
         for event in pygame.event.get():
+
             if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 run = False
             if event.type == pygame.QUIT:
@@ -156,3 +136,15 @@ def main_menu(folder):
         clock.tick(60)
         pygame.display.update()
     pygame.quit()
+
+
+def game():
+    run = True
+
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+        screen.fill((0, 0, 0))
+        pygame.display.flip()
+        clock.tick(60)
