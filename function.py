@@ -156,7 +156,7 @@ def main_menu(folder):
         for event in pygame.event.get():
             if start_button.clicked():
                 run = False
-                menu_music.music.stop()
+                menu_music.soundtrack.stop()
                 game('Assets/background/sunset_sky')
             if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 run = False
