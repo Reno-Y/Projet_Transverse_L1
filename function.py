@@ -1,7 +1,7 @@
 import pygame
 import time
 import os
-from Class import Animation, Button
+from Class import Animation, Button, Music, TittleName
 
 pygame.init()
 pygame.mixer.init()
@@ -89,25 +89,12 @@ def parallax(inf, scroll, folder):
             speed += 1
 
 
-def title_name():
-    title_name = pygame.image.load('Assets/menu/Chronicles_of_Etheria.png').convert_alpha()
-    title_name = pygame.transform.scale(title_name, (width, height))
-    title_name.set_colorkey((255, 255, 255))
-    screen.blit(title_name, (0, 0))
-
-
-def main_menu(folder):
+def game(folder):
     scroll = 0
     inf = 0
-    menu_sound_and_apparition()
-    player_walk = Animation(screen, width, height, 'Assets/character/player/Run.png', 2, 128,
-                            ((width / 4) - 300, height - (height / 1.95)))
-    princess_walk = Animation(screen, width, height, 'Assets/character/hime/walk.png', 2, 128,
-                              (width - (width / 4), height - (height / 1.95)))
-    start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
-    button_width, button_height = start_button.get_rect().width, start_button.get_rect().height
-
-    start = Button((width / 2 - button_width * 3.5 / 2),(height / 2 - button_height * 3.5 / 2), start_button, 3.5)
+    menu_music = Music("sound/music/The_Adventure_Begins.mp3")
+    menu_music.play(-1)
+    title_name = TittleName(screen, width, height)
 
     run = True
     while run:
@@ -116,16 +103,7 @@ def main_menu(folder):
         inf += 2
         parallax(inf, scroll, folder)
         scroll += 5
-        title_name()
-
-        start.draw()
-        player_walk.update()
-        player_walk.draw()
-        princess_walk.update()
-        princess_walk.draw()
-
-
-        pygame.display.flip()
+        title_name.draw()
 
         for event in pygame.event.get():
 
@@ -138,13 +116,52 @@ def main_menu(folder):
     pygame.quit()
 
 
-def game():
-    run = True
 
+def main_menu(folder):
+    scroll = 0
+    inf = 0
+    menu_music = Music("sound/music/theme_of_love.mp3")
+
+    player_walk = Animation(screen, width, height, 'Assets/character/player/Run.png', 2.4, 128, 128,
+                            ((width / 4) - 300, height - (height / 1.95)))
+
+    princess_walk = Animation(screen, width, height, 'Assets/character/hime/walk.png', 2, 128, 128,
+                              (width - (width / 4), height - (height / 2.2)))
+
+    start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
+    button_width, button_height = start_button.get_rect().width, start_button.get_rect().height
+
+    start_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 - button_height * 3.5 / 2),
+                          start_button, 3.5, screen, 'Assets/menu/start/start_spritesheet.png', width, height)
+
+    title_name = TittleName(screen, width, height)
+
+    menu_music.play(-1)
+    run = True
     while run:
+
+        screen.fill((0, 0, 0))
+        inf += 2
+        parallax(inf, scroll, folder)
+        scroll += 5
+        title_name.draw()
+        start_button.draw()
+        player_walk.update()
+        player_walk.draw()
+        princess_walk.update()
+        princess_walk.draw()
+
+        pygame.display.flip()
+
         for event in pygame.event.get():
+            if start_button.clicked():
+                run = False
+                menu_music.music.stop()
+                game('Assets/background/sunset_sky')
+            if pygame.key.get_pressed()[pygame.K_ESCAPE]:
+                run = False
             if event.type == pygame.QUIT:
                 run = False
-        screen.fill((0, 0, 0))
-        pygame.display.flip()
         clock.tick(60)
+        pygame.display.update()
+    pygame.quit()
