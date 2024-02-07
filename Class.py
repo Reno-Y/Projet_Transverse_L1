@@ -97,3 +97,4 @@ class Button:
             self.button_animation.draw()
         elif not self.rect.collidepoint(pos):
             self.screen.blit(self.image, (self.rect.x, self.rect.y))
+
