@@ -137,6 +137,10 @@ def main_menu(folder):
     setting_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + button_height * 3.5 / 2), setting_button,
                             3.5, screen, 'Assets/menu/settings/settings_spritesheet.png', width, height)
 
+    quit_button = pygame.image.load('Assets/menu/quit/quit1.png').convert_alpha()
+    quit_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + (button_height * 3.5 / 2)*3), quit_button,
+                            3.5, screen, 'Assets/menu/quit/quit_spritesheet.png', width, height)
+
 
     title_name = TittleName(screen, width, height)
 
@@ -154,7 +158,7 @@ def main_menu(folder):
         player_walk.draw()
         princess_walk.update()
         princess_walk.draw()
-
+        quit_button.draw()
         setting_button.draw()
         pygame.display.flip()
 
@@ -163,6 +167,10 @@ def main_menu(folder):
                 run = False
                 menu_music.soundtrack.stop()
                 game('Assets/background/sunset_sky')
+
+            if quit_button.clicked():
+                run = False
+                menu_music.soundtrack.stop()
 
             if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 run = False
