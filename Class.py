@@ -80,7 +80,6 @@ class Button:
         self.rect.topleft = (x, y)
         self.width = width
         self.height = height
-
         self.button_animation = Animation(screen, width, height, sheet, scale, 64, 16,
                                           (x, y))
 

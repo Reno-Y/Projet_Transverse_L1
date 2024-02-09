@@ -92,18 +92,16 @@ def parallax(inf, scroll, folder):
 def game(folder):
     scroll = 0
     inf = 0
-    menu_music = Music("sound/music/The_Adventure_Begins.mp3")
+    menu_music = Music("sound/music/ending.mp3")
     menu_music.play(-1)
-    title_name = TittleName(screen, width, height)
 
     run = True
     while run:
 
         screen.fill((0, 0, 0))
-        inf += 2
+        inf += 1
         parallax(inf, scroll, folder)
-        scroll += 5
-        title_name.draw()
+        scroll += 2
 
         for event in pygame.event.get():
 
@@ -117,6 +115,7 @@ def game(folder):
 
 
 def main_menu(folder):
+    menu_back_apparition()
     scroll = 0
     inf = 0
     menu_music = Music("sound/music/theme_of_love.mp3")
@@ -134,13 +133,14 @@ def main_menu(folder):
                           start_button, 3.5, screen, 'Assets/menu/start/start_spritesheet.png', width, height)
 
     setting_button = pygame.image.load('Assets/menu/settings/settings1.png').convert_alpha()
-    setting_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + button_height * 3.5 / 2), setting_button,
+    setting_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + button_height * 3.5 / 2),
+                            setting_button,
                             3.5, screen, 'Assets/menu/settings/settings_spritesheet.png', width, height)
 
     quit_button = pygame.image.load('Assets/menu/quit/quit1.png').convert_alpha()
-    quit_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + (button_height * 3.5 / 2)*3), quit_button,
-                            3.5, screen, 'Assets/menu/quit/quit_spritesheet.png', width, height)
-
+    quit_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + (button_height * 3.5 / 2) * 3),
+                         quit_button,
+                         3.5, screen, 'Assets/menu/quit/quit_spritesheet.png', width, height)
 
     title_name = TittleName(screen, width, height)
 
@@ -151,7 +151,7 @@ def main_menu(folder):
         screen.fill((0, 0, 0))
         inf += 2
         parallax(inf, scroll, folder)
-        scroll += 5
+        scroll += 4
         title_name.draw()
         start_button.draw()
         player_walk.update()
