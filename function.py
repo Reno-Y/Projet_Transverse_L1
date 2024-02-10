@@ -89,13 +89,11 @@ def parallax(inf, scroll, folder):
 
 
 def end(folder):
+    menu_music = Music("sound/music/ending.mp3")
+    menu_music.play(-1)
     scroll = 0
     inf = 0
     background_apparition('Assets/background/sunset_sky.png')
-    """""
-    menu_music = Music("sound/music/ending.mp3")
-    menu_music.play(-1)
-    """""
 
     text = ["HARU : C'EST DONC LA FIN ?",
             "             EST CE QUE TOUT CELA EN VALAIT VRAIMENT LE COUP ?",
@@ -103,7 +101,8 @@ def end(folder):
             "             JE SUIS PRET A AFFRONTER TOUT CE QUI M'ATTEND",
             "             ET VOUS ?"]
 
-    dialogue = Dialogue(screen,height,width, width / 1.2, height / 4, width / 2 - width / 2.4, height / 4 + (7 * height / 16), text,
+    dialogue = Dialogue(screen, height, width, width / 1.2, height / 4, width / 2 - width / 2.4,
+                        height / 4 + (7 * height / 16), text,
                         (255, 255, 255))
 
     run = True
