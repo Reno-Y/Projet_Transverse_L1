@@ -1,7 +1,7 @@
 import pygame
 import time
 import os
-from Class import Animation, Button, Music, TittleName
+from Class import Animation, Button, Music, TittleName, Dialogue
 
 pygame.init()
 pygame.mixer.init()
@@ -17,11 +17,13 @@ def game_window_info():
     pygame.display.set_caption('Chronicles of Etheria')
     game_icon = pygame.image.load('Assets/menu/Shinobi_studio.png')
     pygame.display.set_icon(game_icon)
+    # on définit le titre et l'icone de la fenêtre
 
 
 def draw_text(text, font, color, x, y):
     img = font.render(text, True, color)
     screen.blit(img, (x, y))
+    # on affiche du texte à l'écran
 
 
 def launch_logo():
@@ -57,10 +59,11 @@ def background_images_list(folder):
         bg_image = pygame.transform.scale(bg_image, (width, height))
         bg_images.append(bg_image)
     return bg_images
+    # on récupère une liste d'images pour le parallax
 
 
-def menu_back_apparition():
-    background = pygame.image.load('Assets/menu/menu.png')
+def background_apparition(folder):
+    background = pygame.image.load(folder)
     background = pygame.transform.scale(background, (width, height))
 
     for i in range(0, 256, 10):  # fait apparaitre l'image
@@ -68,12 +71,7 @@ def menu_back_apparition():
         background.set_alpha(i)
         screen.blit(background, (0, 0))
         pygame.display.update()
-
-
-def menu_sound_and_apparition():
-    menu_music = pygame.mixer.Sound("sound/music/theme_of_love.mp3")
-    menu_music.play(-1)
-    menu_back_apparition()
+    # on fait apparaitre l'image de fond
 
 
 def parallax(inf, scroll, folder):
@@ -87,13 +85,26 @@ def parallax(inf, scroll, folder):
         for y in bg_images:
             screen.blit(y, ((i * bg_width) - scroll * speed, 0))
             speed += 1
+    # on fait défiler les images de fond
 
 
-def game(folder):
+def end(folder):
     scroll = 0
     inf = 0
+    background_apparition('Assets/background/sunset_sky.png')
+    """""
     menu_music = Music("sound/music/ending.mp3")
     menu_music.play(-1)
+    """""
+
+    text = ["HARU : C'EST DONC LA FIN ?",
+            "             EST CE QUE TOUT CELA EN VALAIT VRAIMENT LE COUP ?",
+            "             CE VOYAGE TOUCHE PEUT ETRE A SA FIN MAIS CE N'EST QUE LE DEBUT D'UNE NOUVELLE AVENTURE",
+            "             JE SUIS PRET A AFFRONTER TOUT CE QUI M'ATTEND",
+            "             ET VOUS ?"]
+
+    dialogue = Dialogue(screen,height,width, width / 1.2, height / 4, width / 2 - width / 2.4, height / 4 + (7 * height / 16), text,
+                        (255, 255, 255))
 
     run = True
     while run:
@@ -103,19 +114,25 @@ def game(folder):
         parallax(inf, scroll, folder)
         scroll += 2
 
+        dialogue.draw()
+
         for event in pygame.event.get():
 
-            if pygame.key.get_pressed()[pygame.K_ESCAPE]:
-                run = False
-            if event.type == pygame.QUIT:
-                run = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    dialogue.skip()
+                    dialogue.next()
+                    dialogue.close()
+                if event.key == pygame.K_ESCAPE:
+                    run = False
+
         clock.tick(60)
         pygame.display.update()
     pygame.quit()
 
 
 def main_menu(folder):
-    menu_back_apparition()
+    background_apparition('Assets/menu/menu.png')
     scroll = 0
     inf = 0
     menu_music = Music("sound/music/theme_of_love.mp3")
@@ -166,7 +183,7 @@ def main_menu(folder):
             if start_button.clicked():
                 run = False
                 menu_music.soundtrack.stop()
-                game('Assets/background/sunset_sky')
+                end('Assets/background/sunset_sky')
 
             if quit_button.clicked():
                 run = False
