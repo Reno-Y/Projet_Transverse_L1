@@ -1,4 +1,5 @@
 import pygame
+from pygame import surface
 
 pygame.init()
 
@@ -256,3 +257,11 @@ class Player:
 
     def show(self, surface, screen) -> None:
         screen.blit(surface, (self.pos_x, self.pos_y))
+
+
+class Physique:
+    gravity = 1
+
+    def collision(level_colmaplist, level):
+        list_col = pygame.Rect.collideobjectsall(level_colmaplist[level])
+        for rect in list_col:
