@@ -227,10 +227,10 @@ class Player:
 
         def init_animation(self,width,height_object, sheet_location, scale):
             self.run_animation = Animation(screen=self.screen, width=width, height=height_object,
-                                           sheet_location=sheet_location, scale=scale, pixel_x=128, pixel_y=128,
+                                           sheet_location="Assets/character/player/Run.png", scale=scale, pixel_x=128, pixel_y=128,
                                            coordinates=(self.pos_x, self.pos_y))
             self.walk_animation = Animation(screen=self.screen, width=width, height=height_object,
-                                           sheet_location=sheet_location, scale=scale, pixel_x=128, pixel_y=128,
+                                           sheet_location="Assets/character/player/Walk.png", scale=scale, pixel_x=128, pixel_y=128,
                                            coordinates=(self.pos_x, self.pos_y))
 
         def mouvement(self) -> None:
@@ -241,7 +241,7 @@ class Player:
                 if self.walk_speed <= self.speed_x < 0:
                     self.walk_animation.update()
                     self.walk_animation.draw(orientation= 'left')
-                if  0 > self.speed_x <= self.walk_speed:
+                if 0 > self.speed_x <= self.walk_speed:
                     self.walk_animation.update()
                     self.walk_animation.draw()
             else:
@@ -256,5 +256,10 @@ class Player:
             self.speed_y += acceleration_y
             self.speed = (self.speed_x, self.speed_y)
 
-        def show(self, surface, Screen) -> None:
-            Screen.blit(surface, (self.pos_x, self.pos_y))
+        def show(self, surface, screen) -> None:
+            screen.blit(surface, (self.pos_x, self.pos_y))
+
+class Physique:
+    gravity = 10
+
+    def forces(self):
