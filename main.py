@@ -14,4 +14,3 @@ screen = pygame.display.set_mode((width, height))
 game_window_info()  # logo et titre du jeu
 launch_logo()  # logo de démarrage
 main_menu("Assets/background/summer")
-
