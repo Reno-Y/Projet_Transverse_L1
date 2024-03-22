@@ -231,7 +231,6 @@ class Player:
         self.attack3_animation = None
         self.idle_animation = None
 
-
     def mouvement(self) -> None:
         oldpos = self.pos
         self.speed_x = min(20, self.speed_x)
@@ -256,6 +255,8 @@ class Player:
             else:
                 self.jump_animation2.update()
                 self.jump_animation.draw()
+
+        self.strength(0, 2)
 
     def strength(self, acceleration_x, acceleration_y) -> None:
         self.speed_x += acceleration_x
