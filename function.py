@@ -170,8 +170,8 @@ def bloque_sur_collision(niveau, old_pos, new_pos, vx, vy):
     La fonction retourne la position modifiée pour new_pos ainsi que les
     vitesses modifiées selon les éventuelles collisions.
     """
-    old_rect = pygame.Rect(old_pos, (25, 25))
-    new_rect = pygame.Rect(new_pos, (25, 25))
+    old_rect = pygame.Rect(old_pos, (48, 64))
+    new_rect = pygame.Rect(new_pos, (48, 64))
     i, j = from_coord_to_grid(new_pos)
     collide_later = list()
     blocks = get_neighbour_blocks(niveau, i, j)
