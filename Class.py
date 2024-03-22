@@ -1,6 +1,6 @@
 import pygame
 from pygame import surface
-
+from function import *
 pygame.init()
 
 
@@ -192,7 +192,7 @@ class Dialogue:
 
 
 class Player:
-
+    level = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
     def __init__(self, pos_x, pos_y, mass, friction_coef, max_speed, walk_speed, screen, width, height, scale) -> None:
 
         self.width = width
@@ -231,10 +231,17 @@ class Player:
         self.attack3_animation = None
         self.idle_animation = None
 
+
     def mouvement(self) -> None:
+        oldpos = self.pos
+        self.speed_x = min(20, self.speed_x)
+        self.speed_y = min(20, self.speed_y)
         self.pos_x += self.speed_x
         self.pos_y += self.speed_y
         self.pos = (self.pos_x, self.pos_y)
+        self.pos_x, self.pos_y, self.speed_x, self.speed_y = bloque_sur_collision(self.level, oldpos, self.pos,
+                                                                                  self.speed_x, self.speed_y)
+
         if self.can_move:
             if self.walk_speed <= self.speed_x < 0:
                 self.walk_animation.update()
@@ -260,8 +267,6 @@ class Player:
 
 
 class Physique:
-    gravity = 1
+    gravity = 2
 
-    def collision(level_colmaplist, level):
-        list_col = pygame.Rect.collideobjectsall(level_colmaplist[level])
-        for rect in list_col:
+
