@@ -1,5 +1,6 @@
 from function import Animation, Button, Music, TittleName, background_apparition, parallax
 import pygame
+from ending import run_ending
 
 
 pygame.init()
@@ -68,9 +69,9 @@ def run_menu(boolean):
 
         for event in pygame.event.get():
             if start_button.clicked():
-                run = False
                 menu_music.soundtrack.stop()
-                import ending
+                run_ending(True)
+                run = False
 
             if quit_button.clicked():
                 run = False
