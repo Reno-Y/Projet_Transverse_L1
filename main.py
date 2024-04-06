@@ -1,5 +1,6 @@
 import pygame
-from function import launch_logo, game_window_info, main_menu, end
+from function import launch_logo, game_window_info
+from main_menu import run_menu
 
 # initialisation de pygame et de la clock
 pygame.init()
@@ -13,4 +14,6 @@ screen = pygame.display.set_mode((width, height))
 
 game_window_info()  # logo et titre du jeu
 launch_logo()  # logo de démarrage
-main_menu("Assets/background/summer")
+run_menu(True)
+
+

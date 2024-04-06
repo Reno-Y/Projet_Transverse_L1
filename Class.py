@@ -1,4 +1,5 @@
 import pygame
+
 from pygame import surface
 from function import *
 pygame.init()
@@ -185,10 +186,12 @@ class Dialogue:
             self.counter = 0
         # on passe à la ligne de texte suivante si l'animation est terminée et qu'il reste des lignes de texte
 
-    def close(self):
+    def closed(self):
         if self.active_dialogue == len(self.lines) - 1 and self.done:
             self.run = False
+            return True
     # on arrête l'animation si toutes les lignes de texte ont été affichées
+
 
 
 class Player:

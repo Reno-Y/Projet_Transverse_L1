@@ -8,7 +8,7 @@ pygame.mixer.init()
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
 screen = pygame.display.set_mode((width, height))
 pygame.font.init()
-title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60)
+title_font = pygame.font.Font("Assets/font/hero-speak.ttf", 60)
 canvas = pygame.Surface((width, height))
 clock = pygame.time.Clock()
 
@@ -293,5 +293,6 @@ def main_menu(folder):
         clock.tick(60)
         pygame.display.update()
     pygame.quit()
+
 
 
