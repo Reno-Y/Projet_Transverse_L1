@@ -1,20 +1,15 @@
-from function import Animation, Button, Music, TittleName, background_apparition, parallax
+from function import background_apparition, parallax
+from Class import Animation, Button, Music, TittleName
 import pygame
 from ending import run_ending
 
-
 pygame.init()
 pygame.mixer.init()
-pygame.font.init() #initialisation de pygame
-title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60) #police d'écriture
+pygame.font.init()  # initialisation de pygame
+title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60)  # police d'écriture
 clock = pygame.time.Clock()
-width, height = pygame.display.Info().current_w, pygame.display.Info().current_h #récupération de la taille de l'écran
-screen = pygame.display.set_mode((width, height)) #initialisation de la fenêtre
-
-
-
-
-
+width, height = pygame.display.Info().current_w, pygame.display.Info().current_h  # récupération de la taille de l'écran
+screen = pygame.display.set_mode((width, height))  # initialisation de la fenêtre
 
 player_walk = Animation(screen, width, height, 'Assets/character/player/Run.png', 2.4, 128, 128,
                         ((width / 4) - 300, height - (height / 1.95)))
@@ -39,7 +34,6 @@ quit_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + (button
                      3.5, screen, 'Assets/menu/quit/quit_spritesheet.png', width, height)
 
 title_name = TittleName(screen, width, height)
-
 
 
 def run_menu(boolean):

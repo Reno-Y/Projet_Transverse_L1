@@ -1,4 +1,5 @@
-from function import Music, background_apparition, parallax, Dialogue
+from function import background_apparition, parallax
+from Class import Music, Dialogue
 import pygame
 
 

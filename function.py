@@ -1,7 +1,7 @@
 import pygame
 import time
 import os
-from Class import Animation, Button, Music, TittleName, Dialogue
+
 
 pygame.init()
 pygame.mixer.init()
@@ -86,47 +86,6 @@ def parallax(inf, scroll, folder):
             screen.blit(y, ((i * bg_width) - scroll * speed, 0))
             speed += 1
     # on fait défiler les images de fond
-
-def end(folder):
-    menu_music = Music("sound/music/ending.mp3")
-    menu_music.play(-1)
-    scroll = 0
-    inf = 0
-    background_apparition('Assets/background/sunset_sky.png')
-
-    text = ["HARU : C'EST DONC LA FIN ?",
-            "             EST CE QUE TOUT CELA EN VALAIT VRAIMENT LE COUP ?",
-            "             CE VOYAGE TOUCHE PEUT ETRE A SA FIN MAIS CE N'EST QUE LE DEBUT D'UNE NOUVELLE AVENTURE",
-            "             JE SUIS PRET A AFFRONTER TOUT CE QUI M'ATTEND",
-            "             ET VOUS ?"]
-
-    dialogue = Dialogue(screen, height, width, width / 1.2, height / 4, width / 2 - width / 2.4,
-                        height / 4 + (7 * height / 16), text,
-                        (255, 255, 255))
-
-    run = True
-    while run:
-
-        screen.fill((0, 0, 0))
-        inf += 1
-        parallax(inf, scroll, folder)
-        scroll += 2
-
-        dialogue.draw()
-
-        for event in pygame.event.get():
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    dialogue.skip()
-                    dialogue.next()
-                    dialogue.close()
-                if event.key == pygame.K_ESCAPE:
-                    run = False
-
-        clock.tick(60)
-        pygame.display.update()
-    pygame.quit()
 
 
 def compute_penetration(block, old_rect, new_rect):
@@ -226,73 +185,4 @@ def from_coord_to_grid(pos):
     i = max(0, int(x // 25))
     j = max(0, int(y // 25))
     return i, j
-
-
-def main_menu(folder):
-    background_apparition('Assets/menu/menu.png')
-    scroll = 0
-    inf = 0
-    menu_music = Music("sound/music/theme_of_love.mp3")
-
-    player_walk = Animation(screen, width, height, 'Assets/character/player/Run.png', 2.4, 128, 128,
-                            ((width / 4) - 300, height - (height / 1.95)))
-
-    princess_walk = Animation(screen, width, height, 'Assets/character/hime/walk.png', 2, 128, 128,
-                              (width - (width / 4), height - (height / 2.2)))
-
-    start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
-    button_width, button_height = start_button.get_rect().width, start_button.get_rect().height
-
-    start_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 - button_height * 3.5 / 2),
-                          start_button, 3.5, screen, 'Assets/menu/start/start_spritesheet.png', width, height)
-
-    setting_button = pygame.image.load('Assets/menu/settings/settings1.png').convert_alpha()
-    setting_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + button_height * 3.5 / 2),
-                            setting_button,
-                            3.5, screen, 'Assets/menu/settings/settings_spritesheet.png', width, height)
-
-    quit_button = pygame.image.load('Assets/menu/quit/quit1.png').convert_alpha()
-    quit_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + (button_height * 3.5 / 2) * 3),
-                         quit_button,
-                         3.5, screen, 'Assets/menu/quit/quit_spritesheet.png', width, height)
-
-    title_name = TittleName(screen, width, height)
-
-    menu_music.play(-1)
-    run = True
-    while run:
-
-        screen.fill((0, 0, 0))
-        inf += 2
-        parallax(inf, scroll, folder)
-        scroll += 4
-        title_name.draw()
-        start_button.draw()
-        player_walk.update()
-        player_walk.draw()
-        princess_walk.update()
-        princess_walk.draw()
-        quit_button.draw()
-        setting_button.draw()
-        pygame.display.flip()
-
-        for event in pygame.event.get():
-            if start_button.clicked():
-                run = False
-                menu_music.soundtrack.stop()
-                end('Assets/background/sunset_sky')
-
-            if quit_button.clicked():
-                run = False
-                menu_music.soundtrack.stop()
-
-            if pygame.key.get_pressed()[pygame.K_ESCAPE]:
-                run = False
-            if event.type == pygame.QUIT:
-                run = False
-        clock.tick(60)
-        pygame.display.update()
-    pygame.quit()
-
-
 

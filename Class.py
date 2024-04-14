@@ -55,7 +55,7 @@ class Animation:
         self.sprite_animation_list = []
         self.sprite_animation_steps = animation_step
         self.last_update = pygame.time.get_ticks()
-        self.animation_cooldown = 100
+        self.animation_cooldown = 150
         self.frame = 0
 
         for i in range(animation_step):
