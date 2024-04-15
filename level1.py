@@ -56,8 +56,7 @@ while True:
                 moving_left = False
             if event.key == pygame.K_ESCAPE:
                 pause_menu(True)
-                if event.key == pygame.K_ESCAPE:
-                    pause_menu(False)
+
 
     pygame.display.update()
     pygame.time.Clock().tick(60)
