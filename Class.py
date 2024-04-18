@@ -235,6 +235,8 @@ class Player:
         self.idle_animation = None
 
     def mouvement(self) -> None:
+
+
         oldpos = self.pos
         self.speed_x = min(20, self.speed_x)
         self.speed_y = min(20, self.speed_y)
@@ -268,9 +270,4 @@ class Player:
 
     def show(self, surface, screen) -> None:
         screen.blit(surface, (self.pos_x, self.pos_y))
-
-
-class Physique:
-    gravity = 2
-
 
