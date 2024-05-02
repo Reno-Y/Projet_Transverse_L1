@@ -100,10 +100,6 @@ class Entity:
         self.animation_select()
 
 
-
-
-
-
 def compute_penetration(block, old_rect, new_rect):
     dx_correction = dy_correction = 0.0
     if old_rect.bottom <= block.top < new_rect.bottom:
