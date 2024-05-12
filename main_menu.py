@@ -6,6 +6,8 @@ from ending import run_ending
 pygame.init()
 pygame.mixer.init()
 pygame.font.init()  # initialisation de pygame
+
+
 title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60)  # police d'écriture
 clock = pygame.time.Clock()
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h  # récupération de la taille de l'écran
