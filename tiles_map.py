@@ -3,6 +3,7 @@ import math
 import random
 import time
 import os
+import pytmx
 
 import pygame
 
@@ -27,9 +28,12 @@ class TilesMap:
         self.tile_map = None
         self.tiles_map_layers = None
 
-
     def load_tiles(self):
         for layer in self.tiles_map_layers:
+            if layer['type'] == 'tilelayer':
+                self.load_tile_layer(layer)
+            elif layer['type'] == 'objectgroup':
+                self.load_object_layer(layer)
 
     def init_tiles_type(self):
         dirs = os.listdir("Assets/map")

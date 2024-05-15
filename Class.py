@@ -2,6 +2,7 @@ import pygame
 
 from pygame import surface
 from function import *
+
 pygame.init()
 
 
@@ -193,9 +194,9 @@ class Dialogue:
     # on arrête l'animation si toutes les lignes de texte ont été affichées
 
 
-
 class Player:
     level = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
     def __init__(self, pos_x, pos_y, mass, friction_coef, max_speed, walk_speed, screen, width, height, scale) -> None:
 
         self.width = width
@@ -215,13 +216,13 @@ class Player:
         self.speed_y = 0
         self.speed = (0, 0)
 
-        self.run_animation = self.run_animation = Animation(self.screen, self.width, self.height,
-                                                            "Assets/character/player/Run.png",
-                                                            scale, 128, 128,
-                                                            (self.pos_x, self.pos_y))
-        self.walk_animation = self.walk_animation = Animation(self.screen, width, height,
-                                                              "Assets/character/player/Walk.png", scale, 128, 128,
-                                                              (self.pos_x, self.pos_y))
+        self.run_animation = Animation(self.screen, self.width, self.height,
+                                       "Assets/character/player/Run.png",
+                                       scale, 128, 128,
+                                       (self.pos_x, self.pos_y))
+        self.walk_animation = Animation(self.screen, width, height,
+                                        "Assets/character/player/Walk.png", scale, 128, 128,
+                                        (self.pos_x, self.pos_y))
         self.jump_animation = None
         self.jump_animation2 = None
         self.run_attack_animation = None
@@ -235,7 +236,6 @@ class Player:
         self.idle_animation = None
 
     def mouvement(self) -> None:
-
 
         oldpos = self.pos
         self.speed_x = min(20, self.speed_x)
@@ -271,3 +271,13 @@ class Player:
     def show(self, surface, screen) -> None:
         screen.blit(surface, (self.pos_x, self.pos_y))
 
+
+class SpriteSheet(object):
+    def __init__(self, fileName):
+        self.sheet = pygame.image.load(fileName)
+
+    def image_at(self, rectangle):
+        rect = pygame.Rect(rectangle)
+        image = pygame.Surface(rect.size, pygame.SRCALPHA, 32).convert_alpha()
+        image.blit(self.sheet, (0, 0), rect)
+        return image

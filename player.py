@@ -1,19 +1,28 @@
+import pygame
+from Class import SpriteSheet
+MAP_COLLISION_LAYER = 3
+width, height = pygame.display.Info().current_w, pygame.display.Info().current_h  # récupération de la taille de l'écran
+screen = pygame.display.set_mode((width, height))  # initialisation de la fenêtre
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
 
         # Load the spritesheet of frames for this player
-        self.sprites = SpriteSheet("resources/player.png")
+        self.sprites = SpriteSheet("Assets/character/player/Run.png")
 
         self.stillRight = self.sprites.image_at((0, 0, 30, 42))
         self.stillLeft = self.sprites.image_at((0, 42, 30, 42))
 
         # List of frames for each animation
-        self.runningRight = (self.sprites.image_at((0, 84, 30, 42)),
-                             self.sprites.image_at((30, 84, 30, 42)),
-                             self.sprites.image_at((60, 84, 30, 42)),
-                             self.sprites.image_at((90, 84, 30, 42)),
-                             self.sprites.image_at((120, 84, 30, 42)))
+        self.runningRight = (self.sprites.image_at((0, 0, 128, 128)),
+                             self.sprites.image_at((128, 0, 128, 128)),
+                             self.sprites.image_at((256,    0, 128, 128)),
+                             self.sprites.image_at((384, 0, 128, 128)),
+                             self.sprites.image_at((512, 0, 128, 128)),
+                             self.sprites.image_at((640, 0, 128, 128)),
+                             self.sprites.image_at((768, 0, 128, 128)))
 
         self.runningLeft = (self.sprites.image_at((0, 126, 30, 42)),
                             self.sprites.image_at((30, 126, 30, 42)),
@@ -64,9 +73,9 @@ class Player(pygame.sprite.Sprite):
                 self.rect.left = tile.rect.right
 
         # Move screen if player reaches screen bounds
-        if self.rect.right >= SCREEN_WIDTH - 200:
-            difference = self.rect.right - (SCREEN_WIDTH - 200)
-            self.rect.right = SCREEN_WIDTH - 200
+        if self.rect.right >= width - 200:
+            difference = self.rect.right - (width - 200)
+            self.rect.right = width - 200
             self.currentLevel.shiftLevel(-difference)
 
         # Move screen is player reaches screen bounds
