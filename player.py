@@ -20,55 +20,53 @@ Appel des animations du joueur et des monstres
 """
 
 Player_idle_left = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                             '/Assets/character/player/idle_gauche.png', 1.2, 128, 128,
+                             'Assets/character/player/Idle_gauche.png', 1.2, 128, 128,
                              (0, 0))
 Player_idle_right = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                              '/Assets/character/player/idle_droite.png', 1.2, 128, 128,
+                              'Assets/character/player/idle_droite.png', 1.2, 128, 128,
                               (0, 0))
 # SEQUENCE_IM_joueur court_/gauche/droite
 Player_run_left = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                            '/Assets/character/player/Run_gauche.png', 1.2, 128, 128,
+                            'Assets/character/player/Run_gauche.png', 1.2, 128, 128,
                             (0, 0))
 Player_run_right = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                             '/Assets/character/player/Run_droite.png', 1.2, 128, 128,
+                             'Assets/character/player/Run_droite.png', 1.2, 128, 128,
                              (0, 0))
 # SEQUENCE_IM_joueur frappe1_/gauche/droite
 Player_attack_left = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                               '/Assets/character/player/Attack_gauche.png', 1.2, 128, 128,
+                               'Assets/character/player/Attack_gauche.png', 1.2, 128, 128,
                                (0, 0))
 Player_attack_right = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                                '/Assets/character/player/Attack_droite.png', 1.2, 128, 128,
+                                'Assets/character/player/Attack_droite.png', 1.2, 128, 128,
                                 (0, 0))
 # SEQUENCE_IM_joueur frappe2_/gauche/droite
 Player_attack2_left = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                                '/Assets/character/player/Attack2_gauche.png', 1.2, 128, 128,
+                                'Assets/character/player/Attack2_gauche.png', 1.2, 128, 128,
                                 (0, 0))
 Player_attack2_right = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                                 '/Assets/character/player/Attack2_droite.png', 1.2, 128, 128,
+                                 'Assets/character/player/Attack2_droite.png', 1.2, 128, 128,
                                  (0, 0))
 # SEQUENCE_IM_joueur defense_/gauche/droite
 Player_defense_left = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                                '/Assets/character/player/Defense_gauche.png', 1.2, 128, 128,
+                                'Assets/character/player/Defense_gauche.png', 1.2, 128, 128,
                                 (0, 0))
 Jo_defense_d = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                         '/Assets/character/player/Defense_droite.png', 1.2, 128, 128,
+                         'Assets/character/player/Defense_droite.png', 1.2, 128, 128,
                          (0, 0))
 # SEQUENCE_IM_joueur defense.attaque_/gauche/droite
 Player_defence_left = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                                '/Assets/character/player/DefAttack_gauche.png', 1.2, 128, 128,
+                                'Assets/character/player/DefAttack_gauche.png', 1.2, 128, 128,
                                 (0, 0))
 Player_defence_right = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
-                                 '/Assets/character/player/DefAttack_droite.png', 1.2, 128, 128,
+                                 'Assets/character/player/DefAttack_droite.png', 1.2, 128, 128,
                                  (0, 0))
 
 
 
-Boss_inc = pg.image.load("Boss_LANCEUR\Boss_incant.png").convert_alpha()
 
 
-class JOUEUR(pg.sprite.Sprite):
-    def __init__(self, screen):
-        pg.sprite.Sprite.__init__(self)
+class Player():
+    def __init__(self):
         self.pos_x = 0
         self.pos_y = 0
         self.pos = [self.pos_x, self.pos_y]
@@ -82,8 +80,7 @@ class JOUEUR(pg.sprite.Sprite):
         self.life = 30000  # Definie les points de vie du joueur
         self.statut = 0
         self.attack_range = 130  # Definie la portee des attaques
-        self.strenght = [50,
-                         0]  # Definie les degats causes par les attaques du joueurs, et si celle-ci affligent des status
+        self.strenght = [50,0]  # Definie les degats causes par les attaques du joueurs, et si celle-ci affligent des status
         self.size = [128, 128]
         self.scale = 1.2
 
@@ -204,7 +201,7 @@ class JOUEUR(pg.sprite.Sprite):
         return (pos_x, pos_y)
 
     # Affiche le sprite du joueur, en prenant en compte le mouvement effectue
-
+    """"
     def update(self):
         self.rect.x += self.speed_x
         tileHitList = pg.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
@@ -260,7 +257,7 @@ class JOUEUR(pg.sprite.Sprite):
             #                else:
             #                    self.image = self.jumpingLeft[1]
             # If player is on ground and running, update running animation
-            """"
+
             if self.running and self.changeY == 1:
                 if self.direction == "right":
                     self.image = self.runningRight[self.runningFrame]
@@ -274,9 +271,9 @@ class JOUEUR(pg.sprite.Sprite):
                 self.runningFrame = 0
             else:
                 self.runningFrame += 1        
-            """
+   """
 
-    def rendu(self, Afficheur):
+    def draw(self):
 
         # Dessine une barre de vie
         pg.draw.rect(screen, (255, 0, 0), (50, 100, 70, 35))
@@ -349,9 +346,6 @@ class JOUEUR(pg.sprite.Sprite):
                 else:
                     Player_idle_right.draw((self.pos_x, self.pos_y))
                     Player_idle_right.update()
-        if self.speed > 2:
-            self.speed -= 1
-
 
 
 
