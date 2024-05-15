@@ -1,6 +1,7 @@
 import pygame
 from function import launch_logo, game_window_info
 from main_menu import run_menu
+from level1 import run_level1
 
 # initialisation de pygame et de la clock
 pygame.init()
@@ -11,9 +12,11 @@ clock = pygame.time.Clock()
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
 screen = pygame.display.set_mode((width, height))
 
-
+"""""
 game_window_info()  # logo et titre du jeu
 launch_logo()  # logo de démarrage
 run_menu(True)
 
+"""
+run_level1(True)
 
