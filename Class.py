@@ -1,9 +1,12 @@
 import pygame
-
+import pytmx
 from pygame import surface
 from function import *
 
 pygame.init()
+SCREEN_WIDTH = pygame.display.Info().current_w
+SCREEN_HEIGHT = pygame.display.Info().current_h
+MAP_COLLISION_LAYER = 0
 
 
 class Spritesheet:
@@ -194,85 +197,95 @@ class Dialogue:
     # on arrête l'animation si toutes les lignes de texte ont été affichées
 
 
-class Player:
-    level = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-
-    def __init__(self, pos_x, pos_y, mass, friction_coef, max_speed, walk_speed, screen, width, height, scale) -> None:
-
-        self.width = width
-        self.screen = screen
-        self.height = height
-        self.screen = screen
-        self.scale = scale
-        self.pos_x = pos_x
-        self.pos_y = pos_y
-        self.pos = (self.pos_x, self.pos_y)
-        self.mass = mass
-        self.MaxSpeed = max_speed
-        self.walk_speed = walk_speed
-        self.FrictionCoef = friction_coef
-        self.can_move = True
-        self.speed_x = 0
-        self.speed_y = 0
-        self.speed = (0, 0)
-
-        self.run_animation = Animation(self.screen, self.width, self.height,
-                                       "Assets/character/player/Run.png",
-                                       scale, 128, 128,
-                                       (self.pos_x, self.pos_y))
-        self.walk_animation = Animation(self.screen, width, height,
-                                        "Assets/character/player/Walk.png", scale, 128, 128,
-                                        (self.pos_x, self.pos_y))
-        self.jump_animation = None
-        self.jump_animation2 = None
-        self.run_attack_animation = None
-        self.protect_animation = None
-        self.hurt_animation = None
-        self.defend_animation = None
-        self.dead_animation = None
-        self.attack1_animation = None
-        self.attack2_animation = None
-        self.attack3_animation = None
-        self.idle_animation = None
-
-    def mouvement(self) -> None:
-
-        oldpos = self.pos
-        self.speed_x = min(20, self.speed_x)
-        self.speed_y = min(20, self.speed_y)
-        self.pos_x += self.speed_x
-        self.pos_y += self.speed_y
-        self.pos = (self.pos_x, self.pos_y)
-        self.pos_x, self.pos_y, self.speed_x, self.speed_y = bloque_sur_collision(self.level, oldpos, self.pos,
-                                                                                  self.speed_x, self.speed_y)
-
-        if self.can_move:
-            if self.walk_speed <= self.speed_x < 0:
-                self.walk_animation.update()
-                self.walk_animation.draw(orientation='left')
-            if 0 > self.speed_x <= self.walk_speed:
-                self.walk_animation.update()
-                self.walk_animation.draw()
-        else:
-            if self.speed_y > 0:
-                self.jump_animation.update()
-                self.jump_animation.draw()
-            else:
-                self.jump_animation2.update()
-                self.jump_animation.draw()
-
-        self.strength(0, 2)
-
-    def strength(self, acceleration_x, acceleration_y) -> None:
-        self.speed_x += acceleration_x
-        self.speed_y += acceleration_y
-        self.speed = (self.speed_x, self.speed_y)
-
-    def show(self, surface, screen) -> None:
-        screen.blit(surface, (self.pos_x, self.pos_y))
+# -------------------------------------------------------------------#
 
 
-class SpriteSheet(object):
+class Level(object):
+    def __init__(self, fileName):
+        # Create map object from PyTMX
+        self.mapObject = pytmx.load_pygame(fileName)
+
+        # Create list of layers for map
+        self.layers = []
+
+        # Amount of level shift left/right
+        self.levelShift = 0
+
+        # Create layers for each layer in tile map
+        for layer in range(len(self.mapObject.layers)):
+            self.layers.append(Layer(index=layer, mapObject=self.mapObject))
+
+    # Move layer left/right
+    def shiftLevel(self, shiftX):
+        self.levelShift += shiftX
+
+        for layer in self.layers:
+            for tile in layer.tiles:
+                tile.rect.x += shiftX
+
+    # Update layer
+    def draw(self, screen):
+        for layer in self.layers:
+            layer.draw(screen)
+
+
+class Layer(object):
+    def __init__(self, index, mapObject):
+        # Layer index from tiled map
+        self.index = index
+
+        # Create gruop of tiles for this layer
+        self.tiles = pygame.sprite.Group()
+
+        # Reference map object
+        self.mapObject = mapObject
+
+        # Create tiles in the right position for each layer
+        for x in range(self.mapObject.width):
+            for y in range(self.mapObject.height):
+                img = self.mapObject.get_tile_image(x, y, self.index)
+                if img:
+                    self.tiles.add(Tile(image=img, x=(x * self.mapObject.tilewidth), y=(y * self.mapObject.tileheight)))
+
+    # Draw layer
+    def draw(self, screen):
+        self.tiles.draw(screen)
+
+
+class Tile(pygame.sprite.Sprite):
+    def __init__(self, image, x, y):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+class Layer(object):
+    def __init__(self, index, mapObject):
+        # Layer index from tiled map
+        self.index = index
+
+        # Create gruop of tiles for this layer
+        self.tiles = pygame.sprite.Group()
+
+        # Reference map object
+        self.mapObject = mapObject
+
+        # Create tiles in the right position for each layer
+        for x in range(self.mapObject.width):
+            for y in range(self.mapObject.height):
+                img = self.mapObject.get_tile_image(x, y, self.index)
+                if img:
+                    self.tiles.add(Tile(image=img, x=(x * self.mapObject.tilewidth), y=(y * self.mapObject.tileheight)))
+
+    # Draw layer
+    def draw(self, screen):
+        self.tiles.draw(screen)
+
+
+class SpriteSheet2(object):
     def __init__(self, fileName):
         self.sheet = pygame.image.load(fileName)
 
@@ -281,3 +294,283 @@ class SpriteSheet(object):
         image = pygame.Surface(rect.size, pygame.SRCALPHA, 32).convert_alpha()
         image.blit(self.sheet, (0, 0), rect)
         return image
+
+
+class Game(object):
+    def __init__(self):
+        # Set up a level to load
+        self.currentLevelNumber = 0
+        self.levels = []
+        self.levels.append(Level(fileName="Assets/levels/level1.tmx"))
+        self.currentLevel = self.levels[self.currentLevelNumber]
+
+        # Create a player object and set the level it is in
+        self.player = Player(x=200, y=100)
+        self.player.currentLevel = self.currentLevel
+
+
+    def processEvents(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return True
+            # Get keyboard input and move player accordingly
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    self.player.goLeft()
+                elif event.key == pygame.K_RIGHT:
+                    self.player.goRight()
+                elif event.key == pygame.K_UP:
+                    self.player.jump()
+                elif event.key == pygame.K_ESCAPE:
+                    PauseMenu.run_pause_menu()
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT and self.player.changeX < 0:
+                    self.player.stop()
+                elif event.key == pygame.K_RIGHT and self.player.changeX > 0:
+                    self.player.stop()
+
+        return False
+
+    def runLogic(self):
+        # Update player movement and collision logic
+        self.player.update()
+
+    # Draw level, player, overlay
+    def draw(self, screen):
+        screen.fill((0, 0, 0))
+        self.currentLevel.draw(screen)
+        self.player.draw(screen)
+        pygame.display.flip()
+
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+
+        # Load the spritesheet of frames for this player
+        self.sprites = SpriteSheet2("Assets/character/player/Player1.png")
+
+        self.stillRight = self.sprites.image_at((0, 0, 40, 64))
+        self.stillLeft = self.sprites.image_at((0, 64, 40, 64))
+
+        # List of frames for each animation
+        self.runningRight = (self.sprites.image_at((48, 0, 50, 64)),
+                             self.sprites.image_at((102, 0, 50, 64)),
+                             self.sprites.image_at((150, 0, 50, 64)),
+                             self.sprites.image_at((251, 0, 50, 64)),
+                             self.sprites.image_at((300, 0, 50, 64)),
+                             self.sprites.image_at((354, 0, 50, 64)),
+                             self.sprites.image_at((402, 0, 50, 64)))
+
+        self.runningLeft = (self.sprites.image_at((48, 64, 50, 64)),
+                            self.sprites.image_at((102, 64, 50, 64)),
+                            self.sprites.image_at((150, 64, 50, 64)),
+                            self.sprites.image_at((251, 64, 50, 64)),
+                            self.sprites.image_at((300, 64, 50, 64)),
+                            self.sprites.image_at((354, 64, 50, 64)),
+                            self.sprites.image_at((402, 64, 50, 64)))
+
+        self.jumpingLeft = \
+            (self.sprites.image_at((61, 128, 50, 64)),
+             self.sprites.image_at((107, 128, 50, 64)),
+             self.sprites.image_at((156, 128, 50, 64)))
+
+        self.jumpingRight = (self.sprites.image_at((49, 192, 48, 64)),
+                             self.sprites.image_at((95, 192, 50, 64)),
+                             self.sprites.image_at((156, 192, 50, 64)))
+
+        self.image = self.stillRight
+
+        # Set player position
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+        # Set speed and direction
+        self.changeX = 0
+        self.changeY = 0
+        self.direction = "right"
+
+        # Boolean to check if player is running, current running frame, and time since last frame change
+        self.running = False
+        self.runningFrame = 0
+        self.runningTime = pygame.time.get_ticks()
+
+        # Players current level, set after object initialized in game constructor
+        self.currentLevel = None
+
+    def update(self):
+        # Update player position by change
+        self.rect.x += self.changeX
+
+        # Get tiles in collision layer that player is now touching
+        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+
+        # Move player to correct side of that block
+        for tile in tileHitList:
+            if self.changeX > 0:
+                self.rect.right = tile.rect.left
+            else:
+                self.rect.left = tile.rect.right
+
+        # Move screen if player reaches screen bounds
+        if self.rect.right >= SCREEN_WIDTH - 200:
+            difference = self.rect.right - (SCREEN_WIDTH - 200)
+            self.rect.right = SCREEN_WIDTH - 200
+            self.currentLevel.shiftLevel(-difference)
+
+        # Move screen is player reaches screen bounds
+        if self.rect.left <= 200:
+            difference = 200 - self.rect.left
+            self.rect.left = 200
+            self.currentLevel.shiftLevel(difference)
+
+        # Update player position by change
+        self.rect.y += self.changeY
+
+        # Get tiles in collision layer that player is now touching
+        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+
+        # If there are tiles in that list
+        if len(tileHitList) > 0:
+            # Move player to correct side of that tile, update player frame
+            for tile in tileHitList:
+                if self.changeY > 0:
+                    self.rect.bottom = tile.rect.top
+                    self.changeY = 1
+
+                    if self.direction == "right":
+                        self.image = self.stillRight
+                    else:
+                        self.image = self.stillLeft
+                else:
+                    self.rect.top = tile.rect.bottom
+                    self.changeY = 0
+        # If there are not tiles in that list
+        else:
+            # Update player change for jumping/falling and player frame
+            self.changeY += 0.2
+            if self.changeY > 0:
+                if self.direction == "right":
+                    self.image = self.jumpingRight[1]
+                else:
+                    self.image = self.jumpingLeft[1]
+
+        # If player is on ground and running, update running animation
+        if self.running and self.changeY == 1:
+            if self.direction == "right":
+                self.image = self.runningRight[self.runningFrame]
+            else:
+                self.image = self.runningLeft[self.runningFrame]
+
+        # When correct amount of time has passed, go to next frame
+        if pygame.time.get_ticks() - self.runningTime > 50:
+            self.runningTime = pygame.time.get_ticks()
+            if self.runningFrame == 4:
+                self.runningFrame = 0
+            else:
+                self.runningFrame += 1
+
+    # Make player jump
+    def jump(self):
+        # Check if player is on ground
+        self.rect.y += 2
+        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        self.rect.y -= 2
+
+        if len(tileHitList) > 0:
+            if self.direction == "right":
+                self.image = self.jumpingRight[0]
+            else:
+                self.image = self.jumpingLeft[0]
+
+            self.changeY = -6
+
+    # Move right
+    def goRight(self):
+        self.direction = "right"
+        self.running = True
+        self.changeX = 3
+
+    # Move left
+    def goLeft(self):
+        self.direction = "left"
+        self.running = True
+        self.changeX = -3
+
+    # Stop moving
+    def stop(self):
+        self.running = False
+        self.changeX = 0
+
+    # Draw player
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+
+class PauseMenu:
+
+    def __init__(self):
+        self.width, self.height = pygame.display.Info().current_w, pygame.display.Info().current_h
+        self.screen = pygame.display.set_mode((width, height))
+        self.start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
+        self.button_width, self.button_height = self.start_button.get_rect().width, self.start_button.get_rect().height
+        self.clock = pygame.time.Clock()
+
+        self.resume_button = pygame.image.load('Assets/menu/resume/resume1.png').convert_alpha()
+        self.resume_button = Button((width / 2 - self.button_width * 3.5 / 2), (height / 2 - (self.button_height * 3.5) * 1.5),
+                                    self.resume_button, 3.5, screen, 'Assets/menu/resume/resume_spritesheet.png', width,
+                                    height)
+
+        self.quit_button = pygame.image.load('Assets/menu/quit/quit1.png').convert_alpha()
+        self.quit_button = Button((width / 2 - self.button_width * 3.5 / 2), (height / 2 + (self.button_height * 3.5 / 2) * 3),
+                                  self.quit_button,
+                                  3.5, screen, 'Assets/menu/quit/quit_spritesheet.png', width, height)
+        self.setting_button = pygame.image.load('Assets/menu/settings/settings1.png').convert_alpha()
+        self.setting_button = Button((width / 2 - self.button_width * 3.5 / 2), (height / 2 + self.button_height * 3.5 / 2),
+                                     self.setting_button,
+                                     3.5, screen, 'Assets/menu/settings/settings_spritesheet.png', width, height)
+        self.main_menu_button = pygame.image.load('Assets/menu/main_menu/main_menu_1.png').convert_alpha()
+        self.main_menu_button = Button((width / 2 - self.button_width * 3.5 / 2), (height / 2 - self.button_height * 3.5 / 2),
+                                       self.main_menu_button,
+                                       3.5, screen, 'Assets/menu/main_menu/main_menu_spritesheet.png', width, height)
+
+        self.screen = pygame.display.set_mode((width, height))
+        self.inf = 0
+        self.scroll = 0
+
+    def run_pause_menu(self,boolean):
+
+        run = boolean
+        inf = 0
+        scroll = 0
+
+        while run:
+            screen.fill((0, 0, 0))  # remplissage de l'écran
+            inf += 1
+            parallax(inf, scroll, "assets/background/sunset_sky")
+            scroll += 2
+
+            self.quit_button.draw()
+            self.setting_button.draw()
+            self.resume_button.draw()
+            self.main_menu_button.draw()
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        run = False
+
+                if self.quit_button.clicked():
+                    quit()
+
+                if self.resume_button.clicked():
+                    run = False
+
+                if self.main_menu_button.clicked():
+                    # run_menu(True)
+                    run = False
+
+            clock.tick(60)
+            pygame.display.update()
