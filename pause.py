@@ -9,6 +9,8 @@ start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
 button_width, button_height = start_button.get_rect().width, start_button.get_rect().height
 clock = pygame.time.Clock()
 
+
+
 resume_button = pygame.image.load('Assets/menu/resume/resume1.png').convert_alpha()
 resume_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 - (button_height * 3.5) * 1.5),
                        resume_button, 3.5, screen, 'Assets/menu/resume/resume_spritesheet.png', width, height)
