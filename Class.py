@@ -303,7 +303,7 @@ class Game(object):
         self.levels = []
         self.levels.append(Level(fileName="Assets/levels/level1.tmx"))
         self.currentLevel = self.levels[self.currentLevelNumber]
-
+        self.move = False
         # Create a player object and set the level it is in
         self.player = Player(x=200, y=100)
         self.player.currentLevel = self.currentLevel
@@ -323,11 +323,13 @@ class Game(object):
                     self.player.jump()
                 elif event.key == pygame.K_ESCAPE:
                     PauseMenu.run_pause_menu()
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT and self.player.changeX < 0:
-                    self.player.stop()
-                elif event.key == pygame.K_RIGHT and self.player.changeX > 0:
-                    self.player.stop()
+                elif event.type == pygame.KEYUP:
+                    if (event.key == pygame.K_LEFT) and self.player.changeX < 0:
+                        self.move = False
+                    if (event.key == pygame.K_RIGHT) and self.player.changeX > 0:
+                        self.move = False
+        if (self.move == False):
+            self.player.stop()
 
         return False
 
@@ -419,6 +421,17 @@ class Player(pygame.sprite.Sprite):
             self.rect.left = 200
             self.currentLevel.shiftLevel(difference)
 
+        # Move screen if player reaches screen bounds
+        if self.rect.bottom >= SCREEN_HEIGHT - 50:
+            difference_y = -(self.rect.bottom - (SCREEN_HEIGHT - 50))
+            self.rect.bottom = SCREEN_HEIGHT - 50
+
+        # Move screen is player reaches screen bounds
+        if self.rect.top <= 100:
+            difference_y = 100 - self.rect.top
+            self.rect.top = 100
+            self.currentLevel.shiftLevel(difference, difference_y)
+
         # Update player position by change
         self.rect.y += self.changeY
 
@@ -482,20 +495,35 @@ class Player(pygame.sprite.Sprite):
 
     # Move right
     def goRight(self):
-        self.direction = "right"
-        self.running = True
-        self.changeX = 3
+        self.rect.y += 2
+        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        self.rect.y -= 2
+
+        if len(tileHitList) > 0:
+            self.direction = "right"
+            self.running = True
+            self.changeX = 3
 
     # Move left
     def goLeft(self):
-        self.direction = "left"
-        self.running = True
-        self.changeX = -3
+        self.rect.y += 2
+        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        self.rect.y -= 2
+
+        if len(tileHitList) > 0:
+            self.direction = "left"
+            self.running = True
+            self.changeX = -3
 
     # Stop moving
     def stop(self):
-        self.running = False
-        self.changeX = 0
+        self.rect.y += 2
+        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        self.rect.y -= 2
+
+        if len(tileHitList) > 0:
+            self.running = False
+            self.changeX = 0
 
     # Draw player
     def draw(self, screen):
