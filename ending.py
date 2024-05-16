@@ -1,11 +1,11 @@
 from function import background_apparition, parallax
 from Class import Music, Dialogue
 import pygame
-""""
+
 from level1 import run_level1
 
 #il faut changer l'instance
-"""
+
 
 pygame.init()
 pygame.mixer.init()
@@ -63,9 +63,9 @@ def run_ending(boolean):
                     dialogue2.closed()
                     dialogue.closed()
                     if dialogue2.closed():
-                        """"
+
                         run_level1(True)
-                        """
+
                         run_ending(False)
 
                 if event.key == pygame.K_ESCAPE:

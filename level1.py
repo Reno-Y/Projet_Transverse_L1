@@ -1,7 +1,7 @@
 import pygame
 from function import parallax
 from Class import Animation, Game
-from pause import run_pause_menu
+
 
 
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
