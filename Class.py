@@ -308,6 +308,7 @@ class Game(object):
         self.player = Player(x=200, y=100)
         self.player.currentLevel = self.currentLevel
 
+
     def processEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -321,7 +322,7 @@ class Game(object):
                 elif event.key == pygame.K_UP:
                     self.player.jump()
                 elif event.key == pygame.K_ESCAPE:
-                    PauseMenu.run_pause_menu(True)
+                    PauseMenu.run_pause_menu()
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT and self.player.changeX < 0:
                     self.player.stop()
@@ -509,39 +510,38 @@ class Player(pygame.sprite.Sprite):
 
 class PauseMenu:
 
-    def __init__(self, screen, width, height, start_button, button_width, button_height, clock, resume_button,
-                 quit_button, setting_button, main_menu_button, transparency, inf, scroll):
+    def __init__(self):
         self.width, self.height = pygame.display.Info().current_w, pygame.display.Info().current_h
         self.screen = pygame.display.set_mode((width, height))
         self.start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
-        self.button_width, self.button_height = start_button.get_rect().width, start_button.get_rect().height
+        self.button_width, self.button_height = self.start_button.get_rect().width, self.start_button.get_rect().height
         self.clock = pygame.time.Clock()
 
         self.resume_button = pygame.image.load('Assets/menu/resume/resume1.png').convert_alpha()
-        self.resume_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 - (button_height * 3.5) * 1.5),
-                                    resume_button, 3.5, screen, 'Assets/menu/resume/resume_spritesheet.png', width,
+        self.resume_button = Button((width / 2 - self.button_width * 3.5 / 2), (height / 2 - (self.button_height * 3.5) * 1.5),
+                                    self.resume_button, 3.5, screen, 'Assets/menu/resume/resume_spritesheet.png', width,
                                     height)
 
         self.quit_button = pygame.image.load('Assets/menu/quit/quit1.png').convert_alpha()
-        self.quit_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + (button_height * 3.5 / 2) * 3),
-                                  quit_button,
+        self.quit_button = Button((width / 2 - self.button_width * 3.5 / 2), (height / 2 + (self.button_height * 3.5 / 2) * 3),
+                                  self.quit_button,
                                   3.5, screen, 'Assets/menu/quit/quit_spritesheet.png', width, height)
         self.setting_button = pygame.image.load('Assets/menu/settings/settings1.png').convert_alpha()
-        self.setting_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 + button_height * 3.5 / 2),
-                                     setting_button,
+        self.setting_button = Button((width / 2 - self.button_width * 3.5 / 2), (height / 2 + self.button_height * 3.5 / 2),
+                                     self.setting_button,
                                      3.5, screen, 'Assets/menu/settings/settings_spritesheet.png', width, height)
         self.main_menu_button = pygame.image.load('Assets/menu/main_menu/main_menu_1.png').convert_alpha()
-        self.main_menu_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 - button_height * 3.5 / 2),
-                                       main_menu_button,
+        self.main_menu_button = Button((width / 2 - self.button_width * 3.5 / 2), (height / 2 - self.button_height * 3.5 / 2),
+                                       self.main_menu_button,
                                        3.5, screen, 'Assets/menu/main_menu/main_menu_spritesheet.png', width, height)
 
         self.screen = pygame.display.set_mode((width, height))
         self.inf = 0
         self.scroll = 0
 
-    def run_pause_menu(self):
+    def run_pause_menu(self,boolean):
 
-        run = True
+        run = boolean
         inf = 0
         scroll = 0
 
