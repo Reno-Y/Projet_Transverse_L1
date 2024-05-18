@@ -8,7 +8,7 @@ pygame.init()
 pygame.mixer.init()
 clock = pygame.time.Clock()
 
-# récupération de la taille de l'écran ainsi que l'initialisation de la fenêtre
+# récup   ération de la taille de l'écran ainsi que l'initialisation de la fenêtre
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
 screen = pygame.display.set_mode((width, height))
 

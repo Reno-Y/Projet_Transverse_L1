@@ -216,12 +216,14 @@ class Level(object):
             self.layers.append(Layer(index=layer, mapObject=self.mapObject))
 
     # Move layer left/right
-    def shiftLevel(self, shiftX):
+    def shiftLevel(self, shiftX, shiftY):
         self.levelShift += shiftX
+        self.levelShift += shiftY
 
         for layer in self.layers:
             for tile in layer.tiles:
                 tile.rect.x += shiftX
+                tile.rect.y += shiftY
 
     # Update layer
     def draw(self, screen):
@@ -316,18 +318,19 @@ class Game(object):
             # Get keyboard input and move player accordingly
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
+                    self.move = True
                     self.player.goLeft()
                 elif event.key == pygame.K_RIGHT:
+                    self.move = True
                     self.player.goRight()
                 elif event.key == pygame.K_UP:
                     self.player.jump()
-                elif event.key == pygame.K_ESCAPE:
-                    PauseMenu.run_pause_menu()
-                elif event.type == pygame.KEYUP:
-                    if (event.key == pygame.K_LEFT) and self.player.changeX < 0:
-                        self.move = False
-                    if (event.key == pygame.K_RIGHT) and self.player.changeX > 0:
-                        self.move = False
+
+            elif event.type == pygame.KEYUP:
+                if (event.key == pygame.K_LEFT) and self.player.changeX < 0:
+                    self.move = False
+                if (event.key == pygame.K_RIGHT) and self.player.changeX > 0:
+                    self.move = False
         if (self.move == False):
             self.player.stop()
 
@@ -408,18 +411,16 @@ class Player(pygame.sprite.Sprite):
                 self.rect.right = tile.rect.left
             else:
                 self.rect.left = tile.rect.right
-
+        difference_y, difference = 0, 0
         # Move screen if player reaches screen bounds
         if self.rect.right >= SCREEN_WIDTH - 200:
-            difference = self.rect.right - (SCREEN_WIDTH - 200)
+            difference = -(self.rect.right - (SCREEN_WIDTH - 200))
             self.rect.right = SCREEN_WIDTH - 200
-            self.currentLevel.shiftLevel(-difference)
 
         # Move screen is player reaches screen bounds
         if self.rect.left <= 200:
             difference = 200 - self.rect.left
             self.rect.left = 200
-            self.currentLevel.shiftLevel(difference)
 
         # Move screen if player reaches screen bounds
         if self.rect.bottom >= SCREEN_HEIGHT - 50:
@@ -430,7 +431,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.top <= 100:
             difference_y = 100 - self.rect.top
             self.rect.top = 100
-            self.currentLevel.shiftLevel(difference, difference_y)
+        self.currentLevel.shiftLevel(difference, difference_y)
 
         # Update player position by change
         self.rect.y += self.changeY
@@ -477,8 +478,6 @@ class Player(pygame.sprite.Sprite):
                 self.runningFrame = 0
             else:
                 self.runningFrame += 1
-
-    # Make player jump
     def jump(self):
         # Check if player is on ground
         self.rect.y += 2
