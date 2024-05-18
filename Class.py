@@ -354,29 +354,34 @@ class Player(pygame.sprite.Sprite):
         # Load the spritesheet of frames for this player
         self.sprites = SpriteSheet2("Assets/character/player/Player1.png")
 
-        self.stillRight = self.sprites.image_at((0, 0, 30, 42))
-        self.stillLeft = self.sprites.image_at((0, 42, 30, 42))
+        self.stillRight = self.sprites.image_at((0, 0, 48, 64))
+        self.stillLeft = self.sprites.image_at((0, 64, 48, 64))
 
         # List of frames for each animation
-        self.runningRight = (self.sprites.image_at((0, 84, 30, 42)),
-                             self.sprites.image_at((30, 84, 30, 42)),
-                             self.sprites.image_at((60, 84, 30, 42)),
-                             self.sprites.image_at((90, 84, 30, 42)),
-                             self.sprites.image_at((120, 84, 30, 42)))
+        self.runningRight = (self.sprites.image_at((48, 0, 50, 64)),
+                             self.sprites.image_at((102, 0, 50, 64)),
+                             self.sprites.image_at((150, 0, 50, 64)),
+                             self.sprites.image_at((251, 0, 50, 64)),
+                             self.sprites.image_at((300, 0, 50, 64)),
+                             self.sprites.image_at((354, 0, 50, 64)),
+                             self.sprites.image_at((402, 0, 50, 64)))
 
-        self.runningLeft = (self.sprites.image_at((0, 126, 30, 42)),
-                            self.sprites.image_at((30, 126, 30, 42)),
-                            self.sprites.image_at((60, 126, 30, 42)),
-                            self.sprites.image_at((90, 126, 30, 42)),
-                            self.sprites.image_at((120, 126, 30, 42)))
+        self.runningLeft = (self.sprites.image_at((48, 64, 50, 63)),
+                            self.sprites.image_at((102, 64, 50, 63)),
+                            self.sprites.image_at((150, 64, 50, 63)),
+                            self.sprites.image_at((251, 64, 50, 63)),
+                            self.sprites.image_at((300, 64, 50, 63)),
+                            self.sprites.image_at((354, 64, 50, 63)),
+                            self.sprites.image_at((402, 64, 50, 63)))
 
-        self.jumpingRight = (self.sprites.image_at((30, 0, 30, 42)),
-                             self.sprites.image_at((60, 0, 30, 42)),
-                             self.sprites.image_at((90, 0, 30, 42)))
+        self.jumpingLeft = \
+            (self.sprites.image_at((61, 128, 50, 64)),
+             self.sprites.image_at((107, 128, 50, 64)),
+             self.sprites.image_at((156, 128, 50, 64)))
 
-        self.jumpingLeft = (self.sprites.image_at((30, 42, 30, 42)),
-                            self.sprites.image_at((60, 42, 30, 42)),
-                            self.sprites.image_at((90, 42, 30, 42)))
+        self.jumpingRight = (self.sprites.image_at((49, 192, 48, 64)),
+                             self.sprites.image_at((95, 192, 50, 64)),
+                             self.sprites.image_at((156, 192, 50, 64)))
 
         self.image = self.stillRight
 
