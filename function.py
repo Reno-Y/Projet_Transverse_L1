@@ -73,16 +73,20 @@ def background_apparition(folder):
         pygame.display.update()
     # on fait apparaitre l'image de fond
 
+
 def parallax_init(folder):
     bg_images = background_images_list(folder)
     return bg_images
 
 
-def parallax(inf, scroll, bg_images):
-
-    for i in range(inf):
-        speed = 1
-        for y in bg_images:
+def parallax(scroll, bg_images):
+    speed = 1
+    for y in bg_images:
+        i = (scroll * speed) // width
+        x_position = -scroll * speed
+        while x_position < width:
             screen.blit(y, ((i * width) - scroll * speed, 0))
-            speed += 1
+            i += 1
+            x_position += width
+        speed += 1
     # on fait défiler les images de fond

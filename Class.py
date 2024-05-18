@@ -569,7 +569,7 @@ class PauseMenu:
         while run:
             screen.fill((0, 0, 0))  # remplissage de l'écran
             inf += 1
-            parallax(inf, scroll, bg_images)
+            parallax(scroll, bg_images)
             scroll += 2
 
             self.quit_button.draw()

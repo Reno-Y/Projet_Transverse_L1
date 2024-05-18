@@ -51,7 +51,7 @@ def run_menu(boolean):
 
         screen.fill((0, 0, 0))
         inf += 2
-        parallax(inf, scroll, bg_images)
+        parallax(scroll, bg_images)
         scroll += 4
         title_name.draw()
         start_button.draw()

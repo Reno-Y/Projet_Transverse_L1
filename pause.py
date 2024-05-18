@@ -42,7 +42,7 @@ def run_pause_menu(boolean):
     while run:
         screen.fill((0, 0, 0))  # remplissage de l'écran
         inf += 1
-        parallax(inf, scroll, "assets/background/sunset_sky")
+        parallax(scroll, "assets/background/sunset_sky")
         scroll += 2
 
         quit_button.draw()
