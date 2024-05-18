@@ -65,7 +65,6 @@ def run_ending(boolean):
                     if dialogue2.closed():
 
                         run_level1(True)
-
                         run_ending(False)
 
                 if event.key == pygame.K_ESCAPE:

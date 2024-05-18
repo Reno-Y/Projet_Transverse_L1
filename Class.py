@@ -352,7 +352,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         # Load the spritesheet of frames for this player
-        self.sprites = SpriteSheet2("Assets/character/player.png")
+        self.sprites = SpriteSheet2("Assets/character/player/Player1.png")
 
         self.stillRight = self.sprites.image_at((0, 0, 30, 42))
         self.stillLeft = self.sprites.image_at((0, 42, 30, 42))
