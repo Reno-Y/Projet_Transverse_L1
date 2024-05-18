@@ -1,4 +1,4 @@
-from function import background_apparition, parallax
+from function import background_apparition, parallax, parallax_init
 from Class import Music, Dialogue
 import pygame
 
@@ -40,12 +40,12 @@ def run_ending(boolean):
     scroll = 0
     inf = 0
     run = boolean
-
+    bg_images = parallax_init("assets/background/sunset_sky")
     while run:
 
         screen.fill((0, 0, 0))  # remplissage de l'écran
         inf += 1
-        parallax(inf, scroll, "assets/background/sunset_sky")
+        parallax(inf, scroll, bg_images)
         scroll += 2
 
         dialogue.draw()  # affichage du dialogue

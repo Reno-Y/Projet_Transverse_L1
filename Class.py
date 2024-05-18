@@ -565,11 +565,11 @@ class PauseMenu:
         run = boolean
         inf = 0
         scroll = 0
-
+        bg_images = parallax_init("assets/background/sunset_sky")
         while run:
             screen.fill((0, 0, 0))  # remplissage de l'écran
             inf += 1
-            parallax(inf, scroll, "assets/background/sunset_sky")
+            parallax(inf, scroll, bg_images)
             scroll += 2
 
             self.quit_button.draw()

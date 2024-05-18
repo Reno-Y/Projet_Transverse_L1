@@ -1,4 +1,4 @@
-from function import background_apparition, parallax
+from function import background_apparition, parallax, parallax_init
 from Class import Animation, Button, Music, TittleName
 import pygame
 from ending import run_ending
@@ -46,12 +46,12 @@ def run_menu(boolean):
     scroll = 0
     inf = 0
     run = boolean
-
+    bg_images = parallax_init("assets/background/summer")
     while run:
 
         screen.fill((0, 0, 0))
         inf += 2
-        parallax(inf, scroll, "assets/background/summer")
+        parallax(inf, scroll, bg_images)
         scroll += 4
         title_name.draw()
         start_button.draw()
