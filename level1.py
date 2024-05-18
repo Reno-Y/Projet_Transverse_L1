@@ -24,7 +24,7 @@ def run_level1(boolean):
     while boolean:
         screen.fill((50, 50, 50))
 
-        done = game.processEvents()
+        boolean = game.processEvents()
         game.runLogic()
         game.draw(screen)
 

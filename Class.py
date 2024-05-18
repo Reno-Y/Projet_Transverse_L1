@@ -314,10 +314,12 @@ class Game(object):
     def processEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return True
+                return False
             # Get keyboard input and move player accordingly
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_ESCAPE:
+                    return False
+                elif event.key == pygame.K_LEFT:
                     self.move = True
                     self.player.goLeft()
                 elif event.key == pygame.K_RIGHT:
@@ -334,7 +336,7 @@ class Game(object):
         if (self.move == False):
             self.player.stop()
 
-        return False
+        return True
 
     def runLogic(self):
         # Update player movement and collision logic
