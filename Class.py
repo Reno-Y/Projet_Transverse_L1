@@ -6,7 +6,7 @@ from function import *
 pygame.init()
 SCREEN_WIDTH = pygame.display.Info().current_w
 SCREEN_HEIGHT = pygame.display.Info().current_h
-MAP_COLLISION_LAYER = 1
+MAP_COLLISION_LAYER = 0
 
 
 class Spritesheet:
