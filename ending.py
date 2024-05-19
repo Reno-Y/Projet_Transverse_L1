@@ -67,10 +67,12 @@ def run_ending(boolean):
 
                 if event.key == pygame.K_ESCAPE:
                     if pause.run(True):
+                        music.soundtrack.stop()
                         return "main_menu"
 
                 if event.key == pygame.K_RETURN:
                     dialogue.draw()
         clock.tick(FPS)
         pygame.display.update()
+    music.soundtrack.stop()
     return run

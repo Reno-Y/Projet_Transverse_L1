@@ -74,7 +74,10 @@ class Game(object):
                     self.move = False
                 if (event.key == pygame.K_RIGHT) and self.player.changeX > 0:
                     self.move = False
-
+        if self.player.rect.x > SCREEN_WIDTH:
+            return False
+        if self.player.rect.y > SCREEN_HEIGHT:
+            return "main_menu"
         if not self.move:
             self.player.stop()
 

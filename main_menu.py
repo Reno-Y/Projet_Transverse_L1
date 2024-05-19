@@ -74,6 +74,8 @@ def run_menu(boolean):
         for event in pygame.event.get():
             if start_button.clicked():
                 menu_music.soundtrack.stop()
+                if run_ending(True) == "main_menu":
+                    break
                 if run_level1(True) == "main_menu":
                     break
                 if run_ending(True) == "main_menu":
