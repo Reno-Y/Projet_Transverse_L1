@@ -79,7 +79,7 @@ def parallax_init(folder):
     return bg_images
 
 
-def parallax(scroll, bg_images):
+def parallax(scroll, bg_images, screen):
     speed = 1
     for y in bg_images:
         i = (scroll * speed) // width

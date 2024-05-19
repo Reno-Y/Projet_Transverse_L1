@@ -1,10 +1,9 @@
 import pygame
 from function import parallax
 from Class import Animation, Game
+from constants import FPS, SCREEN_HEIGHT, SCREEN_WIDTH
 
-
-
-width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
+width, height = SCREEN_WIDTH, SCREEN_HEIGHT
 screen = pygame.display.set_mode((width, height))
 
 
@@ -21,11 +20,10 @@ def run_level1(boolean):
 
     game = Game()
     while boolean:
-        screen.fill((50, 50, 50))
 
         boolean = game.processEvents()
         game.runLogic()
         game.draw(screen)
 
         pygame.display.flip()
-        pygame.time.Clock().tick(60)
+        pygame.time.Clock().tick(FPS)

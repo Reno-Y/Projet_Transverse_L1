@@ -1,7 +1,7 @@
 import pygame
-from Class import Button
+from button import Button
 from main_menu import run_menu
-from function import parallax
+from function import parallax, parallax_init
 
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
 screen = pygame.display.set_mode((width, height))
@@ -36,13 +36,12 @@ def run_pause_menu(boolean):
     pygame.draw.rect(transparency, (0, 0, 0, 100), [0, 0, width, height])
     screen.blit(transparency, (0, 0))
     run = boolean
-    inf = 0
+    bg_images = parallax_init("assets/background/sunset_sky")
     scroll = 0
 
     while run:
         screen.fill((0, 0, 0))  # remplissage de l'écran
-        inf += 1
-        parallax(scroll, "assets/background/sunset_sky")
+        parallax(scroll, bg_images, screen)
         scroll += 2
 
         quit_button.draw()

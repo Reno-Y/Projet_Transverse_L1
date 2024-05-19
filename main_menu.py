@@ -1,7 +1,11 @@
 from function import background_apparition, parallax, parallax_init
-from Class import Animation, Button, Music, TittleName
+from Class import TittleName
+from music import Music
 import pygame
 from ending import run_ending
+from animation import Animation
+from button import Button
+from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT
 
 pygame.init()
 pygame.mixer.init()
@@ -10,7 +14,7 @@ pygame.font.init()  # initialisation de pygame
 
 title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60)  # police d'écriture
 clock = pygame.time.Clock()
-width, height = pygame.display.Info().current_w, pygame.display.Info().current_h  # récupération de la taille de l'écran
+width, height = SCREEN_WIDTH, SCREEN_HEIGHT  # récupération de la taille de l'écran
 screen = pygame.display.set_mode((width, height))  # initialisation de la fenêtre
 
 player_walk = Animation(screen, width, height, 'Assets/character/player/Run.png', 2.4, 128, 128,
@@ -44,14 +48,12 @@ def run_menu(boolean):
     menu_music = Music("sound/music/theme_of_love.mp3")
     menu_music.play(-1)
     scroll = 0
-    inf = 0
     run = boolean
     bg_images = parallax_init("assets/background/summer")
     while run:
 
         screen.fill((0, 0, 0))
-        inf += 2
-        parallax(scroll, bg_images)
+        parallax(scroll, bg_images, screen)
         scroll += 4
         title_name.draw()
         start_button.draw()
@@ -77,6 +79,6 @@ def run_menu(boolean):
                 run = False
             if event.type == pygame.QUIT:
                 run = False
-        clock.tick(60)
+        clock.tick(FPS)
         pygame.display.update()
     pygame.quit()

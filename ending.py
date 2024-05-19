@@ -1,7 +1,7 @@
 from function import background_apparition, parallax, parallax_init
-from Class import Music, Dialogue
+from music import Music
+from dialogue import Dialogue
 import pygame
-
 from level1 import run_level1
 
 #il faut changer l'instance
@@ -38,14 +38,12 @@ def run_ending(boolean):
     background_apparition('Assets/background/sunset_sky.png')  # fade in de l'image de fond
     music.play(-1)  # lancement de la musique
     scroll = 0
-    inf = 0
     run = boolean
     bg_images = parallax_init("assets/background/sunset_sky")
     while run:
 
         screen.fill((0, 0, 0))  # remplissage de l'écran
-        inf += 1
-        parallax(scroll, bg_images)
+        parallax(scroll, bg_images, screen)
         scroll += 2
 
         dialogue.draw()  # affichage du dialogue
