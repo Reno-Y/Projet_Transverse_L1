@@ -47,8 +47,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = y
 
         # Set speed and direction
-        self.changeX = 0
-        self.changeY = 0
+        self.speedX = 0
+        self.speedY = 0
         self.direction = "right"
 
         # Boolean to check if player is running, current running frame, and time since last frame change
@@ -63,14 +63,14 @@ class Player(pygame.sprite.Sprite):
         self.dashtime = pygame.time.get_ticks()
     def update(self):
         # Update player position by change
-        self.rect.x += self.changeX
+        self.rect.x += self.speedX
 
         # Get tiles in collision layer that player is now touching
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
 
         # Move player to correct side of that block
         for tile in tileHitList:
-            if self.changeX > 0:
+            if self.speedX > 0:
                 self.rect.right = tile.rect.left
             else:
                 self.rect.left = tile.rect.right
@@ -104,7 +104,7 @@ class Player(pygame.sprite.Sprite):
         self.currentLevel.shiftLevel(self.difference, difference_y)
 
         # Update player position by change
-        self.rect.y += self.changeY
+        self.rect.y += self.speedY
 
         # Get tiles in collision layer that player is now touching
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
@@ -113,9 +113,9 @@ class Player(pygame.sprite.Sprite):
         if len(tileHitList) > 0:
             # Move player to correct side of that tile, update player frame
             for tile in tileHitList:
-                if self.changeY > 0:
+                if self.speedY > 0:
                     self.rect.bottom = tile.rect.top
-                    self.changeY = 1
+                    self.speedY = 1
 
                     if self.direction == "right":
                         self.image = self.stillRight
@@ -123,19 +123,19 @@ class Player(pygame.sprite.Sprite):
                         self.image = self.stillLeft
                 else:
                     self.rect.top = tile.rect.bottom
-                    self.changeY = 0
+                    self.speedY = 0
         # If there are no tiles in that list
         else:
             # Update player change for jumping/falling and player frame
-            self.changeY += GRAVITY
-            if self.changeY > 0:
+            self.speedY += GRAVITY
+            if self.speedY > 0:
                 if self.direction == "right":
                     self.image = self.jumpingRight[1]
                 else:
                     self.image = self.jumpingLeft[1]
 
         # If player is on ground and running, update running animation
-        if self.running and self.changeY == 1:
+        if self.running and self.speedY == 1:
             if self.direction == "right":
                 self.image = self.runningRight[self.runningFrame]
             else:
@@ -161,7 +161,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.image = self.jumpingLeft[0]
 
-            self.changeY = -6
+            self.speedY = -6
 
     def dash(self):
         self.rect.y += 2
@@ -170,9 +170,9 @@ class Player(pygame.sprite.Sprite):
         if len(tileHitList) > 0:
             if (pygame.time.get_ticks() - self.dashtime) > 3000:
                 if self.direction == "right":
-                    self.changeX = 20
+                    self.speedX = 20
                 else:
-                    self.changeX = -20
+                    self.speedX = -20
                 self.dashtime = pygame.time.get_ticks()
     # Move right
 
@@ -184,7 +184,7 @@ class Player(pygame.sprite.Sprite):
         if len(tileHitList) > 0:
             self.direction = "right"
             self.running = True
-            self.changeX = 3
+            self.speedX = 3
 
     # Move left
     def goLeft(self):
@@ -195,7 +195,7 @@ class Player(pygame.sprite.Sprite):
         if len(tileHitList) > 0:
             self.direction = "left"
             self.running = True
-            self.changeX = -3
+            self.speedX = -3
 
     # Stop moving
     def stop(self):
@@ -205,7 +205,7 @@ class Player(pygame.sprite.Sprite):
 
         if len(tileHitList) > 0:
             self.running = False
-            self.changeX = 0
+            self.speedX = 0
 
     # Draw player
     def draw(self, screen):

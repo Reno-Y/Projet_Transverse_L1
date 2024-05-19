@@ -72,9 +72,9 @@ class Game(object):
                     self.player.dash()
 
             elif event.type == pygame.KEYUP:
-                if (event.key == pygame.K_LEFT) and self.player.changeX < 0:
+                if (event.key == pygame.K_LEFT) and self.player.speedX < 0:
                     self.move = False
-                if (event.key == pygame.K_RIGHT) and self.player.changeX > 0:
+                if (event.key == pygame.K_RIGHT) and self.player.speedX > 0:
                     self.move = False
         if self.player.rect.x > SCREEN_WIDTH:
             return False
