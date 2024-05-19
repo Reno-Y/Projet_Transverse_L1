@@ -68,6 +68,8 @@ class Game(object):
                     self.player.goRight()
                 elif event.key == pygame.K_UP:
                     self.player.jump()
+                elif event.key == pygame.K_w:
+                    self.player.dash()
 
             elif event.type == pygame.KEYUP:
                 if (event.key == pygame.K_LEFT) and self.player.changeX < 0:

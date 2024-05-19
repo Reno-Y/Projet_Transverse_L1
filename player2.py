@@ -60,6 +60,7 @@ class Player(pygame.sprite.Sprite):
         self.currentLevel = None
         self.difference = 0
 
+        self.dashtime = pygame.time.get_ticks()
     def update(self):
         # Update player position by change
         self.rect.x += self.changeX
@@ -162,7 +163,19 @@ class Player(pygame.sprite.Sprite):
 
             self.changeY = -6
 
+    def dash(self):
+        self.rect.y += 2
+        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        self.rect.y -= 2
+        if len(tileHitList) > 0:
+            if (pygame.time.get_ticks() - self.dashtime) > 3000:
+                if self.direction == "right":
+                    self.changeX = 20
+                else:
+                    self.changeX = -20
+                self.dashtime = pygame.time.get_ticks()
     # Move right
+
     def goRight(self):
         self.rect.y += 2
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
