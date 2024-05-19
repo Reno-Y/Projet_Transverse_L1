@@ -25,16 +25,11 @@ main_menu_button = pygame.image.load('Assets/menu/main_menu/main_menu_1.png').co
 main_menu_button = Button((width / 2 - button_width * 3.5 / 2), (height / 2 - button_height * 3.5 / 2),
                           main_menu_button,
                           3.5, screen, 'Assets/menu/main_menu/main_menu_spritesheet.png', width, height)
-transparency = pygame.Surface((width, height), pygame.SRCALPHA)
 
 screen = pygame.display.set_mode((width, height))
-inf = 0
-scroll = 0
 
 
 def run_pause_menu(boolean):
-    pygame.draw.rect(transparency, (0, 0, 0, 100), [0, 0, width, height])
-    screen.blit(transparency, (0, 0))
     run = boolean
     bg_images = parallax_init("assets/background/sunset_sky")
     scroll = 0

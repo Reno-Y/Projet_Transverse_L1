@@ -58,6 +58,7 @@ class Player(pygame.sprite.Sprite):
 
         # Players current level, set after object initialized in game constructor
         self.currentLevel = None
+        self.difference = 0
 
     def update(self):
         # Update player position by change
@@ -72,28 +73,34 @@ class Player(pygame.sprite.Sprite):
                 self.rect.right = tile.rect.left
             else:
                 self.rect.left = tile.rect.right
-        difference_y, difference = 0, 0
+        difference_y, self.difference = 0, 0
 
-        # Move screen if player reaches screen bounds
-        if self.rect.right >= SCREEN_WIDTH - (SCREEN_WIDTH * 0.3):
-            difference = -(self.rect.right - (SCREEN_WIDTH - (SCREEN_WIDTH * 0.3)))
+        # change la camera si le joueur atteint le bord droit de l'écran
+        if ((self.rect.right >= SCREEN_WIDTH - (SCREEN_WIDTH * 0.3)) and
+                ((SCREEN_WIDTH - self.currentLevel.levelShift) < self.currentLevel.map_width)):
+
+            self.difference = -(self.rect.right - (SCREEN_WIDTH - (SCREEN_WIDTH * 0.3)))
             self.rect.right = SCREEN_WIDTH - (SCREEN_WIDTH * 0.3)
 
-        # Move screen is player reaches screen bounds
-        if self.rect.left <= (SCREEN_WIDTH * 0.3):
-            difference = (SCREEN_WIDTH * 0.3) - self.rect.left
+        # change la camera si le joueur atteint le bord gauche de l'écran
+        elif (self.rect.left <= (SCREEN_WIDTH * 0.3)) and 0 > self.currentLevel.levelShift:
+
+            self.difference = (SCREEN_WIDTH * 0.3) - self.rect.left
             self.rect.left = (SCREEN_WIDTH * 0.3)
 
-        # Move screen if player reaches screen bounds
-        if self.rect.bottom >= SCREEN_HEIGHT - (SCREEN_WIDTH * 0.15):
-            difference_y = -(self.rect.bottom - (SCREEN_HEIGHT - (SCREEN_WIDTH * 0.15)))
-            self.rect.bottom = SCREEN_HEIGHT - (SCREEN_WIDTH * 0.15)
+        # change la camera si le joueur atteint le bord inferieur de l'écran
+        if ((self.rect.bottom >= SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.15)) and
+                ((self.currentLevel.map_height - self.currentLevel.levelShifty) < SCREEN_HEIGHT)):
 
-        # Move screen is player reaches screen bounds
-        if self.rect.top <= (SCREEN_WIDTH * 0.15):
-            difference_y = (SCREEN_WIDTH * 0.15) - self.rect.top
-            self.rect.top = (SCREEN_WIDTH * 0.15)
-        self.currentLevel.shiftLevel(difference, difference_y)
+            difference_y = -(self.rect.bottom - (SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.15)))
+            self.rect.bottom = SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.15)
+
+        # change la camera si le joueur atteint le bord superieur de l'écran
+        elif self.rect.top <= (SCREEN_HEIGHT * 0.15):
+            difference_y = (SCREEN_HEIGHT * 0.15) - self.rect.top
+            self.rect.top = (SCREEN_HEIGHT * 0.15)
+
+        self.currentLevel.shiftLevel(self.difference, difference_y)
 
         # Update player position by change
         self.rect.y += self.changeY
@@ -140,6 +147,7 @@ class Player(pygame.sprite.Sprite):
                 self.runningFrame = 0
             else:
                 self.runningFrame += 1
+
     def jump(self):
         # Check if player is on ground
         self.rect.y += 2

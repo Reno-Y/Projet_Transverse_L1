@@ -38,7 +38,7 @@ class TittleName:
 class Game(object):
     def __init__(self):
         # Set up a level to load
-        self.scroll = 0
+        self.scroll = 310
         self.bg_images = parallax_init("assets/background/level0")
         self.currentLevelNumber = 0
         self.pause = PauseMenu(screen)
@@ -54,12 +54,12 @@ class Game(object):
     def processEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return False
+                pygame.quit()
             # Get keyboard input and move player accordingly
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if self.pause.run(True):
-                        return False
+                        return "main_menu"
                 elif event.key == pygame.K_LEFT:
                     self.move = True
                     self.player.goLeft()
@@ -74,7 +74,8 @@ class Game(object):
                     self.move = False
                 if (event.key == pygame.K_RIGHT) and self.player.changeX > 0:
                     self.move = False
-        if (self.move == False):
+
+        if not self.move:
             self.player.stop()
 
         return True
@@ -82,12 +83,12 @@ class Game(object):
     def runLogic(self):
         # Update player movement and collision logic
         self.player.update()
-
+        self.scroll += 2 - self.player.difference
     # Draw level, player, overlay
+
     def draw(self, screen):
         screen.fill((135, 206, 235))
         parallax(self.scroll, self.bg_images, screen)
-        self.scroll += 2
         self.currentLevel.draw(screen)
         self.player.draw(screen)
         pygame.display.flip()

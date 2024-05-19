@@ -56,16 +56,16 @@ class PauseMenu:
                     if event.key == pygame.K_ESCAPE:
                         run = False
 
-                if self.quit_button.clicked():
-                    run = False
-                    return True
+                elif self.quit_button.clicked():
+                    quit()
 
-                if self.resume_button.clicked():
+                elif self.resume_button.clicked():
                     run = False
 
-                if self.main_menu_button.clicked():
+                elif self.main_menu_button.clicked():
                     # run_menu(True)
                     run = False
+                    return True
 
             self.clock.tick(FPS)
             pygame.display.update()

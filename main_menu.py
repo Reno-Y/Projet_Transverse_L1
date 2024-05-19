@@ -6,6 +6,7 @@ from ending import run_ending
 from animation import Animation
 from button import Button
 from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT
+from level1 import run_level1
 
 pygame.init()
 pygame.mixer.init()
@@ -68,8 +69,10 @@ def run_menu(boolean):
         for event in pygame.event.get():
             if start_button.clicked():
                 menu_music.soundtrack.stop()
-                run_ending(True)
-                run = False
+                if run_level1(True) == "main_menu":
+                    break
+                if run_ending(True) == "main_menu":
+                    break
 
             if quit_button.clicked():
                 run = False

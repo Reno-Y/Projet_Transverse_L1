@@ -2,17 +2,17 @@ from function import background_apparition, parallax, parallax_init
 from music import Music
 from dialogue import Dialogue
 import pygame
-from level1 import run_level1
+from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT
+from pause_menu import PauseMenu
+#  il faut changer l'instance
 
-#il faut changer l'instance
-
-#TODO changer les texte pour un tuto
+#  TODO changer les texte pour un tuto
 pygame.init()
 pygame.mixer.init()
 pygame.font.init()  # initialisation de pygame
 title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60)  # police d'écriture
 clock = pygame.time.Clock()
-width, height = pygame.display.Info().current_w, pygame.display.Info().current_h  # récupération de la taille de l'écran
+width, height = SCREEN_WIDTH, SCREEN_HEIGHT  # récupération de la taille de l'écran
 screen = pygame.display.set_mode((width, height))  # initialisation de la fenêtre
 
 text = ["HARU : C'EST DONC LA FIN ?",
@@ -38,8 +38,10 @@ def run_ending(boolean):
     background_apparition('Assets/background/sunset_sky.png')  # fade in de l'image de fond
     music.play(-1)  # lancement de la musique
     scroll = 0
+    pause = PauseMenu(screen)
     run = boolean
     bg_images = parallax_init("assets/background/sunset_sky")
+
     while run:
 
         screen.fill((0, 0, 0))  # remplissage de l'écran
@@ -61,14 +63,14 @@ def run_ending(boolean):
                     dialogue2.closed()
                     dialogue.closed()
                     if dialogue2.closed():
-
-                        run_level1(True)
-                        run_ending(False)
+                        run = False
 
                 if event.key == pygame.K_ESCAPE:
-                    run = False
+                    if pause.run(True):
+                        return "main_menu"
+
                 if event.key == pygame.K_RETURN:
                     dialogue.draw()
-        clock.tick(60)
+        clock.tick(FPS)
         pygame.display.update()
-    pygame.quit()
+    return run
