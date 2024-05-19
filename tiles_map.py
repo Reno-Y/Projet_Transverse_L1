@@ -1,41 +1,89 @@
-import json
-import math
-import random
-import time
-import os
 import pytmx
-
 import pygame
 
 
-class TilesMap:
-    def __init__(self, size_map, view_size):
-        self.size_map = size_map
-        self.view_size = view_size
-        self.tile_map = None
-        self.tiles_map_layers = None
-        self.tiles_type = {}
+class Level(object):
+    def __init__(self, fileName):
+        # Create map object from PyTMX
+        self.mapObject = pytmx.load_pygame(fileName)
 
-    def load_map(self, path):
-        f = open(path, 'r')
-        dat = f.read()
-        f.close()
-        json_dat = json.loads(dat)
-        self.tile_map = json_dat['map']
-        self.tiles_map_layers = json_dat['layers']
+        # Create list of layers for map
+        self.layers = []
 
-    def clean(self):
-        self.tile_map = None
-        self.tiles_map_layers = None
+        # Amount of level shift left/right
+        self.levelShift = 0
+        self.levelShifty = 0
+        # Create layers for each layer in tile map
+        for layer in range(len(self.mapObject.layers)):
+            self.layers.append(Layer(index=layer, mapObject=self.mapObject))
 
-    def load_tiles(self):
-        for layer in self.tiles_map_layers:
-            if layer['type'] == 'tilelayer':
-                self.load_tile_layer(layer)
-            elif layer['type'] == 'objectgroup':
-                self.load_object_layer(layer)
+    # Move layer left/right
+    def shiftLevel(self, shiftX, shiftY):
+        self.levelShift += shiftX
+        self.levelShifty += shiftY
 
-    def init_tiles_type(self):
-        dirs = os.listdir("Assets/map")
-        for file in dirs:
-            self.tiles_type[file](pygame.image.load(os.path.join('Assets/map/', file)).convert_alpha())
+        for layer in self.layers:
+            for tile in layer.tiles:
+                tile.rect.x += shiftX
+                tile.rect.y += shiftY
+
+    # Update layer
+    def draw(self, screen):
+        for layer in self.layers:
+            layer.draw(screen)
+
+
+class Layer(object):
+    def __init__(self, index, mapObject):
+        # Layer index from tiled map
+        self.index = index
+
+        # Create group of tiles for this layer
+        self.tiles = pygame.sprite.Group()
+
+        # Reference map object
+        self.mapObject = mapObject
+
+        # Create tiles in the right position for each layer
+        for x in range(self.mapObject.width):
+            for y in range(self.mapObject.height):
+                img = self.mapObject.get_tile_image(x, y, self.index)
+                if img:
+                    self.tiles.add(Tile(image=img, x=(x * self.mapObject.tilewidth), y=(y * self.mapObject.tileheight)))
+
+    # Draw layer
+    def draw(self, screen):
+        self.tiles.draw(screen)
+
+
+class Tile(pygame.sprite.Sprite):
+    def __init__(self, image, x, y):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+class Layer(object):
+    def __init__(self, index, mapObject):
+        # Layer index from tiled map
+        self.index = index
+
+        # Create gruop of tiles for this layer
+        self.tiles = pygame.sprite.Group()
+
+        # Reference map object
+        self.mapObject = mapObject
+
+        # Create tiles in the right position for each layer
+        for x in range(self.mapObject.width):
+            for y in range(self.mapObject.height):
+                img = self.mapObject.get_tile_image(x, y, self.index)
+                if img:
+                    self.tiles.add(Tile(image=img, x=(x * self.mapObject.tilewidth), y=(y * self.mapObject.tileheight)))
+
+    # Draw layer
+    def draw(self, screen):
+        self.tiles.draw(screen)

@@ -18,7 +18,6 @@ def run_level1(boolean):
 
 
     scroll = 0
-    inf = 0
 
     game = Game()
     while boolean:

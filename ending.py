@@ -6,7 +6,7 @@ from level1 import run_level1
 
 #il faut changer l'instance
 
-
+#TODO changer les texte pour un tuto
 pygame.init()
 pygame.mixer.init()
 pygame.font.init()  # initialisation de pygame

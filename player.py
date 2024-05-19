@@ -1,7 +1,7 @@
 from function import *
 import pygame as pg
 from Class import Animation
-
+#TODO: export utility and delete file
 infini = True
 Lanceur = True
 
