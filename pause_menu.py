@@ -1,5 +1,5 @@
 import pygame
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, BUTTON_SCALE
 from function import parallax, parallax_init
 
 
@@ -10,9 +10,9 @@ class PauseMenu:
         from button import Button
         self.width, self.height = pygame.display.Info().current_w, pygame.display.Info().current_h
         self.screen = screen
-        self.scale = 6
         self.start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
         self.button_width, self.button_height = self.start_button.get_rect().width, self.start_button.get_rect().height
+        self.scale = self.width // (self.button_width * (1 / BUTTON_SCALE))
         self.clock = pygame.time.Clock()
 
         self.resume_button = pygame.image.load('Assets/menu/resume/resume1.png').convert_alpha()
