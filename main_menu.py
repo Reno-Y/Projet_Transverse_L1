@@ -30,12 +30,12 @@ button_width, button_height = start_button.get_rect().width, start_button.get_re
 scale = width // (button_width * (1 / BUTTON_SCALE))
 
 
-start_button = Button((SCREEN_WIDTH / 2 - button_width * scale / 2),
-                      (SCREEN_HEIGHT / 2 - (button_height * scale) * 1.5), start_button, scale, screen,
-                      'Assets/menu/start/start_spritesheet.png', SCREEN_WIDTH, SCREEN_HEIGHT)
+start_button = Button((width / 2 - button_width * scale / 2),
+                      (height / 2 - (button_height * scale) * 0.5), start_button, scale, screen,
+                      'Assets/menu/start/start_spritesheet.png', width, height)
 
 setting_button = pygame.image.load('Assets/menu/settings/settings1.png').convert_alpha()
-setting_button = Button((width / 2 - button_width * scale / 2), (height / 2 + button_height * scale / 2),
+setting_button = Button((width / 2 - button_width * scale / 2), (height / 2 + (button_height * scale) / 2),
                         setting_button,
                         scale, screen, 'Assets/menu/settings/settings_spritesheet.png', width, height)
 
