@@ -49,7 +49,7 @@ class Game(object):
         self.player = Player(list_player_pos[self.currentLvNb])
         self.player.currentLevel = self.currentLevel
         self.bullets = pygame.sprite.Group()
-        Bullet.player = self.player
+        Bullet.player_group = pygame.sprite.Group(self.player)
         self.move_left = False
         self.move_right = False
 
@@ -95,7 +95,7 @@ class Game(object):
                 self.currentLevel = self.levels[self.currentLvNb]
             else:
                 return False
-        if self.player.rect.y > SCREEN_HEIGHT:
+        if self.player.rect.y > SCREEN_HEIGHT or self.player.life <= 0:
             return "main_menu"
 
         return True

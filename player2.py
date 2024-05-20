@@ -67,6 +67,7 @@ class Player(pygame.sprite.Sprite):
         self.shoottime = pygame.time.get_ticks()
         self.dashing = 0
         self.damage = 1
+        self.life = 10
     def update(self):
         if self.dashing > 0:
             if self.direction == "right":

@@ -1,10 +1,12 @@
 import pygame
 from constants import MAP_COLLISION_LAYER, GRAVITY, BULLET_SCALE
 
+
 class Bullet(pygame.sprite.Sprite):
+
     gravity = GRAVITY
-    player = None  # Assigner le joueur à cette variable depuis l'extérieur
-    enemies = None  # Assigner les ennemis à cette variable depuis l'extérieur
+    player_group = None  # Assigner le joueur à cette variable depuis l'extérieur
+    enemies_group = None  # Assigner les ennemis à cette variable depuis l'extérieur
 
     def __init__(self, damage, speed_x, speed_y, pos, currentlevel, byplayer):
         pygame.sprite.Sprite.__init__(self)
@@ -15,6 +17,7 @@ class Bullet(pygame.sprite.Sprite):
                           self.sprites.image_at((12, 0, 6, 6))]
         self.image = self.animation[0]
         self.frame = 0
+        self.frametime = pygame.time.get_ticks()
         image_width = self.image.get_width()
         image_height = self.image.get_height()
         for i, image in enumerate(self.animation):
@@ -42,28 +45,33 @@ class Bullet(pygame.sprite.Sprite):
         # suprime la balle si elle sort de la map
         if (((self.rect.x - self.currentLevel.levelShift) > self.currentLevel.map_width) or
                 (self.rect.x - self.currentLevel.levelShift) < 0):
-            print("out x")
             self.kill()
         if (self.rect.y + self.currentLevel.levelShifty) > self.currentLevel.map_height:
-            print("out y")
             self.kill()
 
         tilehitlist = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         if len(tilehitlist) > 0:
             self.kill()
 
-        if self.byplayer:
-            pass
-
-        else:
-            hitlist = pygame.sprite.spritecollide(self, Bullet.player, False)
-            if hitlist:
+        if self.byplayer and Bullet.enemies_group is not None:
+            hitlist = pygame.sprite.spritecollide(self, Bullet.enemies_group, False)
+            for enemie in hitlist:
                 self.kill()
+                enemie.life -= 1
 
-        if self.frame == 2:
-            self.frame = 0
         else:
-            self.frame += 1
+            if Bullet.player_group is not None and not self.byplayer:
+                hitlist = pygame.sprite.spritecollide(self, Bullet.player_group, False)
+                for player in hitlist:
+                    print("player")
+                    self.kill()
+                    player.life -= 1
+        if pygame.time.get_ticks() - self.frametime > 100:
+            if self.frame == 2:
+                self.frame = 0
+            else:
+                self.frame += 1
+            self.frametime = pygame.time.get_ticks()
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
