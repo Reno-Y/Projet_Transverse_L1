@@ -90,7 +90,7 @@ class Game(object):
                 self.player.goRight()
 
         if self.player.rect.x > SCREEN_WIDTH:
-            if len(self.levels) > self.currentLvNb:
+            if len(self.levels) > self.currentLvNb+1:
                 self.currentLvNb += 1
                 self.currentLevel = self.levels[self.currentLvNb]
             else:
