@@ -1,14 +1,14 @@
 import pygame
 import pytmx
 from pygame import surface
-
-
+from music import Music
+from bullet import Bullet
 from function import *
 from player import Player
 from tiles_map import *
 from pause_menu import PauseMenu
 from button import Button
-
+from gameover import GameOver
 from animation import Animation
 from dialogue import Dialogue
 
@@ -16,6 +16,11 @@ pygame.init()
 SCREEN_WIDTH = pygame.display.Info().current_w
 SCREEN_HEIGHT = pygame.display.Info().current_h
 MAP_COLLISION_LAYER = 0
+GameOver = GameOver(screen)
+
+music = Music("sound/music/voyage.mp3")
+death_sound = Music("sound/effect/deathsound.mp3")
+
 
 
 class TittleName:
@@ -26,7 +31,7 @@ class TittleName:
         title_image = pygame.image.load('Assets/menu/Chronicles_of_Etheria.png').convert_alpha()
         self.title_image = pygame.transform.scale(title_image, (self.width, self.height))
         # on charge l'image du titre et on la redimensionne
-
+        self.music = Music("sound/music/voyage.mp3")
     def draw(self):
         self.screen.blit(self.title_image, (0, 0))
         # on affiche l'image du titre
@@ -106,7 +111,11 @@ class Game(object):
             else:
                 return False
 
-        if self.player.rect.y > SCREEN_HEIGHT or self.player.life <= 0:  # game over
+        if self.player.rect.y > SCREEN_HEIGHT or self.player.life <= 0:
+            music.soundtrack.stop() # game over
+            death_sound.play(0)
+            GameOver.run(True)
+
             return "main_menu"
 
         return True
@@ -127,6 +136,9 @@ class Game(object):
         self.player.draw(screen)
         pygame.display.flip()
 
+    def music(self):
+        music.play(-1)
+        # music.play(-1) permet de jouer la musique en boucle
 
 def load_levels(levels_directory):
     levels = []

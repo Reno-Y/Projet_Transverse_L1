@@ -1,6 +1,7 @@
 import pygame
 from Class import Animation, Game
 from constants import FPS, SCREEN_HEIGHT, SCREEN_WIDTH
+from music import Music
 
 width, height = SCREEN_WIDTH, SCREEN_HEIGHT
 screen = pygame.display.set_mode((width, height))
@@ -16,6 +17,9 @@ player_run = Animation(screen, width, height, 'Assets/character/player/Run.png',
 def run_level1(boolean):
 
     game = Game([(200, 100)], "Assets/levels/")
+
+    game.music()
+
     while boolean:
 
         state = game.process_events()
@@ -28,4 +32,5 @@ def run_level1(boolean):
 
         pygame.display.flip()
         pygame.time.Clock().tick(FPS)
+
     return boolean
