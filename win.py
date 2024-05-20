@@ -3,9 +3,10 @@ import time
 import pygame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, BUTTON_SCALE
 from animation import Animation
-
+from function import parallax, parallax_init
+from music import Music
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-class GameOver:
+class Win:
 
     def __init__(self, screen):
 
@@ -19,27 +20,32 @@ class GameOver:
         self.clock = pygame.time.Clock()
 
         self.main_menu_button = pygame.image.load('Assets/menu/main_menu/main_menu_1.png').convert_alpha()
-        self.main_menu_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2), (SCREEN_HEIGHT / 2 + 8*(self.button_height * self.scale / 2)),
+        self.main_menu_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2), (SCREEN_HEIGHT / 2 ),
                                        self.main_menu_button,
                                        self.scale, self.screen, 'Assets/menu/main_menu/main_menu_spritesheet.png', SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.player_death = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/player/Dead2.png', 3.5, 128, 128,
-                                  (((SCREEN_WIDTH/2)-(SCREEN_WIDTH/8)) , ((SCREEN_HEIGHT/4)-(SCREEN_HEIGHT/20) )))
+        self.player_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/player/Idle.png', 3, 128, 128,
+                                    (((SCREEN_WIDTH/2)-(SCREEN_WIDTH/4)) , ((SCREEN_HEIGHT/2)+ (SCREEN_HEIGHT/9) )))
+        self.hime_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/hime/idle.png', 2.7, 128, 128,
+                                    (((SCREEN_WIDTH / 2) + (SCREEN_WIDTH /16)), ((SCREEN_HEIGHT / 2)+ (SCREEN_HEIGHT / 7))))
 
     def run(self, boolean):
-
+        scroll = 0
+        music = Music("sound/music/theme_of_love.mp3")
+        bg_images = parallax_init("assets/background/beach")
         run = boolean
-
+        from Class import Title
+        win = Title(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/menu/win.png')
+        music.play(-1)
         while run:
+
             self.screen.fill((0, 0, 0))  # remplissage de l'écran
-            self.screen.blit(pygame.image.load('Assets/background/gameover/gameover.png'), (0, 0))
-
-
-
-            self.player_death.draw()
-            self.player_death.play_once(300)
-
-
-
+            parallax(scroll, bg_images, self.screen)
+            scroll += 0.5
+            self.player_idle.draw()
+            self.player_idle.update()
+            self.hime_idle.draw(orientation=True)
+            self.hime_idle.update()
+            win.draw()
 
             self.main_menu_button.draw()
             pygame.display.flip()
@@ -52,9 +58,11 @@ class GameOver:
 
                 elif self.main_menu_button.clicked():
                     # run_menu(True)
+                    music.soundtrack.stop()
                     run = False
                     return True
 
             self.clock.tick(FPS)
             pygame.display.update()
+
 

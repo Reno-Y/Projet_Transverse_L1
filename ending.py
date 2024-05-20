@@ -47,7 +47,7 @@ def run_ending(boolean):
 
         screen.fill((0, 0, 0))  # remplissage de l'écran
         parallax(scroll, bg_images, screen)
-        scroll += 2
+        scroll += 1
 
         dialogue.draw()  # affichage du dialogue
 

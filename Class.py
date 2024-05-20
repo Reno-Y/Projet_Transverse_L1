@@ -12,6 +12,7 @@ from button import Button
 from gameover import GameOver
 from animation import Animation
 from dialogue import Dialogue
+from win import Win
 
 pygame.init()
 SCREEN_WIDTH = pygame.display.Info().current_w
@@ -21,7 +22,7 @@ GameOver = GameOver(screen)
 
 music = Music("sound/music/voyage.mp3")
 death_sound = Music("sound/effect/deathsound.mp3")
-
+win = Win(screen)
 
 
 class TittleName:
@@ -37,6 +38,17 @@ class TittleName:
         self.screen.blit(self.title_image, (0, 0))
         # on affiche l'image du titre
 
+class Title:
+    def __init__(self, screen, width, height, image_path):
+        self.screen = screen
+        self.width = width
+        self.height = height
+        title_image = pygame.image.load(image_path).convert_alpha()
+        self.title_image = pygame.transform.scale(title_image, (self.width, self.height))
+
+    def draw(self):
+        self.screen.blit(self.title_image, (0, 0))
+        # on affiche l'image du titre
 
 # -------------------------------------------------------------------#
 
@@ -126,7 +138,11 @@ class Game(object):
                 return False
 
         elif self.player.rect.x > SCREEN_WIDTH:
-            self.player.rect.x -= 10
+            music.soundtrack.stop()
+            win.run(True)
+
+            return "main_menu"
+
 
         if self.player.rect.y > SCREEN_HEIGHT or self.player.life <= 0:
             music.soundtrack.stop()  # game over

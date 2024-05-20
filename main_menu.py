@@ -60,7 +60,7 @@ def run_menu(boolean):
 
         screen.fill((0, 0, 0))
         parallax(scroll, bg_images, screen)
-        scroll += 4
+        scroll += 2
         title_name.draw()
         start_button.draw()
         player_walk.update()
