@@ -2,9 +2,9 @@ import pygame
 import pytmx
 from pygame import surface
 
-from bullet import Bullet
+
 from function import *
-from player2 import Player
+from player import Player
 from tiles_map import *
 from pause_menu import PauseMenu
 from button import Button

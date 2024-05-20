@@ -19,6 +19,7 @@ class Animation:
         self.last_update = pygame.time.get_ticks()
         self.animation_cooldown = 150
         self.frame = 0
+        self.finished = False
 
         for i in range(animation_step):
             self.sprite_animation_list.append(
@@ -40,3 +41,17 @@ class Animation:
             self.screen.blit(pygame.transform.flip(self.sprite_animation_list[self.frame], False, True),
                              self.coordinates)
         # on affiche la frame actuelle
+
+    def play_once(self,animation_cooldown):
+        """Joue l'animation une seule fois"""
+        current_time = pygame.time.get_ticks()
+        if not self.finished and current_time - self.last_update >= animation_cooldown:
+            self.last_update = current_time
+            self.frame += 1
+            if self.frame >= len(self.sprite_animation_list):
+                self.frame = len(self.sprite_animation_list) - 1
+                self.finished = True  # Marque l'animation comme terminée
+
+    def is_finished(self):
+        """Retourne True si l'animation est terminée"""
+        return self.finished
