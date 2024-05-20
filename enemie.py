@@ -21,6 +21,18 @@ class Enemies(object):
     def draw(self, screen):
         self.enemies_group.draw(screen)
 
+    def next_level(self, liste_pos, currentlevel, playergroup, bulletgroup, player):
+        self.liste_pos = liste_pos
+        self.enemies_group = pygame.sprite.Group()
+        self.currentlevel = currentlevel
+        Enemie.player = player
+        Enemie.bullet_group = bulletgroup
+        Enemie.player_group = playergroup
+
+        for pos in self.liste_pos:
+            self.enemies_group.add(Enemie(self.domage, self.life, pos, self.currentlevel))
+
+
 
 class Enemie(pygame.sprite.Sprite):
     gravity = GRAVITY  # Assurez-vous que GRAVITY est défini quelque part dans votre code
@@ -48,7 +60,7 @@ class Enemie(pygame.sprite.Sprite):
         self.life = life
         self.damage = damage  # Définir les dégâts de la balle
         self.attacktime = pygame.time.get_ticks()
-        self.speed_x = 2  # Définir la vitesse en x
+        self.speed_x = 0  # Définir la vitesse en x
         self.speed_y = 0  # Définir la vitesse en y
         self.fall = True
         # Set enemie position
@@ -87,19 +99,20 @@ class Enemie(pygame.sprite.Sprite):
                     self.rect.top = tile.rect.bottom
                 self.speed_y = 0  # Arrête la chute en cas de collision
                 self.fall = False
-        if not self.fall and not tilehitlist:
-            self.speed_x = -self.speed_x
-            self.rect.x += self.speed_x * 2
-            self.rect.y -= self.speed_y
-            self.speed_y = 0
+        # if not self.fall and not tilehitlist:
+        #     self.speed_x = -self.speed_x
+        #     self.rect.x += self.speed_x * 2
+        #     self.rect.y -= self.speed_y
+        #     self.speed_y = 0
 
         self.shifty = self.currentLevel.levelShifty
 
 
         # Supprime l'enemie si elle sort de la map
-        if self.rect.x > self.currentLevel.map_width or self.rect.x < 0:
+        if (((self.rect.x - self.currentLevel.levelShift) > self.currentLevel.map_width) or
+                ((self.rect.x - self.currentLevel.levelShift) < 0)):
             self.kill()
-        if self.rect.y > self.currentLevel.map_height + SCREEN_HEIGHT:
+        if (self.rect.y + self.currentLevel.levelShifty) > self.currentLevel.map_height:
             self.kill()
 
         # Vérifie les collisions avec le joueur

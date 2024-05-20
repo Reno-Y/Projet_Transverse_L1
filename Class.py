@@ -56,6 +56,7 @@ class Game(object):
         self.player_group = pygame.sprite.Group(self.player)
         self.list_player_pos = list_player_pos
         self.player.currentLevel = self.currentLevel
+        self.list_enemies = list_enemies
         self.bullets = pygame.sprite.Group()
         self.enemies = Enemies(list_enemies[self.currentLvNb], self.currentLevel, self.player_group, self.bullets,
                                self.player)
@@ -76,6 +77,7 @@ class Game(object):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if self.pause.run(True):
+                        music.soundtrack.stop()
                         return "main_menu"
                 elif event.key == pygame.K_LEFT:
                     self.move_left = True
@@ -100,7 +102,7 @@ class Game(object):
             if self.move_right:
                 self.player.goRight()
 
-        if self.player.rect.x > SCREEN_WIDTH:  # scene suivante
+        if (self.player.rect.x > SCREEN_WIDTH) and (len(self.enemies.enemies_group) == 0):  # scene suivante
             if len(self.levels) > self.currentLvNb+1:
                 self.currentLvNb += 1
                 self.currentLevel = self.levels[self.currentLvNb]
@@ -112,12 +114,22 @@ class Game(object):
                 else:
                     self.player.rect.x = 100
                     self.player.rect.y = 0
-
+                if len(self.list_enemies) > self.currentLvNb:
+                    self.enemies.next_level(self.list_enemies[self.currentLvNb], self.currentLevel, self.player_group,
+                                            self.bullets, self.player)
+                    Bullet.enemies = self.enemies.enemies_group
+                else:
+                    self.enemies.enemies_group.empty()
+                    Bullet.enemies = None
             else:
+                music.soundtrack.stop()
                 return False
 
+        elif self.player.rect.x > SCREEN_WIDTH:
+            self.player.rect.x -= 10
+
         if self.player.rect.y > SCREEN_HEIGHT or self.player.life <= 0:
-            music.soundtrack.stop() # game over
+            music.soundtrack.stop()  # game over
             death_sound.play(0)
             GameOver.run(True)
 
