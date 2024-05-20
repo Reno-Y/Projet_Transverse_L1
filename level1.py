@@ -16,7 +16,7 @@ player_run = Animation(screen, width, height, 'Assets/character/player/Run.png',
 
 def run_level1(boolean):
 
-    game = Game([(200, 100)], "Assets/levels/")
+    game = Game([(150, 100)], "Assets/levels/", [[(300, 100), (250, 100), (300, 100)]])
 
     game.music()
 

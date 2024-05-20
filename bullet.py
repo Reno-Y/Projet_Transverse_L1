@@ -25,6 +25,7 @@ class Bullet(pygame.sprite.Sprite):
                                                                int(image_height * BULLET_SCALE)))
 
         # Set player position
+        self.currentLevel = currentlevel
         self.rect = self.image.get_rect()
         self.rect.x = pos[0]
         self.rect.y = pos[1]
@@ -32,7 +33,7 @@ class Bullet(pygame.sprite.Sprite):
         self.damage = damage  # Définir les dégâts de la balle
         self.speed_x = speed_x  # Définir la vitesse en x
         self.speed_y = speed_y  # Définir la vitesse en y
-        self.currentLevel = currentlevel
+
         self.byplayer = byplayer
 
     def update(self):  # TODO à appeler dans la boucle de jeu, player et enemies sont dans un groupe
@@ -56,6 +57,7 @@ class Bullet(pygame.sprite.Sprite):
         if self.byplayer and Bullet.enemies_group is not None:
             hitlist = pygame.sprite.spritecollide(self, Bullet.enemies_group, False)
             for enemie in hitlist:
+                print("hit")
                 self.kill()
                 enemie.life -= 1
 
@@ -63,9 +65,9 @@ class Bullet(pygame.sprite.Sprite):
             if Bullet.player_group is not None and not self.byplayer:
                 hitlist = pygame.sprite.spritecollide(self, Bullet.player_group, False)
                 for player in hitlist:
-                    print("player")
                     self.kill()
                     player.life -= 1
+
         if pygame.time.get_ticks() - self.frametime > 100:
             if self.frame == 2:
                 self.frame = 0

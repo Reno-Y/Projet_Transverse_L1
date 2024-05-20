@@ -90,3 +90,17 @@ def parallax(scroll, bg_images, screen):
             x_position += width
         speed += 1
     # on fait défiler les images de fond
+
+
+def compute_penetration(block, old_rect, new_rect):
+    dx_correction = dy_correction = 0.0
+    if old_rect.bottom <= block.top < new_rect.bottom:
+        dy_correction = block.top - new_rect.bottom
+    elif old_rect.top >= block.bottom > new_rect.top:
+        dy_correction = block.bottom - new_rect.top
+    if old_rect.right <= block.left < new_rect.right:
+        dx_correction = block.left - new_rect.right
+    elif old_rect.left >= block.right > new_rect.left:
+        dx_correction = block.right - new_rect.left
+    return dx_correction, dy_correction
+

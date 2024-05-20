@@ -7,6 +7,7 @@ from function import *
 from player import Player
 from tiles_map import *
 from pause_menu import PauseMenu
+from enemie import Enemies
 from button import Button
 from gameover import GameOver
 from animation import Animation
@@ -41,7 +42,7 @@ class TittleName:
 
 
 class Game(object):
-    def __init__(self, list_player_pos, level_directory):
+    def __init__(self, list_player_pos, level_directory, list_enemies):
         # Set up a level to load
         self.scroll = 310
         self.bg_images = parallax_init("assets/background/level0")
@@ -52,10 +53,14 @@ class Game(object):
         self.move = False
         # Create a player object and set the level it is in
         self.player = Player(list_player_pos[self.currentLvNb])
+        self.player_group = pygame.sprite.Group(self.player)
         self.list_player_pos = list_player_pos
         self.player.currentLevel = self.currentLevel
         self.bullets = pygame.sprite.Group()
-        Bullet.player_group = pygame.sprite.Group(self.player)
+        self.enemies = Enemies(list_enemies[self.currentLvNb], self.currentLevel, self.player_group, self.bullets,
+                               self.player)
+        Bullet.player_group = self.player_group
+        Bullet.enemies = self.enemies.enemies_group
         self.move_left = False
         self.move_right = False
 
@@ -123,6 +128,7 @@ class Game(object):
     def runLogic(self):
         # Update player movement and collision logic
         self.player.update()
+        self.enemies.update()
         self.bullets.update()
         self.scroll += 2 - self.player.difference
 
@@ -133,6 +139,7 @@ class Game(object):
         parallax(self.scroll, self.bg_images, screen)
         self.currentLevel.draw(screen)
         self.bullets.draw(screen)
+        self.enemies.draw(screen)
         self.player.draw(screen)
         pygame.display.flip()
 
