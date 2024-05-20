@@ -15,25 +15,26 @@ clock = pygame.time.Clock()
 width, height = SCREEN_WIDTH, SCREEN_HEIGHT  # récupération de la taille de l'écran
 screen = pygame.display.set_mode((width, height))  # initialisation de la fenêtre
 
-text = ["HARU : C'EST DONC LA FIN ?",
-        "             EST CE QUE TOUT CELA EN VALAIT VRAIMENT LE COUP ?",
-        "             CE VOYAGE TOUCHE PEUT ETRE A SA FIN MAIS CE N'EST QUE LE DEBUT D'UNE NOUVELLE AVENTURE",
-        "             JE SUIS PRET A AFFRONTER TOUT CE QUI M'ATTEND",
-        "             ET VOUS ?"]
-
-text2 = ["HARU : SUITE DU TEXTE T'AS CAPTE ?",
-         "             J'SUIS PAS ASSEZ PAYE POUR ECRIRE TOUT CA",
-         "             HELPPPPPP"]
-
-dialogue = Dialogue(screen, height, width, width / 1.2, height / 4, width / 2 - width / 2.4,
-                    height / 4 + (7 * height / 16), text,
-                    (255, 255, 255))
-dialogue2 = Dialogue(screen, height, width, width / 1.2, height / 4, width / 2 - width / 2.4,
-                     height / 4 + (7 * height / 16), text2,
-                     (255, 255, 255))
-
 
 def run_ending(boolean):
+
+    text = ["HARU : C'EST DONC LA FIN ?",
+            "             EST CE QUE TOUT CELA EN VALAIT VRAIMENT LE COUP ?",
+            "             CE VOYAGE TOUCHE PEUT ETRE A SA FIN MAIS CE N'EST QUE LE DEBUT D'UNE NOUVELLE AVENTURE",
+            "             JE SUIS PRET A AFFRONTER TOUT CE QUI M'ATTEND",
+            "             ET VOUS ?"]
+
+    text2 = ["HARU : SUITE DU TEXTE T'AS CAPTE ?",
+             "             J'SUIS PAS ASSEZ PAYE POUR ECRIRE TOUT CA",
+             "             HELPPPPPP"]
+
+    dialogue = Dialogue(screen, height, width, width / 1.2, height / 4, width / 2 - width / 2.4,
+                        height / 4 + (7 * height / 16), text,
+                        (255, 255, 255))
+    dialogue2 = Dialogue(screen, height, width, width / 1.2, height / 4, width / 2 - width / 2.4,
+                         height / 4 + (7 * height / 16), text2,
+                         (255, 255, 255))
+
     music = Music("sound/music/ending.mp3")
     background_apparition('Assets/background/sunset_sky.png')  # fade in de l'image de fond
     music.play(-1)  # lancement de la musique
