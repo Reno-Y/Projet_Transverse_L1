@@ -1,9 +1,11 @@
 import pygame
-from constants import GRAVITY, MAP_COLLISION_LAYER, SCREEN_HEIGHT, SCREEN_WIDTH
+
+from bullet import Bullet
+from constants import GRAVITY, MAP_COLLISION_LAYER, SCREEN_HEIGHT, SCREEN_WIDTH, BULLET_SPEED
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, player_pos):
         from spritesheet import SpriteSheet2
         pygame.sprite.Sprite.__init__(self)
 
@@ -43,8 +45,8 @@ class Player(pygame.sprite.Sprite):
 
         # Set player position
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = player_pos[0]
+        self.rect.y = player_pos[1]
 
         # Set speed and direction
         self.speedX = 0
@@ -59,9 +61,20 @@ class Player(pygame.sprite.Sprite):
         # Players current level, set after object initialized in game constructor
         self.currentLevel = None
         self.difference = 0
+        self.difference_y = 0
 
         self.dashtime = pygame.time.get_ticks()
+        self.shoottime = pygame.time.get_ticks()
+        self.dashing = 0
+        self.damage = 1
     def update(self):
+        if self.dashing > 0:
+            if self.direction == "right":
+                self.speedX = 10
+            else:
+                self.speedX = -10
+            self.dashing -= 1
+
         # Update player position by change
         self.rect.x += self.speedX
 
@@ -72,9 +85,11 @@ class Player(pygame.sprite.Sprite):
         for tile in tileHitList:
             if self.speedX > 0:
                 self.rect.right = tile.rect.left
+                self.speedX = 0
             else:
                 self.rect.left = tile.rect.right
-        difference_y, self.difference = 0, 0
+                self.speedX = 0
+        self.difference_y, self.difference = 0, 0
 
         # change la camera si le joueur atteint le bord droit de l'écran
         if ((self.rect.right >= SCREEN_WIDTH - (SCREEN_WIDTH * 0.3)) and
@@ -93,15 +108,15 @@ class Player(pygame.sprite.Sprite):
         if ((self.rect.bottom >= SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.15)) and
                 ((self.currentLevel.map_height - self.currentLevel.levelShifty) < SCREEN_HEIGHT)):
 
-            difference_y = -(self.rect.bottom - (SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.15)))
+            self.difference_y = -(self.rect.bottom - (SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.15)))
             self.rect.bottom = SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.15)
 
         # change la camera si le joueur atteint le bord superieur de l'écran
         elif self.rect.top <= (SCREEN_HEIGHT * 0.15):
-            difference_y = (SCREEN_HEIGHT * 0.15) - self.rect.top
+            self.difference_y = (SCREEN_HEIGHT * 0.15) - self.rect.top
             self.rect.top = (SCREEN_HEIGHT * 0.15)
 
-        self.currentLevel.shiftLevel(self.difference, difference_y)
+        self.currentLevel.shiftLevel(self.difference, self.difference_y)
 
         # Update player position by change
         self.rect.y += self.speedY
@@ -161,21 +176,19 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.image = self.jumpingLeft[0]
 
-            self.speedY = -6
+            self.speedY += -6
 
     def dash(self):
         self.rect.y += 2
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
+
         if len(tileHitList) > 0:
             if (pygame.time.get_ticks() - self.dashtime) > 3000:
-                if self.direction == "right":
-                    self.speedX = 20
-                else:
-                    self.speedX = -20
+                self.dashing = 10
                 self.dashtime = pygame.time.get_ticks()
-    # Move right
 
+    #  Move right
     def goRight(self):
         self.rect.y += 2
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
@@ -203,9 +216,22 @@ class Player(pygame.sprite.Sprite):
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if len(tileHitList) > 0:
+        if len(tileHitList) > 0 and (self.dashing <= 0):
             self.running = False
             self.speedX = 0
+
+    def shoot(self, display, mouse_pos):
+        if (pygame.time.get_ticks() - self.shoottime) > 1000:
+            # Calculer le vecteur de direction
+            direction_x = ((mouse_pos[0] - self.rect.x) * BULLET_SPEED) / SCREEN_WIDTH
+            direction_y = ((mouse_pos[1] - self.rect.y) * BULLET_SPEED) / SCREEN_HEIGHT
+
+            # Multiplier par la vitesse souhaitée
+            speed_x = min(direction_x, BULLET_SPEED)
+            speed_y = min(direction_y, BULLET_SPEED)
+            self.shoottime = pygame.time.get_ticks()
+            # Créer et retourner la nouvelle balle
+            return Bullet(self.damage, speed_x, speed_y, self.rect.center, self.currentLevel, True)
 
     # Draw player
     def draw(self, screen):

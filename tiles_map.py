@@ -55,9 +55,9 @@ class Layer(object):
                     self.tiles.add(Tile(image=img, x=(x * self.mapObject.tilewidth),
                                         y=(y * self.mapObject.tileheight) + (SCREEN_HEIGHT - self.map_height)))
 
-
     # Draw layer
     def draw(self, screen):
+
         self.tiles.draw(screen)
 
 

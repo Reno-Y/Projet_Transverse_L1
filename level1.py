@@ -1,5 +1,4 @@
 import pygame
-from function import parallax
 from Class import Animation, Game
 from constants import FPS, SCREEN_HEIGHT, SCREEN_WIDTH
 
@@ -16,10 +15,10 @@ player_run = Animation(screen, width, height, 'Assets/character/player/Run.png',
 
 def run_level1(boolean):
 
-    game = Game()
+    game = Game([(200, 100)], "Assets/levels/")
     while boolean:
 
-        state = game.processEvents()
+        state = game.process_events()
         if state == "main_menu":
             return "main_menu"
         else:

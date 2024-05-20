@@ -36,64 +36,91 @@ class TittleName:
 
 
 class Game(object):
-    def __init__(self):
+    def __init__(self, list_player_pos, level_directory):
         # Set up a level to load
         self.scroll = 310
         self.bg_images = parallax_init("assets/background/level0")
-        self.currentLevelNumber = 0
+        self.currentLvNb = 0
         self.pause = PauseMenu(screen)
-        self.levels = []
-        self.levels.append(Level(fileName="Assets/levels/level1.tmx"))
-        self.currentLevel = self.levels[self.currentLevelNumber]
+        self.levels = load_levels(level_directory)
+        self.currentLevel = self.levels[self.currentLvNb]
         self.move = False
         # Create a player object and set the level it is in
-        self.player = Player(x=200, y=100)
+        self.player = Player(list_player_pos[self.currentLvNb])
         self.player.currentLevel = self.currentLevel
         self.bullets = pygame.sprite.Group()
+        Bullet.player = self.player
+        self.move_left = False
+        self.move_right = False
 
-    def processEvents(self):
+    def process_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
             # Get keyboard input and move player accordingly
+            elif pygame.mouse.get_pressed()[0]:
+                bullet = self.player.shoot(screen, pygame.mouse.get_pos())
+                if bullet is not None:
+                    self.bullets.add(bullet)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if self.pause.run(True):
                         return "main_menu"
                 elif event.key == pygame.K_LEFT:
-                    self.move = True
-                    self.player.goLeft()
+                    self.move_left = True
                 elif event.key == pygame.K_RIGHT:
-                    self.move = True
-                    self.player.goRight()
+                    self.move_right = True
                 elif event.key == pygame.K_UP:
                     self.player.jump()
                 elif event.key == pygame.K_w:
                     self.player.dash()
 
             elif event.type == pygame.KEYUP:
-                if (event.key == pygame.K_LEFT) and self.player.speedX < 0:
-                    self.move = False
-                if (event.key == pygame.K_RIGHT) and self.player.speedX > 0:
-                    self.move = False
+                if event.key == pygame.K_LEFT:
+                    self.move_left = False
+                if event.key == pygame.K_RIGHT:
+                    self.move_right = False
+
+        if not self.move_right and not self.move_left:
+            self.player.stop()
+        else:
+            if self.move_left:
+                self.player.goLeft()
+            if self.move_right:
+                self.player.goRight()
+
         if self.player.rect.x > SCREEN_WIDTH:
-            return False
+            if len(self.levels) > self.currentLvNb:
+                self.currentLvNb += 1
+                self.currentLevel = self.levels[self.currentLvNb]
+            else:
+                return False
         if self.player.rect.y > SCREEN_HEIGHT:
             return "main_menu"
-        if not self.move:
-            self.player.stop()
 
         return True
 
     def runLogic(self):
         # Update player movement and collision logic
         self.player.update()
+        self.bullets.update()
         self.scroll += 2 - self.player.difference
+
     # Draw level, player, overlay
 
     def draw(self, screen):
         screen.fill((135, 206, 235))
         parallax(self.scroll, self.bg_images, screen)
         self.currentLevel.draw(screen)
+        self.bullets.draw(screen)
         self.player.draw(screen)
         pygame.display.flip()
+
+
+def load_levels(levels_directory):
+    levels = []
+    for file_name in os.listdir(levels_directory):
+        if file_name.endswith(".tmx"):
+            level_path = os.path.join(levels_directory, file_name)
+            levels.append(Level(fileName=level_path))
+    return levels
