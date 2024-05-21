@@ -1,7 +1,8 @@
 import pygame
 
 from bullet import Bullet
-from constants import GRAVITY, MAP_COLLISION_LAYER, SCREEN_HEIGHT, SCREEN_WIDTH, BULLET_SPEED, PLAYER_AIRMOVE
+from constants import (GRAVITY, MAP_COLLISION_LAYER, SCREEN_HEIGHT, SCREEN_WIDTH, BULLET_SPEED, PLAYER_AIRMOVE,
+                       PLAYER_SPEED, PLAYER_DOMAGE, PLAYER_LIFE)
 
 
 class Player(pygame.sprite.Sprite):
@@ -66,8 +67,8 @@ class Player(pygame.sprite.Sprite):
         self.dashtime = pygame.time.get_ticks()
         self.shoottime = pygame.time.get_ticks()
         self.dashing = 0
-        self.damage = 1
-        self.life = 10
+        self.damage = PLAYER_DOMAGE
+        self.life = PLAYER_LIFE
     def update(self):
         if self.dashing > 0:
             if self.direction == "right":
@@ -198,7 +199,7 @@ class Player(pygame.sprite.Sprite):
         if (len(tileHitList) > 0) or PLAYER_AIRMOVE:
             self.direction = "right"
             self.running = True
-            self.speedX = 3
+            self.speedX = PLAYER_SPEED
 
     # Move left
     def goLeft(self):
@@ -209,7 +210,7 @@ class Player(pygame.sprite.Sprite):
         if (len(tileHitList) > 0) or PLAYER_AIRMOVE:
             self.direction = "left"
             self.running = True
-            self.speedX = -3
+            self.speedX = -PLAYER_SPEED
 
     # Stop moving
     def stop(self):
@@ -223,15 +224,15 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self, display, mouse_pos):
         if (pygame.time.get_ticks() - self.shoottime) > 1000:
-            # Calculer le vecteur de direction
+            # Calcule les composantes du vecteur direction
             direction_x = ((mouse_pos[0] - self.rect.x) * BULLET_SPEED) / SCREEN_WIDTH
             direction_y = ((mouse_pos[1] - self.rect.y) * BULLET_SPEED) / SCREEN_HEIGHT
 
-            # Multiplier par la vitesse souhaitée
+            # Multipliées par la vitesse souhaitée
             speed_x = min(direction_x, BULLET_SPEED)
             speed_y = min(direction_y, BULLET_SPEED)
             self.shoottime = pygame.time.get_ticks()
-            # Créer et retourner la nouvelle balle
+            # Créé et retourne la nouvelle balle
             return Bullet(self.damage, speed_x, speed_y, self.rect.center, self.currentLevel, True)
 
     # Draw player
