@@ -12,7 +12,6 @@ from button import Button
 from gameover import GameOver
 from animation import Animation
 from dialogue import Dialogue
-from win import Win
 
 pygame.init()
 SCREEN_WIDTH = pygame.display.Info().current_w
@@ -22,7 +21,6 @@ GameOver = GameOver(screen)
 
 music = Music("sound/music/voyage.mp3")
 death_sound = Music("sound/effect/deathsound.mp3")
-win = Win(screen)
 
 
 class TittleName:
@@ -74,7 +72,6 @@ class Game(object):
                                self.player)
         Bullet.player_group = self.player_group
         Bullet.enemies = self.enemies.enemies_group
-        self.win = Win(screen)
         self.move_left = False
         self.move_right = False
 

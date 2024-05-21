@@ -1,6 +1,7 @@
 import pygame
 pygame.init()
 
+
 class Button:
     def __init__(self, x, y, image, scale, screen, sheet, width, height):
         from animation import Animation

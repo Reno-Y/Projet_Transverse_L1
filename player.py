@@ -1,8 +1,9 @@
 import pygame
 
 from bullet import Bullet
-from constants import (GRAVITY, MAP_COLLISION_LAYER, SCREEN_HEIGHT, SCREEN_WIDTH, BULLET_SPEED, PLAYER_AIRMOVE,
-                       PLAYER_SPEED, PLAYER_DOMAGE, PLAYER_LIFE)
+from constants import (GRAVITY, MAP_COLLISION_LAYER, SCREEN_HEIGHT, SCREEN_WIDTH, BULLET_SPEED, PLAYER_AIR_MOVE,
+                       PLAYER_SPEED, PLAYER_DAMAGE, PLAYER_LIFE, PLAYER_DASH, PLAYER_SHOOT_DELAY, PLAYER_DASH_DELAY,
+                       PLAYER_JUMP_ACCELERATION)
 
 
 class Player(pygame.sprite.Sprite):
@@ -10,7 +11,7 @@ class Player(pygame.sprite.Sprite):
         from spritesheet import SpriteSheet2
         pygame.sprite.Sprite.__init__(self)
 
-        # Load the spritesheet for this player
+        # Load the sprite-sheet for this player
         self.sprites = SpriteSheet2("Assets/character/player/Player1.png")
 
         self.stillRight = self.sprites.image_at((0, 0, 48, 64))
@@ -64,11 +65,12 @@ class Player(pygame.sprite.Sprite):
         self.difference = 0
         self.difference_y = 0
 
-        self.dashtime = pygame.time.get_ticks()
-        self.shoottime = pygame.time.get_ticks()
-        self.dashing = 0
-        self.damage = PLAYER_DOMAGE
+        self.dash_time = pygame.time.get_ticks()
+        self.shoot_time = pygame.time.get_ticks()
+        self.dashing = 0  # nombre d'images avant la fin du dash
+        self.damage = PLAYER_DAMAGE
         self.life = PLAYER_LIFE
+
     def update(self):
         if self.dashing > 0:
             if self.direction == "right":
@@ -178,17 +180,17 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.image = self.jumpingLeft[0]
 
-            self.speedY += -6
+            self.speedY += PLAYER_JUMP_ACCELERATION
 
     def dash(self):
         self.rect.y += 2
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if len(tileHitList) > 0:
-            if (pygame.time.get_ticks() - self.dashtime) > 3000:
-                self.dashing = 10
-                self.dashtime = pygame.time.get_ticks()
+        if len(tileHitList) > 0 and PLAYER_DASH:
+            if (pygame.time.get_ticks() - self.dash_time) > PLAYER_DASH_DELAY:
+                self.dashing = 5
+                self.dash_time = pygame.time.get_ticks()
 
     #  Move right
     def goRight(self):
@@ -196,7 +198,7 @@ class Player(pygame.sprite.Sprite):
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if (len(tileHitList) > 0) or PLAYER_AIRMOVE:
+        if (len(tileHitList) > 0) or PLAYER_AIR_MOVE:
             self.direction = "right"
             self.running = True
             self.speedX = PLAYER_SPEED
@@ -207,7 +209,7 @@ class Player(pygame.sprite.Sprite):
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if (len(tileHitList) > 0) or PLAYER_AIRMOVE:
+        if (len(tileHitList) > 0) or PLAYER_AIR_MOVE:
             self.direction = "left"
             self.running = True
             self.speedX = -PLAYER_SPEED
@@ -223,7 +225,7 @@ class Player(pygame.sprite.Sprite):
             self.speedX = 0
 
     def shoot(self, display, mouse_pos):
-        if (pygame.time.get_ticks() - self.shoottime) > 1000:
+        if (pygame.time.get_ticks() - self.shoot_time) > PLAYER_SHOOT_DELAY:
             # Calcule les composantes du vecteur direction
             direction_x = ((mouse_pos[0] - self.rect.x) * BULLET_SPEED) / SCREEN_WIDTH
             direction_y = ((mouse_pos[1] - self.rect.y) * BULLET_SPEED) / SCREEN_HEIGHT
@@ -231,7 +233,7 @@ class Player(pygame.sprite.Sprite):
             # Multipliées par la vitesse souhaitée
             speed_x = min(direction_x, BULLET_SPEED)
             speed_y = min(direction_y, BULLET_SPEED)
-            self.shoottime = pygame.time.get_ticks()
+            self.shoot_time = pygame.time.get_ticks()
             # Créé et retourne la nouvelle balle
             return Bullet(self.damage, speed_x, speed_y, self.rect.center, self.currentLevel, True)
 

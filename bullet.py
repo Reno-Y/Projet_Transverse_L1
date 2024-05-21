@@ -17,7 +17,7 @@ class Bullet(pygame.sprite.Sprite):
                           self.sprites.image_at((12, 0, 6, 6))]
         self.image = self.animation[0]
         self.frame = 0
-        self.frametime = pygame.time.get_ticks()
+        self.frame_time = pygame.time.get_ticks()
         image_width = self.image.get_width()
         image_height = self.image.get_height()
         for i, image in enumerate(self.animation):
@@ -34,11 +34,12 @@ class Bullet(pygame.sprite.Sprite):
         self.speed_x = speed_x  # Définir la vitesse en x
         self.speed_y = speed_y  # Définir la vitesse en y
 
-        self.byplayer = byplayer
+        self.by_player = byplayer
 
     def update(self):  # TODO à appeler dans la boucle de jeu, player et enemies sont dans un groupe
         self.image = self.animation[self.frame]
-        # Mettre à jour la position de la balle
+
+        # Mettre à jour la position de la balle (équation de trajectoire)
         self.speed_y += Bullet.gravity
         self.rect.x += self.speed_x
         self.rect.y += self.speed_y
@@ -50,30 +51,33 @@ class Bullet(pygame.sprite.Sprite):
         if (self.rect.y + self.currentLevel.levelShifty) > self.currentLevel.map_height:
             self.kill()
 
+        #  supprime la balle si elle entre en collision avec la carte
         tilehitlist = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         if len(tilehitlist) > 0:
             self.kill()
 
-        if self.byplayer and Bullet.enemies_group is not None:
+        # fait des dégats à l'ennemie et suprime la balle si elle entre en collision avec la carte
+        if self.by_player and Bullet.enemies_group is not None:
             hitlist = pygame.sprite.spritecollide(self, Bullet.enemies_group, False)
             for enemie in hitlist:
-                print("hit")
                 self.kill()
                 enemie.life -= 1
 
         else:
-            if Bullet.player_group is not None and not self.byplayer:
+            # fait des dégats au joueur et suprime la balle si elle entre en collision avec la carte
+            if Bullet.player_group is not None and not self.by_player:
                 hitlist = pygame.sprite.spritecollide(self, Bullet.player_group, False)
                 for player in hitlist:
                     self.kill()
                     player.life -= 1
 
-        if pygame.time.get_ticks() - self.frametime > 100:
+        if pygame.time.get_ticks() - self.frame_time > 100:
             if self.frame == 2:
                 self.frame = 0
             else:
                 self.frame += 1
-            self.frametime = pygame.time.get_ticks()
+            self.frame_time = pygame.time.get_ticks()
 
     def draw(self, screen):
+        # affiche la balle
         screen.blit(self.image, self.rect)

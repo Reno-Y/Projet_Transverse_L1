@@ -1,19 +1,20 @@
 import pygame
-from constants import MAP_COLLISION_LAYER, GRAVITY, ENEMIE_SCALE, SCREEN_HEIGHT
+from constants import (MAP_COLLISION_LAYER, GRAVITY, ENEMIES_SCALE, SCREEN_HEIGHT, ENEMIES_LIFE, ENEMIES_DAMAGE,
+                       ENEMIES_ATTACK_DELAY)
 
 
 class Enemies(object):
     def __init__(self, liste_pos, currentlevel, playergroup, bulletgroup, player):
-        self.liste_pos = liste_pos
+        self.list_pos = liste_pos
         self.enemies_group = pygame.sprite.Group()
-        self.currentlevel = currentlevel
-        self.domage = 2
-        self.life = 3
+        self.current_level = currentlevel
+        self.damage = ENEMIES_DAMAGE
+        self.life = ENEMIES_LIFE
         Enemie.player = player
         Enemie.bullet_group = bulletgroup
         Enemie.player_group = playergroup
-        for pos in self.liste_pos:
-            self.enemies_group.add(Enemie(self.domage, self.life, pos, self.currentlevel))
+        for pos in self.list_pos:
+            self.enemies_group.add(Enemie(self.damage, self.life, pos, self.current_level))
 
     def update(self):
         self.enemies_group.update()
@@ -22,22 +23,21 @@ class Enemies(object):
         self.enemies_group.draw(screen)
 
     def next_level(self, liste_pos, currentlevel, playergroup, bulletgroup, player):
-        self.liste_pos = liste_pos
+        self.list_pos = liste_pos
         self.enemies_group = pygame.sprite.Group()
-        self.currentlevel = currentlevel
+        self.current_level = currentlevel
         Enemie.player = player
         Enemie.bullet_group = bulletgroup
         Enemie.player_group = playergroup
 
-        for pos in self.liste_pos:
-            self.enemies_group.add(Enemie(self.domage, self.life, pos, self.currentlevel))
-
+        for pos in self.list_pos:
+            self.enemies_group.add(Enemie(self.damage, self.life, pos, self.current_level))
 
 
 class Enemie(pygame.sprite.Sprite):
-    gravity = GRAVITY  # Assurez-vous que GRAVITY est défini quelque part dans votre code
+    gravity = GRAVITY  # ajoute la gravité à la vitesse
     bullet_group = None  # Assigner les balles à cette variable depuis l'extérieur
-    player = None
+    player = None  # permet d'avoir accès  au joueur
     player_group = None  # Assigner le joueur à cette variable depuis l'extérieur
 
     def __init__(self, damage, life, pos, currentlevel):
@@ -54,8 +54,8 @@ class Enemie(pygame.sprite.Sprite):
         image_width = self.image.get_width()
         image_height = self.image.get_height()
         for i, image in enumerate(self.animation):
-            self.animation[i] = pygame.transform.scale(image, (int(image_width * ENEMIE_SCALE),
-                                                               int(image_height * ENEMIE_SCALE)))
+            self.animation[i] = pygame.transform.scale(image, (int(image_width * ENEMIES_SCALE),
+                                                               int(image_height * ENEMIES_SCALE)))
         self.image = self.animation[0]
         self.life = life
         self.damage = damage  # Définir les dégâts de la balle
@@ -72,10 +72,9 @@ class Enemie(pygame.sprite.Sprite):
 
     def update(self):
         self.image = self.animation[self.frame]
+
+        # Mise à jour de la position horizontale (equation de trajectoire)
         self.speed_y += Enemie.gravity  # Applique la gravité
-
-
-        # Mise à jour de la position horizontale
         self.rect.x += self.speed_x + (self.currentLevel.levelShift - self.shift)
         self.shift = self.currentLevel.levelShift
 
@@ -99,16 +98,14 @@ class Enemie(pygame.sprite.Sprite):
                     self.rect.top = tile.rect.bottom
                 self.speed_y = 0  # Arrête la chute en cas de collision
                 self.fall = False
-        # if not self.fall and not tilehitlist:
+        # if not self.fall and not tilehitlist: # inverse la direction pour éviter la chute (non fonctionnel)
         #     self.speed_x = -self.speed_x
         #     self.rect.x += self.speed_x * 2
         #     self.rect.y -= self.speed_y
         #     self.speed_y = 0
-
         self.shifty = self.currentLevel.levelShifty
 
-
-        # Supprime l'enemie si elle sort de la map
+        # Supprime l'ennemi si il sort de la map
         if (((self.rect.x - self.currentLevel.levelShift) > self.currentLevel.map_width) or
                 ((self.rect.x - self.currentLevel.levelShift) < 0)):
             self.kill()
@@ -118,24 +115,26 @@ class Enemie(pygame.sprite.Sprite):
         # Vérifie les collisions avec le joueur
         if Enemie.player_group is not None:
             hitlist = pygame.sprite.spritecollide(self, Enemie.player_group, False)
-            if hitlist and (pygame.time.get_ticks() - self.attacktime) > 1000:  # delai d'attaque
+
+            if hitlist and (pygame.time.get_ticks() - self.attacktime) > ENEMIES_ATTACK_DELAY:  # delai d'attaque
                 Enemie.player.life -= self.damage  # Inflige des dégâts au joueur
                 self.attacktime = pygame.time.get_ticks()
 
+        # Vérifie les collisions avec les balles qui sont tirées par le joueur
         if Enemie.bullet_group is not None:
             hitlist = pygame.sprite.spritecollide(self, Enemie.bullet_group, True)
             for bullet in hitlist:
                 self.life -= bullet.damage   # Inflige des dégâts au joueur
 
-        # Tue l'enemie si sa vie est épuisée
+        # Se tue si sa vie est épuisée
         if self.life <= 0:
             self.kill()
 
-        # Animation de l'enemie
+        # Animation de l'ennemi
         if pygame.time.get_ticks() - self.frametime > 100:
             self.frame = (self.frame + 1) % len(self.animation)
             self.frametime = pygame.time.get_ticks()
 
     def draw(self, screen):
-
+        # affiche l'enemei
         screen.blit(self.image, self.rect)
