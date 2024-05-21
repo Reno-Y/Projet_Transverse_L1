@@ -44,19 +44,66 @@ class Enemie(pygame.sprite.Sprite):
         super().__init__()
         from spritesheet import SpriteSheet2
         self.sprites = SpriteSheet2("Assets/bullet/bullet.png")  # Charge l'image de l'ennemi
-        self.animation = [self.sprites.image_at((0, 0, 6, 6)),
-                          self.sprites.image_at((6, 0, 6, 6)),
-                          self.sprites.image_at((12, 0, 6, 6))]
-        self.image = self.animation[0]
+        self.gemFull = [self.sprites.image_at((21, 0, 21, 25)),
+                        self.sprites.image_at((42, 0, 21, 25)),
+                        self.sprites.image_at((63, 0, 21, 25)),
+                        self.sprites.image_at((84, 0, 21, 25)),
+                        self.sprites.image_at((105, 0, 21, 25)),
+                        self.sprites.image_at((126, 0, 21, 25)),
+                        self.sprites.image_at((147, 0, 21, 25)),
+                        self.sprites.image_at((168, 0, 21, 25)),
+                        self.sprites.image_at((189, 0, 21, 25)),
+                        self.sprites.image_at((210, 0, 21, 25)),
+                        self.sprites.image_at((231, 0, 21, 25)),
+                        self.sprites.image_at((252, 0, 21, 25)),
+                        self.sprites.image_at((273, 0, 21, 25)),
+                        self.sprites.image_at((294, 0, 21, 25)),
+                        self.sprites.image_at((315, 0, 21, 25))]
+
+        self.gemHurt = [self.sprites.image_at((21, 32, 21, 25)),
+                        self.sprites.image_at((42, 32, 21, 25)),
+                        self.sprites.image_at((63, 32, 21, 25)),
+                        self.sprites.image_at((84, 32, 21, 25)),
+                        self.sprites.image_at((105, 32, 21, 25)),
+                        self.sprites.image_at((126, 32, 21, 25)),
+                        self.sprites.image_at((147, 32, 21, 25)),
+                        self.sprites.image_at((168, 32, 21, 25)),
+                        self.sprites.image_at((189, 32, 21, 25)),
+                        self.sprites.image_at((210, 32, 21, 25)),
+                        self.sprites.image_at((231, 32, 21, 25)),
+                        self.sprites.image_at((252, 32, 21, 25)),
+                        self.sprites.image_at((273, 32, 21, 25)),
+                        self.sprites.image_at((294, 32, 21, 25)),
+                        self.sprites.image_at((315, 32, 21, 25))]
+
+        self.gemDest = [self.sprites.image_at((21, 64, 21, 25)),
+                        self.sprites.image_at((42, 64, 21, 25)),
+                        self.sprites.image_at((63, 64, 21, 25)),
+                        self.sprites.image_at((84, 64, 21, 25)),
+                        self.sprites.image_at((105, 64, 21, 25)),
+                        self.sprites.image_at((126, 64, 21, 25)),
+                        self.sprites.image_at((147, 64, 21, 25)),
+                        self.sprites.image_at((168, 64, 21, 25)),
+                        self.sprites.image_at((189, 64, 21, 25)),
+                        self.sprites.image_at((210, 64, 21, 25)),
+                        self.sprites.image_at((231, 64, 21, 25)),
+                        self.sprites.image_at((252, 64, 21, 25)),
+                        self.sprites.image_at((273, 64, 21, 25)),
+                        self.sprites.image_at((294, 64, 21, 25)),
+                        self.sprites.image_at((315, 64, 21, 25))]
+
+        self.image = self.gemFull[0]
+        image_width = self.image.get_width()
+        image_height = self.image.get_height()
+
+        for i, image in enumerate(self.gemFull):
+            self.gemFull[i] = pygame.transform.scale(image, (int(image_width * ENEMIES_SCALE),
+                                                             int(image_height * ENEMIES_SCALE)))
+        self.image = self.gemFull[0]
+
         self.currentLevel = currentlevel
         self.frame = 0
         self.frametime = pygame.time.get_ticks()
-        image_width = self.image.get_width()
-        image_height = self.image.get_height()
-        for i, image in enumerate(self.animation):
-            self.animation[i] = pygame.transform.scale(image, (int(image_width * ENEMIES_SCALE),
-                                                               int(image_height * ENEMIES_SCALE)))
-        self.image = self.animation[0]
         self.life = life
         self.damage = damage  # Définit les dégâts de la balle
         self.attacktime = pygame.time.get_ticks()
@@ -71,7 +118,6 @@ class Enemie(pygame.sprite.Sprite):
         self.shifty = self.currentLevel.levelShifty
 
     def update(self):
-        self.image = self.animation[self.frame]
 
         # Mise à jour de la position horizontale (équation de trajectoire)
         self.speed_y += Enemie.gravity  # Applique la gravité
@@ -132,8 +178,14 @@ class Enemie(pygame.sprite.Sprite):
 
         # Animation de l'ennemi
         if pygame.time.get_ticks() - self.frametime > 100:
-            self.frame = (self.frame + 1) % len(self.animation)
+            self.frame = (self.frame + 1) % len(self.gemFull)
             self.frametime = pygame.time.get_ticks()
+            if self.life >= 3:
+                self.image = self.gemFull[self.frame]
+            elif self.life == 2:
+                self.image = self.gemFull[self.frame]
+            else:
+                self.image = self.gemFull[self.frame]
 
     def draw(self, screen):
         # Affiche l'ennemi
