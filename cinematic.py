@@ -27,9 +27,10 @@ def run_ending(boolean):
             "             JE SUIS PRET A AFFRONTER TOUT CE QUI M'ATTEND",
             "             ET VOUS ?"]
 
-    text2 = ["HARU : SUITE DU TEXTE T'AS CAPTE ?",
-             "             J'SUIS PAS ASSEZ PAYE POUR ECRIRE TOUT CA",
-             "             HELPPPPPP"]
+    text2 = ["HARU : PARFOIS JE ME RAPELLE DE CE PARCHEMIN QUE J'AIS TROUVE DANS LA CAVE DE MON GRAND PERE",
+             "             IL PARLAIT D'UTILISER LES FLECHES DIRECTIONNELLES POUR SE DEPLACER ET DE CLIQUER DROIT POUR TIRER",
+             "             ON POUVAIT MEME EFFECTUER UN DASH EN APPUYANT SUR W",
+             "             MAIS SURTOUT IL FAUT TUER TOUTES LES GEMMES POUR POUVOIR AVANCER"]
 
     dialogue = Dialogue(screen, height, width, width / 1.2, height / 4, width / 2 - width / 2.4,
                         height / 4 + (7 * height / 16), text,
