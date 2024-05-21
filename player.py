@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
         # Load the sprite-sheet for this player
         self.sprites = SpriteSheet2("Assets/character/player/Player1.png")
 
-        self.stillRight = self.sprites.image_at((0, 0, 48, 64))
+        self.stillRight = self.sprites.image_at((0, 0, 48, 60))
         self.stillLeft = self.sprites.image_at((0, 64, 48, 64))
 
         # List of frames for each animation
@@ -79,22 +79,6 @@ class Player(pygame.sprite.Sprite):
                 self.speedX = -10
             self.dashing -= 1
 
-        # Update player position by change
-        self.rect.x += self.speedX
-
-        # Get tiles in collision layer that player is now touching
-        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
-
-        # Move player to correct side of that block
-        for tile in tileHitList:
-            if self.speedX > 0:
-                self.rect.right = tile.rect.left
-                self.speedX = 0
-            else:
-                self.rect.left = tile.rect.right
-                self.speedX = 0
-        self.difference_y, self.difference = 0, 0
-
         # change la camera si le joueur atteint le bord droit de l'écran
         if ((self.rect.right >= SCREEN_WIDTH - (SCREEN_WIDTH * 0.3)) and
                 ((SCREEN_WIDTH - self.currentLevel.levelShift) < self.currentLevel.map_width)):
@@ -119,8 +103,24 @@ class Player(pygame.sprite.Sprite):
         elif self.rect.top <= (SCREEN_HEIGHT * 0.15):
             self.difference_y = (SCREEN_HEIGHT * 0.15) - self.rect.top
             self.rect.top = (SCREEN_HEIGHT * 0.15)
-
         self.currentLevel.shiftLevel(self.difference, self.difference_y)
+
+    # collision du joueur
+
+        # Update player position x by change
+        self.rect.x += self.speedX
+        # Get tiles in collision layer that player is now touching
+        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+
+        # Move player to correct side of that block
+        for tile in tileHitList:
+            if self.speedX > 0:
+                self.rect.right = tile.rect.left
+                self.speedX = 0
+            else:
+                self.rect.left = tile.rect.right
+                self.speedX = 0
+        self.difference_y, self.difference = 0, 0
 
         # Update player position by change
         self.rect.y += self.speedY

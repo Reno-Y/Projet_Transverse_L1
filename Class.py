@@ -36,6 +36,7 @@ class TittleName:
         self.screen.blit(self.title_image, (0, 0))
         # on affiche l'image du titre
 
+
 class Title:
     def __init__(self, screen, width, height, image_path):
         self.screen = screen
