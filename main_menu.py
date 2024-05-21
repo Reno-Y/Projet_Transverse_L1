@@ -15,8 +15,8 @@ pygame.font.init()  # initialisation de pygame
 
 title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60)  # police d'écriture
 clock = pygame.time.Clock()
-width, height = SCREEN_WIDTH, SCREEN_HEIGHT  # récupération de la taille de l'écran
-screen = pygame.display.set_mode((width, height))  # initialisation de la fenêtre
+width, height = SCREEN_WIDTH, SCREEN_HEIGHT  # Récupération de la taille de l'écran
+screen = pygame.display.set_mode((width, height))  # Initialisation de la fenêtre
 
 player_walk = Animation(screen, width, height, 'Assets/character/player/Run.png', 2.4, 128, 128,
                         ((width / 4) - 300, height - (height / 1.95)))

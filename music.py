@@ -7,4 +7,4 @@ class Music:
 
     def play(self, loop):
         self.soundtrack.play(loop)
-    # on joue la musique en boucle
+    # Joue la musique en boucle

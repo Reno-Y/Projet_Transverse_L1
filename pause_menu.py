@@ -41,7 +41,7 @@ class PauseMenu:
         scroll = 0
         bg_images = parallax_init("assets/background/sunset_sky")
         while run:
-            self.screen.fill((0, 0, 0))  # remplissage de l'écran
+            self.screen.fill((0, 0, 0))  # Remplissage de l'écran
             parallax(scroll, bg_images, self.screen)
             scroll += 2
 
