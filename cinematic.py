@@ -6,7 +6,7 @@ from button import Button
 import pygame
 from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_SCALE
 from pause_menu import PauseMenu
-from Class import Title
+from title_name import Title
 
 #  Il faut changer l'instance
 
@@ -134,7 +134,6 @@ def run_win(boolean):
             elif main_menu_button.clicked():
 
                 music.soundtrack.stop()
-                run = False
                 return "main_menu"
 
         clock.tick(FPS)

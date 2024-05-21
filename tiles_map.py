@@ -4,10 +4,10 @@ from constants import SCREEN_HEIGHT
 
 
 class Level(object):
-    def __init__(self, fileName):
+    def __init__(self, file_name):
         # Créer une carte/un niveau à partir de PyTMX
-        self.mapObject = pytmx.load_pygame(fileName)
-        self.map_height = self.mapObject.tileheight * (self.mapObject.height)
+        self.mapObject = pytmx.load_pygame(file_name)
+        self.map_height = self.mapObject.tileheight * self.mapObject.height
         self.map_width = self.mapObject.tilewidth * self.mapObject.width
         # Créer une liste des différentes "couches" (= "Calques" sur Tiled) de la carte
         self.layers = []
@@ -17,17 +17,17 @@ class Level(object):
         self.levelShifty = self.map_height - SCREEN_HEIGHT - self.mapObject.tileheight
         # Créer une couche/un calque pour chaque couche/calque de la carte
         for layer in range(len(self.mapObject.layers)):
-            self.layers.append(Layer(index=layer, mapObject=self.mapObject))
+            self.layers.append(Layer(index=layer, map_object=self.mapObject))
 
     # Déplacer le calque vers la gauche/droite
-    def shiftLevel(self, shiftX, shiftY):
-        self.levelShift += shiftX
-        self.levelShifty += shiftY
+    def shift_level(self, shift_x, shift_y):
+        self.levelShift += shift_x
+        self.levelShifty += shift_y
 
         for layer in self.layers:
             for tile in layer.tiles:
-                tile.rect.x += shiftX
-                tile.rect.y += shiftY
+                tile.rect.x += shift_x
+                tile.rect.y += shift_y
 
     # Met à jour le calque
     def draw(self, screen):
@@ -36,7 +36,7 @@ class Level(object):
 
 
 class Layer(object):
-    def __init__(self, index, mapObject):
+    def __init__(self, index, map_object):
         # Index des couches de la carte
         self.index = index
 
@@ -44,7 +44,7 @@ class Layer(object):
         self.tiles = pygame.sprite.Group()
 
         # Objet de carte de référence
-        self.mapObject = mapObject
+        self.mapObject = map_object
         self.map_height = self.mapObject.tileheight * (self.mapObject.height + 1)
 
         # Créer des tuiles dans la bonne position pour chaque couche

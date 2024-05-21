@@ -1,13 +1,12 @@
 from function import background_apparition, parallax, parallax_init
-from Class import TittleName
 from music import Music
 import pygame
-from ending import run_ending, run_win
+from cinematic import run_ending, run_win
 from animation import Animation
 from button import Button
 from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_SCALE
-from level1 import run_level1
-
+from level import run_level1
+from title_name import TitleName
 pygame.init()
 pygame.mixer.init()
 pygame.font.init()  # initialisation de pygame
@@ -42,7 +41,7 @@ quit_button = Button((width / 2 - button_width * scale / 2), (height / 2 + (butt
                      quit_button,
                      scale, screen, 'Assets/menu/quit/quit_spritesheet.png', width, height)
 
-title_name = TittleName(screen, width, height)
+title_name = TitleName(screen, width, height)
 
 
 def run_menu(boolean):

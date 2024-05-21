@@ -1,6 +1,3 @@
-import pygame
-import pytmx
-from pygame import surface
 from music import Music
 from bullet import Bullet
 from function import *
@@ -8,10 +5,7 @@ from player import Player
 from tiles_map import *
 from pause_menu import PauseMenu
 from enemie import Enemies
-from button import Button
 from gameover import GameOver
-from animation import Animation
-from dialogue import Dialogue
 
 pygame.init()
 SCREEN_WIDTH = pygame.display.Info().current_w
@@ -21,35 +15,6 @@ GameOver = GameOver(screen)
 
 music = Music("sound/music/voyage.mp3")
 death_sound = Music("sound/effect/deathsound.mp3")
-
-
-class TittleName:
-    def __init__(self, screen, width, height):
-        self.screen = screen
-        self.width = width
-        self.height = height
-        title_image = pygame.image.load('Assets/menu/Chronicles_of_Etheria.png').convert_alpha()
-        self.title_image = pygame.transform.scale(title_image, (self.width, self.height))
-        # on charge l'image du titre et on la redimensionne
-        self.music = Music("sound/music/voyage.mp3")
-
-    def draw(self):
-        self.screen.blit(self.title_image, (0, 0))
-        # Affiche l'image du titre
-
-
-class Title:
-    def __init__(self, screen, width, height, image_path):
-        self.screen = screen
-        self.width = width
-        self.height = height
-        title_image = pygame.image.load(image_path).convert_alpha()
-        self.title_image = pygame.transform.scale(title_image, (self.width, self.height))
-
-    def draw(self):
-        self.screen.blit(self.title_image, (0, 0))
-        # Affiche l'image du titre
-
 
 # -------------------------------------------------------------------#
 
@@ -85,7 +50,7 @@ class Game(object):
                 pygame.quit()
             # Récupère les inputs du clavier et déplace le joueur en fonction de ceux-ci
             elif pygame.mouse.get_pressed()[0]:
-                bullet = self.player.shoot(screen, pygame.mouse.get_pos())
+                bullet = self.player.shoot(pygame.mouse.get_pos())
                 if bullet is not None:
                     self.bullets.add(bullet)
             elif event.type == pygame.KEYDOWN:
@@ -112,9 +77,9 @@ class Game(object):
             self.player.stop()
         else:
             if self.move_left:
-                self.player.goLeft()
+                self.player.go_left()
             if self.move_right:
-                self.player.goRight()
+                self.player.go_right()
 
         if (self.player.rect.x > SCREEN_WIDTH) and (len(self.enemies.enemies_group) == 0):  # scene suivante
             if len(self.levels) > self.currentLvNb + 1:
@@ -148,7 +113,7 @@ class Game(object):
 
         return True
 
-    def runLogic(self):
+    def run_logic(self):
         # Met à jour le mouvement du joueur et les collisions
         self.player.update()
         self.enemies.update()
@@ -157,7 +122,7 @@ class Game(object):
 
     #  Préparation du niveau, du joueur, et de l'overlay
 
-    def draw(self, screen):
+    def draw(self):
         screen.fill((135, 206, 235))
         parallax(self.scroll, self.bg_images, screen)
         self.currentLevel.draw(screen)
@@ -176,5 +141,5 @@ def load_levels(levels_directory):
     for file_name in os.listdir(levels_directory):
         if file_name.endswith(".tmx"):
             level_path = os.path.join(levels_directory, file_name)
-            levels.append(Level(fileName=level_path))
+            levels.append(Level(file_name=level_path))
     return levels

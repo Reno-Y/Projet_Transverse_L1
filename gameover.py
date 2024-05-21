@@ -1,10 +1,6 @@
-import time
-
 import pygame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, BUTTON_SCALE
 from animation import Animation
-
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 class GameOver:
@@ -26,7 +22,8 @@ class GameOver:
                                        self.main_menu_button,
                                        self.scale, self.screen, 'Assets/menu/main_menu/main_menu_spritesheet.png',
                                        SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.player_death = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/player/Dead2.png', 3.5,
+        self.player_death = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT,
+                                      'Assets/character/player/Dead2.png', 3.5,
                                       128, 128,
                                       (((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 7)),
                                        ((SCREEN_HEIGHT / 4) - (SCREEN_HEIGHT / 7))))
@@ -52,10 +49,7 @@ class GameOver:
                     if event.key == pygame.K_ESCAPE:
                         run = False
 
-
                 elif self.main_menu_button.clicked():
-                    # run_menu(True)
-                    run = False
                     return True
 
             self.clock.tick(FPS)

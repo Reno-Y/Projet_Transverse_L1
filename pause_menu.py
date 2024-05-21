@@ -16,22 +16,30 @@ class PauseMenu:
         self.clock = pygame.time.Clock()
 
         self.resume_button = pygame.image.load('Assets/menu/resume/resume1.png').convert_alpha()
-        self.resume_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2), (SCREEN_HEIGHT / 2 - (self.button_height * self.scale) * 1.5),
-                                    self.resume_button, self.scale, self.screen, 'Assets/menu/resume/resume_spritesheet.png', SCREEN_WIDTH,
+        self.resume_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2),
+                                    (SCREEN_HEIGHT / 2 - (self.button_height * self.scale) * 1.5),
+                                    self.resume_button, self.scale, self.screen,
+                                    'Assets/menu/resume/resume_spritesheet.png', SCREEN_WIDTH,
                                     SCREEN_HEIGHT)
 
         self.quit_button = pygame.image.load('Assets/menu/quit/quit1.png').convert_alpha()
-        self.quit_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2), (SCREEN_HEIGHT / 2 + (self.button_height * self.scale / 2) * 3),
+        self.quit_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2),
+                                  (SCREEN_HEIGHT / 2 + (self.button_height * self.scale / 2) * 3),
                                   self.quit_button,
-                                  self.scale, self.screen, 'Assets/menu/quit/quit_spritesheet.png', SCREEN_WIDTH, SCREEN_HEIGHT)
+                                  self.scale, self.screen, 'Assets/menu/quit/quit_spritesheet.png',
+                                  SCREEN_WIDTH, SCREEN_HEIGHT)
         self.setting_button = pygame.image.load('Assets/menu/settings/settings1.png').convert_alpha()
-        self.setting_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2), (SCREEN_HEIGHT / 2 + self.button_height * self.scale / 2),
+        self.setting_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2),
+                                     (SCREEN_HEIGHT / 2 + self.button_height * self.scale / 2),
                                      self.setting_button,
-                                     self.scale, self.screen, 'Assets/menu/settings/settings_spritesheet.png', SCREEN_WIDTH, SCREEN_HEIGHT)
+                                     self.scale, self.screen, 'Assets/menu/settings/settings_spritesheet.png',
+                                     SCREEN_WIDTH, SCREEN_HEIGHT)
         self.main_menu_button = pygame.image.load('Assets/menu/main_menu/main_menu_1.png').convert_alpha()
-        self.main_menu_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2), (SCREEN_HEIGHT / 2 - self.button_height * self.scale / 2),
+        self.main_menu_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2),
+                                       (SCREEN_HEIGHT / 2 - self.button_height * self.scale / 2),
                                        self.main_menu_button,
-                                       self.scale, self.screen, 'Assets/menu/main_menu/main_menu_spritesheet.png', SCREEN_WIDTH, SCREEN_HEIGHT)
+                                       self.scale, self.screen, 'Assets/menu/main_menu/main_menu_spritesheet.png',
+                                       SCREEN_WIDTH, SCREEN_HEIGHT)
 
         self.scroll = 0
 
@@ -63,8 +71,6 @@ class PauseMenu:
                     run = False
 
                 elif self.main_menu_button.clicked():
-                    # run_menu(True)
-                    run = False
                     return True
 
             self.clock.tick(FPS)

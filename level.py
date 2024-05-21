@@ -1,7 +1,7 @@
 import pygame
-from Class import Animation, Game
+from game import Game
+from animation import Animation
 from constants import FPS, SCREEN_HEIGHT, SCREEN_WIDTH
-from music import Music
 
 width, height = SCREEN_WIDTH, SCREEN_HEIGHT
 screen = pygame.display.set_mode((width, height))
@@ -38,7 +38,7 @@ def run_level1(boolean):
         else:
             boolean = state
         game.runLogic()
-        game.draw(screen)
+        game.draw()
 
         pygame.display.flip()
         pygame.time.Clock().tick(FPS)

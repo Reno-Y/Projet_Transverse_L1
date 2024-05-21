@@ -4,7 +4,7 @@ import pygame
 class Dialogue:
     def __init__(self, screen, height, width, box_width, box_height, x, y, text, color):
 
-        from Class import Animation
+        from animation import Animation
         self.text_surfaces = []  # Stocke les surfaces de texte pour les afficher sans animation
         self.screen = screen
         self.width = width

@@ -1,7 +1,6 @@
 import pygame
 from function import launch_logo, game_window_info
 from main_menu import run_menu
-from level1 import run_level1
 
 # initialisation de pygame et de la clock
 pygame.init()
