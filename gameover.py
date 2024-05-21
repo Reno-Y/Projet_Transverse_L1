@@ -55,6 +55,3 @@ class GameOver:
 
             self.clock.tick(FPS)
             pygame.display.update()
-
-gameover = GameOver(screen)
-gameover.run(True)
