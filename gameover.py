@@ -23,7 +23,9 @@ class GameOver:
                                        self.main_menu_button,
                                        self.scale, self.screen, 'Assets/menu/main_menu/main_menu_spritesheet.png', SCREEN_WIDTH, SCREEN_HEIGHT)
         self.player_death = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/player/Dead2.png', 3.5, 128, 128,
-                                  (((SCREEN_WIDTH/2)-(SCREEN_WIDTH/8)) , ((SCREEN_HEIGHT/4)-(SCREEN_HEIGHT/20) )))
+                                  (((SCREEN_WIDTH/2)-(SCREEN_WIDTH/7)) , ((SCREEN_HEIGHT/4)-(SCREEN_HEIGHT/7) )))
+        gameover_image = pygame.image.load('Assets/background/gameover/gameover.png')
+        self.gameover_image = pygame.transform.scale(gameover_image, (self.width, self.height))
 
     def run(self, boolean):
 
@@ -31,7 +33,7 @@ class GameOver:
 
         while run:
             self.screen.fill((0, 0, 0))  # remplissage de l'écran
-            self.screen.blit(pygame.image.load('Assets/background/gameover/gameover.png'), (0, 0))
+            self.screen.blit(self.gameover_image, (0, 0))
 
 
 
