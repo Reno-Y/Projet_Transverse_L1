@@ -37,13 +37,13 @@ class Enemies(object):
 class Enemie(pygame.sprite.Sprite):
     gravity = GRAVITY  # ajoute la gravité à la vitesse
     bullet_group = None  # Assigner les balles à cette variable depuis l'extérieur
-    player = None  # permet d'avoir accès  au joueur
+    player = None  # permet d'avoir accès au joueur
     player_group = None  # Assigner le joueur à cette variable depuis l'extérieur
 
     def __init__(self, damage, life, pos, currentlevel):
         super().__init__()
         from spritesheet import SpriteSheet2
-        self.sprites = SpriteSheet2("Assets/bullet/bullet.png")  # Charger l'image de l'enemie
+        self.sprites = SpriteSheet2("Assets/bullet/bullet.png")  # Charger l'image de l'ennemi
         self.animation = [self.sprites.image_at((0, 0, 6, 6)),
                           self.sprites.image_at((6, 0, 6, 6)),
                           self.sprites.image_at((12, 0, 6, 6))]
@@ -63,7 +63,7 @@ class Enemie(pygame.sprite.Sprite):
         self.speed_x = 0  # Définir la vitesse en x
         self.speed_y = 0  # Définir la vitesse en y
         self.fall = True
-        # Set enemie position
+        # Définit la position de l'ennemi
         self.rect = self.image.get_rect()
         self.rect.x = pos[0] - self.currentLevel.levelShift
         self.rect.y = pos[1] - self.currentLevel.levelShifty
@@ -136,5 +136,5 @@ class Enemie(pygame.sprite.Sprite):
             self.frametime = pygame.time.get_ticks()
 
     def draw(self, screen):
-        # affiche l'enemei
+        # affiche l'ennemi
         screen.blit(self.image, self.rect)
