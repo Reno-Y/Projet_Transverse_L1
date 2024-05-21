@@ -23,18 +23,18 @@ class Button:
     def clicked(self):
 
         if self.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0] == 1:
-            # on vérifie si le bouton est cliqué
+            # Vérifie si le bouton est cliqué
 
             return True
 
     def draw(self):
-        pos = pygame.mouse.get_pos()  # on récupère la position de la souris
+        pos = pygame.mouse.get_pos()  # Récupère la position de la souris
 
         if self.rect.collidepoint(pos):
             self.button_animation.update()
             self.button_animation.draw()
-            # on affiche l'animation du bouton si la souris est dessus
+            # Affiche l'animation du bouton si la souris est dessus
 
         elif not self.rect.collidepoint(pos):
             self.screen.blit(self.image, (self.rect.x, self.rect.y))
-            # on affiche l'image du bouton si la souris n'est pas dessus
+            # Affiche l'image du bouton si la souris n'est pas dessus

@@ -2,13 +2,13 @@ from pygame import display, init
 
 init()
 
-# constantes d'affichage
+# Constantes d'affichage
 BUTTON_SCALE = 0.15
 SCREEN_WIDTH = display.Info().current_w
 SCREEN_HEIGHT = display.Info().current_h
 FPS = 60
 
-# constantes de la physique
+# Constantes pour la physique
 MAP_COLLISION_LAYER = 0
 GRAVITY = 0.2
 
@@ -22,11 +22,11 @@ PLAYER_DAMAGE = 1
 PLAYER_LIFE = 10
 PLAYER_JUMP_ACCELERATION = -6
 
-# constantes des balles
+# Constantes des balles
 BULLET_SPEED = 30
 BULLET_SCALE = 2
 
-# constantes de l'ennemie
+# Constantes de l'ennemi
 ENEMIES_SCALE = 6
 ENEMIES_DAMAGE = 2
 ENEMIES_LIFE = 3

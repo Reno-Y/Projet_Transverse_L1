@@ -7,22 +7,22 @@ import pygame
 from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_SCALE
 from pause_menu import PauseMenu
 from Class import Title
-#  il faut changer l'instance
+#  Il faut changer l'instance
 
 #  TODO changer les texte pour un tuto
 pygame.init()
 pygame.mixer.init()
-pygame.font.init()  # initialisation de pygame
-title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60)  # police d'écriture
+pygame.font.init()  # Initialisation de pygame
+title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60)  # Police d'écriture
 clock = pygame.time.Clock()
-width, height = SCREEN_WIDTH, SCREEN_HEIGHT  # récupération de la taille de l'écran
-screen = pygame.display.set_mode((width, height))  # initialisation de la fenêtre
+width, height = SCREEN_WIDTH, SCREEN_HEIGHT  # Récupération de la taille de l'écran
+screen = pygame.display.set_mode((width, height))  # Initialisation de la fenêtre
 
 
 def run_ending(boolean):
 
     text = ["HARU : C'EST DONC LA FIN ?",
-            "             EST CE QUE TOUT CELA EN VALAIT VRAIMENT LE COUP ?",
+            "             EST CE QUE TOUT CELA EN VALAIT VRAIMENT LA PEINE ?",
             "             CE VOYAGE TOUCHE PEUT ETRE A SA FIN MAIS CE N'EST QUE LE DEBUT D'UNE NOUVELLE AVENTURE",
             "             JE SUIS PRET A AFFRONTER TOUT CE QUI M'ATTEND",
             "             ET VOUS ?"]
@@ -39,8 +39,8 @@ def run_ending(boolean):
                          (255, 255, 255))
 
     music = Music("sound/music/ending.mp3")
-    background_apparition('Assets/background/sunset_sky.png')  # fade in de l'image de fond
-    music.play(-1)  # lancement de la musique
+    background_apparition('Assets/background/sunset_sky.png')  # Fondu entrant de l'image de fond
+    music.play(-1)  # Lancement de la musique
     scroll = 0
     pause = PauseMenu(screen)
     run = boolean
@@ -48,21 +48,21 @@ def run_ending(boolean):
 
     while run:
 
-        screen.fill((0, 0, 0))  # remplissage de l'écran
+        screen.fill((0, 0, 0))  # Remplissage de l'écran
         parallax(scroll, bg_images, screen)
         scroll += 1
 
-        dialogue.draw()  # affichage du dialogue
+        dialogue.draw()  # Affichage du dialogue
 
-        if dialogue.closed():  # si le dialogue est fermé
-            dialogue2.draw()  # affichage du deuxième dialogue
+        if dialogue.closed():  # Si le dialogue est fermé
+            dialogue2.draw()  # Affichage du deuxième dialogue
 
         for event in pygame.event.get():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    dialogue.skip()  # passage au dialogue suivant
-                    dialogue.next()  # affichage du dialogue suivant
+                    dialogue.skip()  # Passage au dialogue suivant
+                    dialogue.next()  # Affichage du dialogue suivant
                     dialogue2.next()
                     dialogue2.closed()
                     dialogue.closed()

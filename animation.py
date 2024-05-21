@@ -24,27 +24,27 @@ class Animation:
         for i in range(animation_step):
             (self.sprite_animation_list.append(
                 self.sprite.get_image(i, pixel_x, pixel_y, scale, (0, 255, 246))))
-            # On récupère les images de l'animation par leurs formats
-            # On génère une liste d'images pour l'animation
+            # Récupère les images de l'animation par leurs formats
+            # Génère une liste d'images pour l'animation
 
     def update(self):
         current_time = pygame.time.get_ticks()
         if current_time - self.last_update >= self.animation_cooldown:
             self.last_update = current_time
             self.frame = (self.frame + 1) % len(self.sprite_animation_list)
-            # on change de frame à chaque fois que le cooldown est atteint
+            # Change de frame à chaque fois que le cooldown est atteint
 
     def draw(self, orientation=None):
         if orientation is None:
             self.screen.blit(self.sprite_animation_list[self.frame], self.coordinates)
 
-        elif orientation is not None:  # on inverse l'image
+        elif orientation is not None:  # Inverse l'image
 
             flipped_image = pygame.transform.flip(self.sprite_animation_list[self.frame], True, False)
-            flipped_image.set_colorkey((0, 255, 246))  # Réappliquer la couleur clé après le retournement
+            flipped_image.set_colorkey((0, 255, 246))  # Réapplique la couleur cléée après le retournement
             self.screen.blit(flipped_image, self.coordinates)
 
-        # on affiche la frame actuelle
+        # Affiche la frame actuelle
 
     def play_once(self, animation_cooldown):
         """Joue l'animation une seule fois"""

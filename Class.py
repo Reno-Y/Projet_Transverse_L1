@@ -34,7 +34,7 @@ class TittleName:
         self.music = Music("sound/music/voyage.mp3")
     def draw(self):
         self.screen.blit(self.title_image, (0, 0))
-        # on affiche l'image du titre
+        # Affiche l'image du titre
 
 
 class Title:
@@ -47,14 +47,14 @@ class Title:
 
     def draw(self):
         self.screen.blit(self.title_image, (0, 0))
-        # on affiche l'image du titre
+        # Affiche l'image du titre
 
 # -------------------------------------------------------------------#
 
 
 class Game(object):
     def __init__(self, list_player_pos, level_directory, list_enemies):
-        # Set up a level to load
+        # Définit un niveau à charger
         self.scroll = 310
         self.bg_images = parallax_init("assets/background/level0")
         self.currentLvNb = 0
@@ -62,7 +62,7 @@ class Game(object):
         self.levels = load_levels(level_directory)
         self.currentLevel = self.levels[self.currentLvNb]
         self.move = False
-        # Créer l'objet joueur et positionner le joueur dans le niveau auquel il est
+        # Créer l'objet joueur et positionne celui-ci dans le niveau défini
         self.player = Player(list_player_pos[self.currentLvNb])
         self.player_group = pygame.sprite.Group(self.player)
         self.list_player_pos = list_player_pos
@@ -80,7 +80,7 @@ class Game(object):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            # Récupérer les inputs du clavier et déplacer le joueur en fonctions de ces inputs
+            # Récupère les inputs du clavier et déplace le joueur en fonction de ceux-ci
             elif pygame.mouse.get_pressed()[0]:
                 bullet = self.player.shoot(screen, pygame.mouse.get_pos())
                 if bullet is not None:
@@ -137,7 +137,7 @@ class Game(object):
                 return False
 
         if self.player.rect.y > SCREEN_HEIGHT or self.player.life <= 0:
-            music.soundtrack.stop()  # game over
+            music.soundtrack.stop()  # Game over
             death_sound.play(0)
             GameOver.run(True)
 
