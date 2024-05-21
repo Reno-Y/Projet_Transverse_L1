@@ -12,38 +12,47 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         # Load the sprite-sheet for this player
-        self.sprites = SpriteSheet2("Assets/character/player/Player1.png")
+        self.sprites = SpriteSheet2("Assets/character/player/Player.png")
+        
+        # Load the frames for each animation
+        
+        self.stillRight = self.sprites.image_at((0, 256, 43, 64))
 
-        self.stillRight = self.sprites.image_at((0, 0, 48, 60))
-        self.stillLeft = self.sprites.image_at((0, 64, 48, 64))
+
+
+        self.stillLeft = self.sprites.image_at((0, 320, 43, 64))
+
 
         # List of frames for each animation
-        self.runningRight = (self.sprites.image_at((48, 0, 50, 64)),
-                             self.sprites.image_at((102, 0, 50, 64)),
-                             self.sprites.image_at((150, 0, 50, 64)),
-                             self.sprites.image_at((251, 0, 50, 64)),
-                             self.sprites.image_at((300, 0, 50, 64)),
-                             self.sprites.image_at((354, 0, 50, 64)),
-                             self.sprites.image_at((402, 0, 50, 64)))
+        self.runningRight = (self.sprites.image_at((64, 0, 54, 64)),
+                             self.sprites.image_at((128, 0, 54, 64)),
+                             self.sprites.image_at((192, 0, 54, 64)),
+                             self.sprites.image_at((256, 0, 54, 64)),
+                             self.sprites.image_at((320, 0, 54, 64)),
+                             self.sprites.image_at((384, 0, 54, 64)),
+                             self.sprites.image_at((448, 0, 54, 64)))
 
-        self.runningLeft = (self.sprites.image_at((48, 64, 50, 63)),
-                            self.sprites.image_at((102, 64, 50, 63)),
-                            self.sprites.image_at((150, 64, 50, 63)),
-                            self.sprites.image_at((251, 64, 50, 63)),
-                            self.sprites.image_at((300, 64, 50, 63)),
-                            self.sprites.image_at((354, 64, 50, 63)),
-                            self.sprites.image_at((402, 64, 50, 63)))
+        self.runningLeft = (self.sprites.image_at((64, 64, 54, 64)),
+                            self.sprites.image_at((128, 64, 54, 64)),
+                            self.sprites.image_at((192, 64, 54, 64)),
+                            self.sprites.image_at((256, 64, 54, 64)),
+                            self.sprites.image_at((320, 64, 54, 64)),
+                            self.sprites.image_at((384, 64, 54, 64)),
+                            self.sprites.image_at((448, 64, 54, 64)))
 
-        self.jumpingLeft = \
-            (self.sprites.image_at((61, 128, 50, 64)),
-             self.sprites.image_at((107, 128, 50, 64)),
-             self.sprites.image_at((156, 128, 50, 64)))
+        self.jumpingRight = \
+            (self.sprites.image_at((64, 128, 50, 64)),
+             self.sprites.image_at((128, 128, 50, 64)),
+             self.sprites.image_at((192, 128, 50, 64)))
 
-        self.jumpingRight = (self.sprites.image_at((49, 192, 48, 64)),
-                             self.sprites.image_at((95, 192, 50, 64)),
-                             self.sprites.image_at((156, 192, 50, 64)))
+        self.jumpingLeft = (self.sprites.image_at((64, 192, 50, 64)),
+                             self.sprites.image_at((128, 192, 50, 64)),
+                             self.sprites.image_at((192, 192, 50, 64)))
 
         self.image = self.stillRight
+
+
+
 
         # Set player position
         self.rect = self.image.get_rect()
@@ -59,6 +68,10 @@ class Player(pygame.sprite.Sprite):
         self.running = False
         self.runningFrame = 0
         self.runningTime = pygame.time.get_ticks()
+
+        self.iddling = False
+        self.iddlingFrame = 0
+
 
         # Players current level, set after object initialized in game constructor
         self.currentLevel = None
