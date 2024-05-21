@@ -104,6 +104,7 @@ class Player(pygame.sprite.Sprite):
             self.difference_y = (SCREEN_HEIGHT * 0.15) - self.rect.top
             self.rect.top = (SCREEN_HEIGHT * 0.15)
         self.currentLevel.shiftLevel(self.difference, self.difference_y)
+        self.difference_y, self.difference = 0, 0
 
     # collision du joueur
 
@@ -116,13 +117,12 @@ class Player(pygame.sprite.Sprite):
         for tile in tileHitList:
             if self.speedX > 0:
                 self.rect.right = tile.rect.left
-                self.speedX = 0
             else:
                 self.rect.left = tile.rect.right
-                self.speedX = 0
-        self.difference_y, self.difference = 0, 0
+        self.speedX = 0
 
-        # Update player position by change
+
+        # Update player position y by change
         self.rect.y += self.speedY
 
         # Get tiles in collision layer that player is now touching
@@ -189,7 +189,7 @@ class Player(pygame.sprite.Sprite):
 
         if len(tileHitList) > 0 and PLAYER_DASH:
             if (pygame.time.get_ticks() - self.dash_time) > PLAYER_DASH_DELAY:
-                self.dashing = 5
+                self.dashing = 10
                 self.dash_time = pygame.time.get_ticks()
 
     #  Move right
