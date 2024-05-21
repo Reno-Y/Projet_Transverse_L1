@@ -32,9 +32,10 @@ class TittleName:
         self.title_image = pygame.transform.scale(title_image, (self.width, self.height))
         # on charge l'image du titre et on la redimensionne
         self.music = Music("sound/music/voyage.mp3")
+
     def draw(self):
         self.screen.blit(self.title_image, (0, 0))
-        # on affiche l'image du titre
+        # Affiche l'image du titre
 
 
 class Title:
@@ -47,14 +48,15 @@ class Title:
 
     def draw(self):
         self.screen.blit(self.title_image, (0, 0))
-        # on affiche l'image du titre
+        # Affiche l'image du titre
+
 
 # -------------------------------------------------------------------#
 
 
 class Game(object):
     def __init__(self, list_player_pos, level_directory, list_enemies):
-        # Set up a level to load
+        # Définit un niveau à charger
         self.scroll = 310
         self.bg_images = parallax_init("assets/background/level0")
         self.currentLvNb = 0
@@ -62,11 +64,12 @@ class Game(object):
         self.levels = load_levels(level_directory)
         self.currentLevel = self.levels[self.currentLvNb]
         self.move = False
-        # Créer l'objet joueur et positionner le joueur dans le niveau auquel il est
+        # Créer l'objet joueur et positionne celui-ci dans le niveau défini
         self.player = Player(list_player_pos[self.currentLvNb])
         self.player_group = pygame.sprite.Group(self.player)
         self.list_player_pos = list_player_pos
         self.player.currentLevel = self.currentLevel
+        self.player.rect.y += (SCREEN_HEIGHT - self.currentLevel.map_height - self.player.rect.height)
         self.list_enemies = list_enemies
         self.bullets = pygame.sprite.Group()
         self.enemies = Enemies(list_enemies[self.currentLvNb], self.currentLevel, self.player_group, self.bullets,
@@ -80,7 +83,7 @@ class Game(object):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            # Récupérer les inputs du clavier et déplacer le joueur en fonctions de ces inputs
+            # Récupère les inputs du clavier et déplace le joueur en fonction de ceux-ci
             elif pygame.mouse.get_pressed()[0]:
                 bullet = self.player.shoot(screen, pygame.mouse.get_pos())
                 if bullet is not None:
@@ -114,7 +117,7 @@ class Game(object):
                 self.player.goRight()
 
         if (self.player.rect.x > SCREEN_WIDTH) and (len(self.enemies.enemies_group) == 0):  # scene suivante
-            if len(self.levels) > self.currentLvNb+1:
+            if len(self.levels) > self.currentLvNb + 1:
                 self.currentLvNb += 1
                 self.currentLevel = self.levels[self.currentLvNb]
                 self.player.currentLevel = self.currentLevel
@@ -123,8 +126,8 @@ class Game(object):
                     self.player.rect.x = self.list_player_pos[self.currentLvNb][0]
                     self.player.rect.y = self.list_player_pos[self.currentLvNb][1]
                 else:
-                    self.player.rect.x = 100
-                    self.player.rect.y = 0
+                    self.player.rect.x = 128
+                    self.player.rect.y = 279
                 if len(self.list_enemies) > self.currentLvNb:
                     self.enemies.next_level(self.list_enemies[self.currentLvNb], self.currentLevel, self.player_group,
                                             self.bullets, self.player)
@@ -137,7 +140,7 @@ class Game(object):
                 return False
 
         if self.player.rect.y > SCREEN_HEIGHT or self.player.life <= 0:
-            music.soundtrack.stop()  # game over
+            music.soundtrack.stop()  # Game over
             death_sound.play(0)
             GameOver.run(True)
 
@@ -166,6 +169,7 @@ class Game(object):
     def music(self):
         music.play(-1)
         # music.play(-1) permet de jouer la musique en boucle
+
 
 def load_levels(levels_directory):
     levels = []

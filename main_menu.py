@@ -12,7 +12,6 @@ pygame.init()
 pygame.mixer.init()
 pygame.font.init()  # initialisation de pygame
 
-
 title_font = pygame.font.Font('Assets/font/hero-speak.ttf', 60)  # police d'écriture
 clock = pygame.time.Clock()
 width, height = SCREEN_WIDTH, SCREEN_HEIGHT  # récupération de la taille de l'écran
@@ -29,7 +28,6 @@ start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
 button_width, button_height = start_button.get_rect().width, start_button.get_rect().height
 scale = width // (button_width * (1 / BUTTON_SCALE))
 
-
 start_button = Button((width / 2 - button_width * scale / 2),
                       (height / 2 - (button_height * scale) * 0.5), start_button, scale, screen,
                       'Assets/menu/start/start_spritesheet.png', width, height)
@@ -43,7 +41,6 @@ quit_button = pygame.image.load('Assets/menu/quit/quit1.png').convert_alpha()
 quit_button = Button((width / 2 - button_width * scale / 2), (height / 2 + (button_height * scale / 2) * 3),
                      quit_button,
                      scale, screen, 'Assets/menu/quit/quit_spritesheet.png', width, height)
-
 
 title_name = TittleName(screen, width, height)
 

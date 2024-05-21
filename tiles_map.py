@@ -45,7 +45,7 @@ class Layer(object):
 
         # Objet de carte de référence
         self.mapObject = mapObject
-        self.map_height = self.mapObject.tileheight * (self.mapObject.height+1)
+        self.map_height = self.mapObject.tileheight * (self.mapObject.height + 1)
 
         # Créer des tuiles dans la bonne position pour chaque couche
         for x in range(self.mapObject.width):
@@ -69,5 +69,3 @@ class Tile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
-
