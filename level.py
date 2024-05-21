@@ -37,7 +37,7 @@ def run_level1(boolean):
             return "main_menu"
         else:
             boolean = state
-        game.runLogic()
+        game.run_logic()
         game.draw()
 
         pygame.display.flip()
