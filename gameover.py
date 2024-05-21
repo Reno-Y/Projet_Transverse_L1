@@ -2,6 +2,7 @@ import pygame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, BUTTON_SCALE
 from animation import Animation
 
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 class GameOver:
 
@@ -26,7 +27,7 @@ class GameOver:
                                       'Assets/character/player/Dead2.png', 3.5,
                                       128, 128,
                                       (((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 7)),
-                                       ((SCREEN_HEIGHT / 4) - (SCREEN_HEIGHT / 7))))
+                                       ((SCREEN_HEIGHT / 4) - (SCREEN_HEIGHT / 20))))
         gameover_image = pygame.image.load('Assets/background/gameover/gameover.png')
         self.gameover_image = pygame.transform.scale(gameover_image, (self.width, self.height))
 
@@ -54,3 +55,6 @@ class GameOver:
 
             self.clock.tick(FPS)
             pygame.display.update()
+
+gameover = GameOver(screen)
+gameover.run(True)
