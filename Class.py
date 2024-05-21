@@ -67,6 +67,7 @@ class Game(object):
         self.player_group = pygame.sprite.Group(self.player)
         self.list_player_pos = list_player_pos
         self.player.currentLevel = self.currentLevel
+        self.player.rect.y += (SCREEN_HEIGHT - self.currentLevel.map_height - self.player.rect.height)
         self.list_enemies = list_enemies
         self.bullets = pygame.sprite.Group()
         self.enemies = Enemies(list_enemies[self.currentLvNb], self.currentLevel, self.player_group, self.bullets,
@@ -123,8 +124,8 @@ class Game(object):
                     self.player.rect.x = self.list_player_pos[self.currentLvNb][0]
                     self.player.rect.y = self.list_player_pos[self.currentLvNb][1]
                 else:
-                    self.player.rect.x = 100
-                    self.player.rect.y = 0
+                    self.player.rect.x = 128
+                    self.player.rect.y = 279
                 if len(self.list_enemies) > self.currentLvNb:
                     self.enemies.next_level(self.list_enemies[self.currentLvNb], self.currentLevel, self.player_group,
                                             self.bullets, self.player)

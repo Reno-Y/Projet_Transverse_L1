@@ -66,7 +66,7 @@ class Enemie(pygame.sprite.Sprite):
         # Définit la position de l'ennemi
         self.rect = self.image.get_rect()
         self.rect.x = pos[0] - self.currentLevel.levelShift
-        self.rect.y = pos[1] - self.currentLevel.levelShifty
+        self.rect.y = pos[1] - self.currentLevel.levelShifty - self.rect.height
         self.shift = self.currentLevel.levelShift
         self.shifty = self.currentLevel.levelShifty
 

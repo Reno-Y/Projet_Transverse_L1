@@ -64,7 +64,6 @@ class Player(pygame.sprite.Sprite):
         self.currentLevel = None
         self.difference = 0
         self.difference_y = 0
-
         self.dash_time = pygame.time.get_ticks()
         self.shoot_time = pygame.time.get_ticks()
         self.dashing = 0  # nombre d'images avant la fin du dash

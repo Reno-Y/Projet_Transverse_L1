@@ -36,7 +36,7 @@ class Bullet(pygame.sprite.Sprite):
 
         self.by_player = byplayer
 
-    def update(self):  # TODO à appeler dans la boucle de jeu, player et enemies sont dans un groupe
+    def update(self):
         self.image = self.animation[self.frame]
 
         # Mettre à jour la position de la balle (équation de trajectoire)
