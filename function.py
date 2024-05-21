@@ -2,7 +2,6 @@ import pygame
 import time
 import os
 
-
 pygame.init()
 pygame.mixer.init()
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
@@ -103,4 +102,3 @@ def compute_penetration(block, old_rect, new_rect):
     elif old_rect.left >= block.right > new_rect.left:
         dx_correction = block.right - new_rect.left
     return dx_correction, dy_correction
-

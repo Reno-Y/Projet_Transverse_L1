@@ -3,7 +3,6 @@ from constants import MAP_COLLISION_LAYER, GRAVITY, BULLET_SCALE
 
 
 class Bullet(pygame.sprite.Sprite):
-
     gravity = GRAVITY
     player_group = None  # Assigne le joueur à cette variable depuis l'extérieur
     enemies_group = None  # Assigne les ennemis à cette variable depuis l'extérieur

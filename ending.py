@@ -7,6 +7,7 @@ import pygame
 from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_SCALE
 from pause_menu import PauseMenu
 from Class import Title
+
 #  Il faut changer l'instance
 
 #  TODO changer les texte pour un tuto
@@ -20,7 +21,6 @@ screen = pygame.display.set_mode((width, height))  # Initialisation de la fenêt
 
 
 def run_ending(boolean):
-
     text = ["HARU : C'EST DONC LA FIN ?",
             "             EST CE QUE TOUT CELA EN VALAIT VRAIMENT LA PEINE ?",
             "             CE VOYAGE TOUCHE PEUT ETRE A SA FIN MAIS CE N'EST QUE LE DEBUT D'UNE NOUVELLE AVENTURE",
@@ -91,16 +91,16 @@ def run_win(boolean):
 
     main_menu_button = pygame.image.load('Assets/menu/main_menu/main_menu_1.png').convert_alpha()
     main_menu_button = Button((SCREEN_WIDTH / 2 - button_width * scale / 2), (SCREEN_HEIGHT / 2),
-                                   main_menu_button,
-                                   scale, screen, 'Assets/menu/main_menu/main_menu_spritesheet.png',
-                                   SCREEN_WIDTH, SCREEN_HEIGHT)
+                              main_menu_button,
+                              scale, screen, 'Assets/menu/main_menu/main_menu_spritesheet.png',
+                              SCREEN_WIDTH, SCREEN_HEIGHT)
     player_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/player/Idle.png', 3, 128,
-                                 128,
-                                 (((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4)),
-                                  ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 9))))
+                            128,
+                            (((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4)),
+                             ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 9))))
     hime_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/hime/idle.png', 2.7, 128, 128,
-                               (((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 16)),
-                                ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 7))))
+                          (((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 16)),
+                           ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 7))))
 
     scroll = 0
     music = Music("sound/music/theme_of_love.mp3")

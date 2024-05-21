@@ -124,7 +124,7 @@ class Enemie(pygame.sprite.Sprite):
         if Enemie.bullet_group is not None:
             hitlist = pygame.sprite.spritecollide(self, Enemie.bullet_group, True)
             for bullet in hitlist:
-                self.life -= bullet.damage   # Inflige des dégâts au joueur
+                self.life -= bullet.damage  # Inflige des dégâts au joueur
 
         # Se tue si sa vie est épuisée
         if self.life <= 0:

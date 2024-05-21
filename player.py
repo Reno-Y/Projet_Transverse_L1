@@ -120,7 +120,6 @@ class Player(pygame.sprite.Sprite):
                 self.rect.left = tile.rect.right
         self.speedX = 0
 
-
         # Update player position y by change
         self.rect.y += self.speedY
 

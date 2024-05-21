@@ -32,6 +32,7 @@ class TittleName:
         self.title_image = pygame.transform.scale(title_image, (self.width, self.height))
         # on charge l'image du titre et on la redimensionne
         self.music = Music("sound/music/voyage.mp3")
+
     def draw(self):
         self.screen.blit(self.title_image, (0, 0))
         # Affiche l'image du titre
@@ -48,6 +49,7 @@ class Title:
     def draw(self):
         self.screen.blit(self.title_image, (0, 0))
         # Affiche l'image du titre
+
 
 # -------------------------------------------------------------------#
 
@@ -115,7 +117,7 @@ class Game(object):
                 self.player.goRight()
 
         if (self.player.rect.x > SCREEN_WIDTH) and (len(self.enemies.enemies_group) == 0):  # scene suivante
-            if len(self.levels) > self.currentLvNb+1:
+            if len(self.levels) > self.currentLvNb + 1:
                 self.currentLvNb += 1
                 self.currentLevel = self.levels[self.currentLvNb]
                 self.player.currentLevel = self.currentLevel
@@ -167,6 +169,7 @@ class Game(object):
     def music(self):
         music.play(-1)
         # music.play(-1) permet de jouer la musique en boucle
+
 
 def load_levels(levels_directory):
     levels = []
