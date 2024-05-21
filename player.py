@@ -13,15 +13,12 @@ class Player(pygame.sprite.Sprite):
 
         # Load the sprite-sheet for this player
         self.sprites = SpriteSheet2("Assets/character/player/Player.png")
-        
+
         # Load the frames for each animation
-        
+
         self.stillRight = self.sprites.image_at((0, 256, 43, 64))
 
-
-
         self.stillLeft = self.sprites.image_at((0, 320, 43, 64))
-
 
         # List of frames for each animation
         self.runningRight = (self.sprites.image_at((64, 0, 54, 64)),
@@ -46,13 +43,10 @@ class Player(pygame.sprite.Sprite):
              self.sprites.image_at((192, 128, 50, 64)))
 
         self.jumpingLeft = (self.sprites.image_at((64, 192, 50, 64)),
-                             self.sprites.image_at((128, 192, 50, 64)),
-                             self.sprites.image_at((192, 192, 50, 64)))
+                            self.sprites.image_at((128, 192, 50, 64)),
+                            self.sprites.image_at((192, 192, 50, 64)))
 
         self.image = self.stillRight
-
-
-
 
         # Set player position
         self.rect = self.image.get_rect()
@@ -71,7 +65,6 @@ class Player(pygame.sprite.Sprite):
 
         self.iddling = False
         self.iddlingFrame = 0
-
 
         # Players current level, set after object initialized in game constructor
         self.currentLevel = None
@@ -118,7 +111,7 @@ class Player(pygame.sprite.Sprite):
         self.currentLevel.shift_level(self.difference, self.difference_y)
         self.difference_y, self.difference = 0, 0
 
-    # collision du joueur
+        # collision du joueur
 
         # Update player position x by change
         self.rect.x += self.speedX

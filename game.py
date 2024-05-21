@@ -49,10 +49,6 @@ class Game(object):
             if event.type == pygame.QUIT:
                 pygame.quit()
             # Récupère les inputs du clavier et déplace le joueur en fonction de ceux-ci
-            elif pygame.mouse.get_pressed()[0]:
-                bullet = self.player.shoot(pygame.mouse.get_pos())
-                if bullet is not None:
-                    self.bullets.add(bullet)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if self.pause.run(True):
@@ -72,6 +68,11 @@ class Game(object):
                     self.move_left = False
                 if event.key == pygame.K_RIGHT:
                     self.move_right = False
+
+            if pygame.mouse.get_pressed()[0]:
+                bullet = self.player.shoot(pygame.mouse.get_pos())
+                if bullet is not None:
+                    self.bullets.add(bullet)
 
         if not self.move_right and not self.move_left:
             self.player.stop()

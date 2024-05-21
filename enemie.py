@@ -43,7 +43,7 @@ class Enemie(pygame.sprite.Sprite):
     def __init__(self, damage, life, pos, currentlevel):
         super().__init__()
         from spritesheet import SpriteSheet2
-        self.sprites = SpriteSheet2("Assets/bullet/bullet.png")  # Charge l'image de l'ennemi
+        self.sprites = SpriteSheet2("Assets/cristal.png")  # Charge l'image de l'ennemi
         self.gemFull = [self.sprites.image_at((21, 0, 21, 25)),
                         self.sprites.image_at((42, 0, 21, 25)),
                         self.sprites.image_at((63, 0, 21, 25)),
@@ -57,8 +57,7 @@ class Enemie(pygame.sprite.Sprite):
                         self.sprites.image_at((231, 0, 21, 25)),
                         self.sprites.image_at((252, 0, 21, 25)),
                         self.sprites.image_at((273, 0, 21, 25)),
-                        self.sprites.image_at((294, 0, 21, 25)),
-                        self.sprites.image_at((315, 0, 21, 25))]
+                        self.sprites.image_at((294, 0, 21, 25))]
 
         self.gemHurt = [self.sprites.image_at((21, 32, 21, 25)),
                         self.sprites.image_at((42, 32, 21, 25)),
@@ -73,8 +72,7 @@ class Enemie(pygame.sprite.Sprite):
                         self.sprites.image_at((231, 32, 21, 25)),
                         self.sprites.image_at((252, 32, 21, 25)),
                         self.sprites.image_at((273, 32, 21, 25)),
-                        self.sprites.image_at((294, 32, 21, 25)),
-                        self.sprites.image_at((315, 32, 21, 25))]
+                        self.sprites.image_at((294, 32, 21, 25))]
 
         self.gemDest = [self.sprites.image_at((21, 64, 21, 25)),
                         self.sprites.image_at((42, 64, 21, 25)),
@@ -89,8 +87,7 @@ class Enemie(pygame.sprite.Sprite):
                         self.sprites.image_at((231, 64, 21, 25)),
                         self.sprites.image_at((252, 64, 21, 25)),
                         self.sprites.image_at((273, 64, 21, 25)),
-                        self.sprites.image_at((294, 64, 21, 25)),
-                        self.sprites.image_at((315, 64, 21, 25))]
+                        self.sprites.image_at((294, 64, 21, 25))]
 
         self.image = self.gemFull[0]
         image_width = self.image.get_width()
@@ -99,7 +96,12 @@ class Enemie(pygame.sprite.Sprite):
         for i, image in enumerate(self.gemFull):
             self.gemFull[i] = pygame.transform.scale(image, (int(image_width * ENEMIES_SCALE),
                                                              int(image_height * ENEMIES_SCALE)))
-        self.image = self.gemFull[0]
+        for i, image in enumerate(self.gemHurt):
+            self.gemHurt[i] = pygame.transform.scale(image, (int(image_width * ENEMIES_SCALE),
+                                                             int(image_height * ENEMIES_SCALE)))
+        for i, image in enumerate(self.gemDest):
+            self.gemDest[i] = pygame.transform.scale(image, (int(image_width * ENEMIES_SCALE),
+                                                             int(image_height * ENEMIES_SCALE)))
 
         self.currentLevel = currentlevel
         self.frame = 0
@@ -110,7 +112,8 @@ class Enemie(pygame.sprite.Sprite):
         self.speed_x = 0  # Définit la vitesse en x
         self.speed_y = 0  # Définit la vitesse en y
         self.fall = True
-        # Définit la position de l'ennemi
+        # Définit la position de l'ennemi et sa collision
+        self.image = self.gemFull[0]
         self.rect = self.image.get_rect()
         self.rect.x = pos[0] - self.currentLevel.levelShift
         self.rect.y = pos[1] - self.currentLevel.levelShifty - self.rect.height
@@ -118,6 +121,13 @@ class Enemie(pygame.sprite.Sprite):
         self.shifty = self.currentLevel.levelShifty
 
     def update(self):
+
+        if self.life >= 3:
+            self.image = self.gemFull[self.frame]
+        elif self.life == 2:
+            self.image = self.gemHurt[self.frame]
+        else:
+            self.image = self.gemDest[self.frame]
 
         # Mise à jour de la position horizontale (équation de trajectoire)
         self.speed_y += Enemie.gravity  # Applique la gravité
@@ -180,12 +190,6 @@ class Enemie(pygame.sprite.Sprite):
         if pygame.time.get_ticks() - self.frametime > 100:
             self.frame = (self.frame + 1) % len(self.gemFull)
             self.frametime = pygame.time.get_ticks()
-            if self.life >= 3:
-                self.image = self.gemFull[self.frame]
-            elif self.life == 2:
-                self.image = self.gemFull[self.frame]
-            else:
-                self.image = self.gemFull[self.frame]
 
     def draw(self, screen):
         # Affiche l'ennemi
