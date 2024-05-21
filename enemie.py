@@ -35,15 +35,15 @@ class Enemies(object):
 
 
 class Enemie(pygame.sprite.Sprite):
-    gravity = GRAVITY  # ajoute la gravité à la vitesse
-    bullet_group = None  # Assigner les balles à cette variable depuis l'extérieur
-    player = None  # permet d'avoir accès au joueur
-    player_group = None  # Assigner le joueur à cette variable depuis l'extérieur
+    gravity = GRAVITY  # Ajoute la gravité à la vitesse
+    bullet_group = None  # Assigne les balles à cette variable depuis l'extérieur
+    player = None  # Permet d'avoir accès au joueur
+    player_group = None  # Assigne le joueur à cette variable depuis l'extérieur
 
     def __init__(self, damage, life, pos, currentlevel):
         super().__init__()
         from spritesheet import SpriteSheet2
-        self.sprites = SpriteSheet2("Assets/bullet/bullet.png")  # Charger l'image de l'ennemi
+        self.sprites = SpriteSheet2("Assets/bullet/bullet.png")  # Charge l'image de l'ennemi
         self.animation = [self.sprites.image_at((0, 0, 6, 6)),
                           self.sprites.image_at((6, 0, 6, 6)),
                           self.sprites.image_at((12, 0, 6, 6))]
@@ -58,10 +58,10 @@ class Enemie(pygame.sprite.Sprite):
                                                                int(image_height * ENEMIES_SCALE)))
         self.image = self.animation[0]
         self.life = life
-        self.damage = damage  # Définir les dégâts de la balle
+        self.damage = damage  # Définit les dégâts de la balle
         self.attacktime = pygame.time.get_ticks()
-        self.speed_x = 0  # Définir la vitesse en x
-        self.speed_y = 0  # Définir la vitesse en y
+        self.speed_x = 0  # Définit la vitesse en x
+        self.speed_y = 0  # Définit la vitesse en y
         self.fall = True
         # Définit la position de l'ennemi
         self.rect = self.image.get_rect()
@@ -73,7 +73,7 @@ class Enemie(pygame.sprite.Sprite):
     def update(self):
         self.image = self.animation[self.frame]
 
-        # Mise à jour de la position horizontale (equation de trajectoire)
+        # Mise à jour de la position horizontale (équation de trajectoire)
         self.speed_y += Enemie.gravity  # Applique la gravité
         self.rect.x += self.speed_x + (self.currentLevel.levelShift - self.shift)
         self.shift = self.currentLevel.levelShift
@@ -98,14 +98,14 @@ class Enemie(pygame.sprite.Sprite):
                     self.rect.top = tile.rect.bottom
                 self.speed_y = 0  # Arrête la chute en cas de collision
                 self.fall = False
-        # if not self.fall and not tilehitlist: # inverse la direction pour éviter la chute (non fonctionnel)
+        # if not self.fall and not tilehitlist: # Inverse la direction pour éviter la chute (non fonctionnel)
         #     self.speed_x = -self.speed_x
         #     self.rect.x += self.speed_x * 2
         #     self.rect.y -= self.speed_y
         #     self.speed_y = 0
         self.shifty = self.currentLevel.levelShifty
 
-        # Supprime l'ennemi si il sort de la map
+        # Supprime l'ennemi s'il sort de la carte
         if (((self.rect.x - self.currentLevel.levelShift) > self.currentLevel.map_width) or
                 ((self.rect.x - self.currentLevel.levelShift) < 0)):
             self.kill()
@@ -136,5 +136,5 @@ class Enemie(pygame.sprite.Sprite):
             self.frametime = pygame.time.get_ticks()
 
     def draw(self, screen):
-        # affiche l'ennemi
+        # Affiche l'ennemi
         screen.blit(self.image, self.rect)
