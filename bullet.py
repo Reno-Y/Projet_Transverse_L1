@@ -24,7 +24,7 @@ class Bullet(pygame.sprite.Sprite):
             self.animation[i] = pygame.transform.scale(image, (int(image_width * BULLET_SCALE),
                                                                int(image_height * BULLET_SCALE)))
 
-        # Set player position
+        # On définit la position du joueur
         self.currentLevel = currentlevel
         self.rect = self.image.get_rect()
         self.rect.x = pos[0]

@@ -61,7 +61,7 @@ class Game(object):
         self.levels = load_levels(level_directory)
         self.currentLevel = self.levels[self.currentLvNb]
         self.move = False
-        # Create a player object and set the level it is in
+        # Créer l'objet joueur et positionner le joueur dans le niveau auquel il est
         self.player = Player(list_player_pos[self.currentLvNb])
         self.player_group = pygame.sprite.Group(self.player)
         self.list_player_pos = list_player_pos
@@ -79,7 +79,7 @@ class Game(object):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            # Get keyboard input and move player accordingly
+            # Récupérer les inputs du clavier et déplacer le joueur en fonctions de ces inputs
             elif pygame.mouse.get_pressed()[0]:
                 bullet = self.player.shoot(screen, pygame.mouse.get_pos())
                 if bullet is not None:
@@ -145,13 +145,13 @@ class Game(object):
         return True
 
     def runLogic(self):
-        # Update player movement and collision logic
+        # Met à jour le mouvement du joueur et les collisions
         self.player.update()
         self.enemies.update()
         self.bullets.update()
         self.scroll += 2 - self.player.difference
 
-    # Draw level, player, overlay
+    #  Préparation du niveau, du joueur, et de l'overlay
 
     def draw(self, screen):
         screen.fill((135, 206, 235))

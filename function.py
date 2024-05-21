@@ -17,7 +17,7 @@ def game_window_info():
     pygame.display.set_caption('Chronicles of Etheria')
     game_icon = pygame.image.load('Assets/menu/Shinobi_studio.png')
     pygame.display.set_icon(game_icon)
-    # on définit le titre et l'icone de la fenêtre
+    # on définit le titre et l'icône de la fenêtre
 
 
 def draw_text(text, font, color, x, y):
