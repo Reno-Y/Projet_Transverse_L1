@@ -80,7 +80,7 @@ def run_menu(boolean):
                     break
                 if run_ending(True) == "main_menu":
                     break
-                if run_ending(True) == "main_menu":
+                if run_win(True) == "main_menu":
                     break
 
             if quit_button.clicked():
