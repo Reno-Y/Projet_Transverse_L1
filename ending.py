@@ -1,9 +1,12 @@
 from function import background_apparition, parallax, parallax_init
 from music import Music
 from dialogue import Dialogue
+from animation import Animation
+from button import Button
 import pygame
-from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT
+from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_SCALE
 from pause_menu import PauseMenu
+from Class import Title
 #  il faut changer l'instance
 
 #  TODO changer les texte pour un tuto
@@ -77,3 +80,63 @@ def run_ending(boolean):
         pygame.display.update()
     music.soundtrack.stop()
     return run
+
+
+def run_win(boolean):
+    pause = PauseMenu(screen)
+    start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
+    button_width, button_height = start_button.get_rect().width, start_button.get_rect().height
+
+    scale = width // (button_width * (1 / BUTTON_SCALE))
+
+    main_menu_button = pygame.image.load('Assets/menu/main_menu/main_menu_1.png').convert_alpha()
+    main_menu_button = Button((SCREEN_WIDTH / 2 - button_width * scale / 2), (SCREEN_HEIGHT / 2),
+                                   main_menu_button,
+                                   scale, screen, 'Assets/menu/main_menu/main_menu_spritesheet.png',
+                                   SCREEN_WIDTH, SCREEN_HEIGHT)
+    player_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/player/Idle.png', 3, 128,
+                                 128,
+                                 (((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4)),
+                                  ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 9))))
+    hime_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/hime/idle.png', 2.7, 128, 128,
+                               (((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 16)),
+                                ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 7))))
+
+    scroll = 0
+    music = Music("sound/music/theme_of_love.mp3")
+    bg_images = parallax_init("assets/background/beach")
+    run = boolean
+    win = Title(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/menu/win.png')
+    music.play(-1)
+    while run:
+
+        screen.fill((0, 0, 0))  # remplissage de l'écran
+        parallax(scroll, bg_images, screen)
+        scroll += 0.5
+        player_idle.draw()
+        player_idle.update()
+        hime_idle.draw(orientation=True)
+        hime_idle.update()
+        win.draw()
+
+        main_menu_button.draw()
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    run = False
+                if event.key == pygame.K_ESCAPE:
+                    if pause.run(True) == "main_menu":
+                        music.soundtrack.stop()
+                        return "main_menu"
+
+            elif main_menu_button.clicked():
+
+                music.soundtrack.stop()
+                run = False
+                return "main_menu"
+
+        clock.tick(FPS)
+        pygame.display.update()
+    return False

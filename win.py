@@ -5,12 +5,17 @@ from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, BUTTON_SCALE
 from animation import Animation
 from function import parallax, parallax_init
 from music import Music
+from pause_menu import PauseMenu
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+
 class Win:
 
     def __init__(self, screen):
 
         from button import Button
+        self.pause = PauseMenu(screen)
         self.width, self.height = pygame.display.Info().current_w, pygame.display.Info().current_h
         self.screen = screen
         self.start_button = pygame.image.load('Assets/menu/start/start2.png').convert_alpha()
@@ -20,13 +25,17 @@ class Win:
         self.clock = pygame.time.Clock()
 
         self.main_menu_button = pygame.image.load('Assets/menu/main_menu/main_menu_1.png').convert_alpha()
-        self.main_menu_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2), (SCREEN_HEIGHT / 2 ),
+        self.main_menu_button = Button((SCREEN_WIDTH / 2 - self.button_width * self.scale / 2), (SCREEN_HEIGHT / 2),
                                        self.main_menu_button,
-                                       self.scale, self.screen, 'Assets/menu/main_menu/main_menu_spritesheet.png', SCREEN_WIDTH, SCREEN_HEIGHT)
-        self.player_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/player/Idle.png', 3, 128, 128,
-                                    (((SCREEN_WIDTH/2)-(SCREEN_WIDTH/4)) , ((SCREEN_HEIGHT/2)+ (SCREEN_HEIGHT/9) )))
+                                       self.scale, self.screen, 'Assets/menu/main_menu/main_menu_spritesheet.png',
+                                       SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.player_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/player/Idle.png', 3, 128,
+                                     128,
+                                     (((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4)),
+                                      ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 9))))
         self.hime_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/hime/idle.png', 2.7, 128, 128,
-                                    (((SCREEN_WIDTH / 2) + (SCREEN_WIDTH /16)), ((SCREEN_HEIGHT / 2)+ (SCREEN_HEIGHT / 7))))
+                                   (((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 16)),
+                                    ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 7))))
 
     def run(self, boolean):
         scroll = 0
@@ -54,15 +63,18 @@ class Win:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         run = False
-
+                    if event.key == pygame.K_ESCAPE:
+                        if self.pause.run(True) == "main_menu":
+                            music.soundtrack.stop()
+                            return "main_menu"
 
                 elif self.main_menu_button.clicked():
-                    # run_menu(True)
+
                     music.soundtrack.stop()
                     run = False
-                    return True
+                    return "main_menu"
 
             self.clock.tick(FPS)
             pygame.display.update()
-
+        return False
 

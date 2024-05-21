@@ -74,6 +74,7 @@ class Game(object):
                                self.player)
         Bullet.player_group = self.player_group
         Bullet.enemies = self.enemies.enemies_group
+        self.win = Win(screen)
         self.move_left = False
         self.move_right = False
 
@@ -136,13 +137,6 @@ class Game(object):
             else:
                 music.soundtrack.stop()
                 return False
-
-        elif self.player.rect.x > SCREEN_WIDTH:
-            music.soundtrack.stop()
-            win.run(True)
-
-            return "main_menu"
-
 
         if self.player.rect.y > SCREEN_HEIGHT or self.player.life <= 0:
             music.soundtrack.stop()  # game over

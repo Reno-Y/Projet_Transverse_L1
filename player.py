@@ -1,7 +1,7 @@
 import pygame
 
 from bullet import Bullet
-from constants import GRAVITY, MAP_COLLISION_LAYER, SCREEN_HEIGHT, SCREEN_WIDTH, BULLET_SPEED
+from constants import GRAVITY, MAP_COLLISION_LAYER, SCREEN_HEIGHT, SCREEN_WIDTH, BULLET_SPEED, PLAYER_AIRMOVE
 
 
 class Player(pygame.sprite.Sprite):
@@ -195,7 +195,7 @@ class Player(pygame.sprite.Sprite):
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if len(tileHitList) > 0:
+        if (len(tileHitList) > 0) or PLAYER_AIRMOVE:
             self.direction = "right"
             self.running = True
             self.speedX = 3
@@ -206,7 +206,7 @@ class Player(pygame.sprite.Sprite):
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if len(tileHitList) > 0:
+        if (len(tileHitList) > 0) or PLAYER_AIRMOVE:
             self.direction = "left"
             self.running = True
             self.speedX = -3

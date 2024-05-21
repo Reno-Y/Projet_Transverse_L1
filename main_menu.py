@@ -2,7 +2,7 @@ from function import background_apparition, parallax, parallax_init
 from Class import TittleName
 from music import Music
 import pygame
-from ending import run_ending
+from ending import run_ending, run_win
 from animation import Animation
 from button import Button
 from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_SCALE
@@ -77,6 +77,8 @@ def run_menu(boolean):
                 if run_ending(True) == "main_menu":
                     break
                 if run_level1(True) == "main_menu":
+                    break
+                if run_ending(True) == "main_menu":
                     break
                 if run_ending(True) == "main_menu":
                     break
