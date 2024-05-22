@@ -11,13 +11,13 @@ class Player(pygame.sprite.Sprite):
         from spritesheet import SpriteSheet2
         pygame.sprite.Sprite.__init__(self)
 
-        # Load the sprite-sheet for this player
+        # Charge la spritesheet du joueur
         self.sprites = SpriteSheet2("Assets/character/player/Player1.png")
 
         self.stillRight = self.sprites.image_at((0, 0, 48, 60))
         self.stillLeft = self.sprites.image_at((0, 64, 48, 64))
 
-        # List of frames for each animation
+        # Liste des frames de chaque animation
         self.runningRight = (self.sprites.image_at((48, 0, 50, 64)),
                              self.sprites.image_at((102, 0, 50, 64)),
                              self.sprites.image_at((150, 0, 50, 64)),
@@ -45,22 +45,23 @@ class Player(pygame.sprite.Sprite):
 
         self.image = self.stillRight
 
-        # Set player position
+        # Définit la position du joueur
         self.rect = self.image.get_rect()
         self.rect.x = player_pos[0]
         self.rect.y = player_pos[1]
 
-        # Set speed and direction
+        # Définit la vitesse et la direction du joueur
         self.speedX = 0
         self.speedY = 0
         self.direction = "right"
 
-        # Boolean to check if player is running, current running frame, and time since last frame change
+        # Booléen pour vérifier si le joueur court, la frame actuelle de l'animation de course et
+        # le temps depuis le dernier changement de frame
         self.running = False
         self.runningFrame = 0
         self.runningTime = pygame.time.get_ticks()
 
-        # Players current level, set after object initialized in game constructor
+        # Niveau actuel où se trouve le joueur, défini après l'initialisation de l'objet dans le jeu
         self.currentLevel = None
         self.difference = 0
         self.difference_y = 0
@@ -78,41 +79,41 @@ class Player(pygame.sprite.Sprite):
                 self.speedX = -10
             self.dashing -= 1
 
-        # change la camera si le joueur atteint le bord droit de l'écran
+        # Change la camera si le joueur atteint le bord droit de l'écran
         if ((self.rect.right >= SCREEN_WIDTH - (SCREEN_WIDTH * 0.3)) and
                 ((SCREEN_WIDTH - self.currentLevel.levelShift) < self.currentLevel.map_width)):
 
             self.difference = -(self.rect.right - (SCREEN_WIDTH - (SCREEN_WIDTH * 0.3)))
             self.rect.right = SCREEN_WIDTH - (SCREEN_WIDTH * 0.3)
 
-        # change la camera si le joueur atteint le bord gauche de l'écran
+        # Change la camera si le joueur atteint le bord gauche de l'écran
         elif (self.rect.left <= (SCREEN_WIDTH * 0.3)) and 0 > self.currentLevel.levelShift:
 
             self.difference = (SCREEN_WIDTH * 0.3) - self.rect.left
             self.rect.left = (SCREEN_WIDTH * 0.3)
 
-        # change la camera si le joueur atteint le bord inferieur de l'écran
+        # Change la camera si le joueur atteint le bord inférieur de l'écran
         if ((self.rect.bottom >= SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.15)) and
                 ((self.currentLevel.map_height - self.currentLevel.levelShifty) < SCREEN_HEIGHT)):
 
             self.difference_y = -(self.rect.bottom - (SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.15)))
             self.rect.bottom = SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.15)
 
-        # change la camera si le joueur atteint le bord superieur de l'écran
+        # Change la camera si le joueur atteint le bord supérieur de l'écran
         elif self.rect.top <= (SCREEN_HEIGHT * 0.15):
             self.difference_y = (SCREEN_HEIGHT * 0.15) - self.rect.top
             self.rect.top = (SCREEN_HEIGHT * 0.15)
         self.currentLevel.shiftLevel(self.difference, self.difference_y)
         self.difference_y, self.difference = 0, 0
 
-    # collision du joueur
+    # Collision du joueur
 
-        # Update player position x by change
+        # Met à jour la position x du joueur
         self.rect.x += self.speedX
-        # Get tiles in collision layer that player is now touching
+        # Récupère les tuiles de la couche de collision que le joueur est en train de toucher
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
 
-        # Move player to correct side of that block
+        # Déplace le joueur du bon côté du block
         for tile in tileHitList:
             if self.speedX > 0:
                 self.rect.right = tile.rect.left
@@ -121,15 +122,15 @@ class Player(pygame.sprite.Sprite):
         self.speedX = 0
 
 
-        # Update player position y by change
+        # Met à jour la position y du joueur
         self.rect.y += self.speedY
 
-        # Get tiles in collision layer that player is now touching
+        # Récupère les tuiles de la couche de collision que le joueur est en train de toucher
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
 
-        # If there are tiles in that list
+        # S'il y a des tuiles dans cette liste
         if len(tileHitList) > 0:
-            # Move player to correct side of that tile, update player frame
+            # Dépalce le joueur du bon côté de la tuile, ainsi que sa frame
             for tile in tileHitList:
                 if self.speedY > 0:
                     self.rect.bottom = tile.rect.top
@@ -142,9 +143,9 @@ class Player(pygame.sprite.Sprite):
                 else:
                     self.rect.top = tile.rect.bottom
                     self.speedY = 0
-        # If there are no tiles in that list
+        # S'il n'y a pas de tuiles dans la liste
         else:
-            # Update player change for jumping/falling and player frame
+            # Met à jour les sauts et chutes du joueur, ainsi que ses frames
             self.speedY += GRAVITY
             if self.speedY > 0:
                 if self.direction == "right":
@@ -152,14 +153,14 @@ class Player(pygame.sprite.Sprite):
                 else:
                     self.image = self.jumpingLeft[1]
 
-        # If player is on ground and running, update running animation
+        # Si le joueur court sur le sol, met à jour son animation de course
         if self.running and self.speedY == 1:
             if self.direction == "right":
                 self.image = self.runningRight[self.runningFrame]
             else:
                 self.image = self.runningLeft[self.runningFrame]
 
-        # When correct amount of time has passed, go to next frame
+        # Quand la durée est écoulée, passe à la prochaine frame
         if pygame.time.get_ticks() - self.runningTime > 100:
             self.runningTime = pygame.time.get_ticks()
             if self.runningFrame == 4:
@@ -168,7 +169,7 @@ class Player(pygame.sprite.Sprite):
                 self.runningFrame += 1
 
     def jump(self):
-        # Check if player is on ground
+        # Vérifie si le joueur est sur le sol
         self.rect.y += 2
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
@@ -213,7 +214,7 @@ class Player(pygame.sprite.Sprite):
             self.running = True
             self.speedX = -PLAYER_SPEED
 
-    # Stop moving
+    # Empêche le joueur d'avancer
     def stop(self):
         self.rect.y += 2
         tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
@@ -229,13 +230,13 @@ class Player(pygame.sprite.Sprite):
             direction_x = ((mouse_pos[0] - self.rect.x) * BULLET_SPEED) / SCREEN_WIDTH
             direction_y = ((mouse_pos[1] - self.rect.y) * BULLET_SPEED) / SCREEN_HEIGHT
 
-            # Multipliées par la vitesse souhaitée
+            # [LEs composantes] Multipliées par la vitesse souhaitée
             speed_x = min(direction_x, BULLET_SPEED)
             speed_y = min(direction_y, BULLET_SPEED)
             self.shoot_time = pygame.time.get_ticks()
             # Créé et retourne la nouvelle balle
             return Bullet(self.damage, speed_x, speed_y, self.rect.center, self.currentLevel, True)
 
-    # Draw player
+    # Trace le joueur
     def draw(self, screen):
         screen.blit(self.image, self.rect)
