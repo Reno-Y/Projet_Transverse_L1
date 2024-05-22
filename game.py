@@ -6,7 +6,6 @@ from tiles_map import *
 from pause_menu import PauseMenu
 from enemie import Enemies
 from gameover import GameOver
-
 pygame.init()
 SCREEN_WIDTH = pygame.display.Info().current_w
 SCREEN_HEIGHT = pygame.display.Info().current_h
@@ -94,6 +93,8 @@ class Game(object):
                 else:
                     self.player.rect.x = 128
                     self.player.rect.y = 279
+                    self.player.speedY = 0
+                    self.player.speedX = 0
                 if len(self.list_enemies) > self.currentLvNb:
                     self.enemies.next_level(self.list_enemies[self.currentLvNb], self.currentLevel, self.player_group,
                                             self.bullets, self.player)
@@ -104,7 +105,8 @@ class Game(object):
             else:
                 music.soundtrack.stop()
                 return False
-
+        elif (self.player.rect.right > SCREEN_WIDTH) and (len(self.enemies.enemies_group) > 0):
+            self.player.rect.right = SCREEN_WIDTH
         if self.player.rect.y > SCREEN_HEIGHT or self.player.life <= 0:
             music.soundtrack.stop()  # Game over
             death_sound.play(0)

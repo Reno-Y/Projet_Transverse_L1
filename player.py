@@ -79,9 +79,9 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         if self.dashing > 0:
             if self.direction == "right":
-                self.speedX = 10
+                self.speedX = 3 * PLAYER_SPEED
             else:
-                self.speedX = -10
+                self.speedX = -3 * PLAYER_SPEED
             self.dashing -= 1
 
         # change la camera si le joueur atteint le bord droit de l'écran

@@ -4,6 +4,7 @@ from animation import Animation
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+
 class GameOver:
 
     def __init__(self, screen):
