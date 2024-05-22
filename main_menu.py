@@ -1,7 +1,7 @@
 from function import background_apparition, parallax, parallax_init
 from music import Music
 import pygame
-from cinematic import run_ending, run_win
+from cinematic import run_ending, run_win, run_tutorial
 from animation import Animation
 from button import Button
 from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_SCALE
@@ -70,7 +70,7 @@ def run_menu(boolean):
         for event in pygame.event.get():
             if start_button.clicked():
                 menu_music.soundtrack.stop()
-                if run_ending(True) == "main_menu":
+                if run_tutorial(True) == "main_menu":
                     break
                 if run_level1(True) == "main_menu":
                     break

@@ -140,3 +140,66 @@ def run_win(boolean):
         clock.tick(FPS)
         pygame.display.update()
     return False
+
+
+def run_tutorial(boolean):
+    text = ["HARU : C'EST DONC LA FIN ?",
+            "             EST CE QUE TOUT CELA EN VALAIT VRAIMENT LA PEINE ?",
+            "             CE VOYAGE TOUCHE PEUT ETRE A SA FIN MAIS CE N'EST QUE LE DEBUT D'UNE NOUVELLE AVENTURE",
+            "             JE SUIS PRET A AFFRONTER TOUT CE QUI M'ATTEND",
+            "             ET VOUS ?"]
+
+    text2 = ["HARU : PARFOIS JE ME RAPELLE DE CE PARCHEMIN QUE J'AIS TROUVE DANS LA CAVE DE MON GRAND PERE",
+             "             IL PARLAIT D'UTILISER LES FLECHES DIRECTIONNELLES POUR SE DEPLACER ET DE CLIQUER GAUCHE POUR TIRER",
+             "             ON POUVAIT MEME EFFECTUER UN DASH EN APPUYANT SUR W",
+             "             MAIS SURTOUT IL FAUT TUER TOUTES LES GEMMES POUR POUVOIR AVANCER"]
+
+    dialogue = Dialogue(screen, height, width, width / 1.2, height / 4, width / 2 - width / 2.4,
+                        height / 4 + (7 * height / 16), text,
+                        (255, 255, 255))
+    dialogue2 = Dialogue(screen, height, width, width / 1.2, height / 4, width / 2 - width / 2.4,
+                         height / 4 + (7 * height / 16), text2,
+                         (255, 255, 255))
+
+    music = Music("sound/music/ending.mp3")
+    background_apparition('Assets/background/sunset_sky.png')  # Fondu entrant de l'image de fond
+    music.play(-1)  # Lancement de la musique
+    scroll = 0
+    pause = PauseMenu(screen)
+    run = boolean
+    bg_images = parallax_init("assets/background/sunset_sky")
+
+    while run:
+
+        screen.fill((0, 0, 0))  # Remplissage de l'écran
+        parallax(scroll, bg_images, screen)
+        scroll += 1
+
+        dialogue.draw()  # Affichage du dialogue
+
+        if dialogue.closed():  # Si le dialogue est fermé
+            dialogue2.draw()  # Affichage du deuxième dialogue
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    dialogue.skip()  # Passage au dialogue suivant
+                    dialogue.next()  # Affichage du dialogue suivant
+                    dialogue2.next()
+                    dialogue2.closed()
+                    dialogue.closed()
+                    if dialogue2.closed():
+                        run = False
+
+                if event.key == pygame.K_ESCAPE:
+                    if pause.run(True):
+                        music.soundtrack.stop()
+                        return "main_menu"
+
+                if event.key == pygame.K_RETURN:
+                    dialogue.draw()
+        clock.tick(FPS)
+        pygame.display.update()
+    music.soundtrack.stop()
+    return run
