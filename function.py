@@ -2,7 +2,6 @@ import pygame
 import time
 import os
 
-
 pygame.init()
 pygame.mixer.init()
 width, height = pygame.display.Info().current_w, pygame.display.Info().current_h
@@ -79,13 +78,13 @@ def parallax_init(folder):
     return bg_images
 
 
-def parallax(scroll, bg_images, screen):
+def parallax(scroll, bg_images, d_screen):
     speed = 1
     for y in bg_images:
         i = (scroll * speed) // width
         x_position = -scroll * speed
         while x_position < width:
-            screen.blit(y, ((i * width) - scroll * speed, 0))
+            d_screen.blit(y, ((i * width) - scroll * speed, 0))
             i += 1
             x_position += width
         speed += 1
@@ -103,4 +102,3 @@ def compute_penetration(block, old_rect, new_rect):
     elif old_rect.left >= block.right > new_rect.left:
         dx_correction = block.right - new_rect.left
     return dx_correction, dy_correction
-

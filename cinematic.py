@@ -6,7 +6,8 @@ from button import Button
 import pygame
 from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_SCALE
 from pause_menu import PauseMenu
-from Class import Title
+from title_name import Title
+
 #  Il faut changer l'instance
 
 #  TODO changer les texte pour un tuto
@@ -20,16 +21,16 @@ screen = pygame.display.set_mode((width, height))  # Initialisation de la fenêt
 
 
 def run_ending(boolean):
-
     text = ["HARU : C'EST DONC LA FIN ?",
             "             EST CE QUE TOUT CELA EN VALAIT VRAIMENT LA PEINE ?",
             "             CE VOYAGE TOUCHE PEUT ETRE A SA FIN MAIS CE N'EST QUE LE DEBUT D'UNE NOUVELLE AVENTURE",
             "             JE SUIS PRET A AFFRONTER TOUT CE QUI M'ATTEND",
             "             ET VOUS ?"]
 
-    text2 = ["HARU : SUITE DU TEXTE T'AS CAPTE ?",
-             "             J'SUIS PAS ASSEZ PAYE POUR ECRIRE TOUT CA",
-             "             HELPPPPPP"]
+    text2 = ["HARU : PARFOIS JE ME RAPELLE DE CE PARCHEMIN QUE J'AIS TROUVE DANS LA CAVE DE MON GRAND PERE",
+             "             IL PARLAIT D'UTILISER LES FLECHES DIRECTIONNELLES POUR SE DEPLACER ET DE CLIQUER GAUCHE POUR TIRER",
+             "             ON POUVAIT MEME EFFECTUER UN DASH EN APPUYANT SUR W",
+             "             MAIS SURTOUT IL FAUT TUER TOUTES LES GEMMES POUR POUVOIR AVANCER"]
 
     dialogue = Dialogue(screen, height, width, width / 1.2, height / 4, width / 2 - width / 2.4,
                         height / 4 + (7 * height / 16), text,
@@ -91,16 +92,16 @@ def run_win(boolean):
 
     main_menu_button = pygame.image.load('Assets/menu/main_menu/main_menu_1.png').convert_alpha()
     main_menu_button = Button((SCREEN_WIDTH / 2 - button_width * scale / 2), (SCREEN_HEIGHT / 2),
-                                   main_menu_button,
-                                   scale, screen, 'Assets/menu/main_menu/main_menu_spritesheet.png',
-                                   SCREEN_WIDTH, SCREEN_HEIGHT)
+                              main_menu_button,
+                              scale, screen, 'Assets/menu/main_menu/main_menu_spritesheet.png',
+                              SCREEN_WIDTH, SCREEN_HEIGHT)
     player_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/player/Idle.png', 3, 128,
-                                 128,
-                                 (((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4)),
-                                  ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 9))))
+                            128,
+                            (((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4)),
+                             ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 9))))
     hime_idle = Animation(screen, SCREEN_WIDTH, SCREEN_HEIGHT, 'Assets/character/hime/idle.png', 2.7, 128, 128,
-                               (((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 16)),
-                                ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 7))))
+                          (((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 16)),
+                           ((SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 7))))
 
     scroll = 0
     music = Music("sound/music/theme_of_love.mp3")
@@ -134,7 +135,6 @@ def run_win(boolean):
             elif main_menu_button.clicked():
 
                 music.soundtrack.stop()
-                run = False
                 return "main_menu"
 
         clock.tick(FPS)
