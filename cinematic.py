@@ -10,7 +10,7 @@ from title_name import Title
 
 #  Il faut changer l'instance
 
-#  TODO changer les texte pour un tuto
+
 pygame.init()
 pygame.mixer.init()
 pygame.font.init()  # Initialisation de pygame
