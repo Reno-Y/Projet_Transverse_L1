@@ -8,8 +8,6 @@ from constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_SCALE
 from pause_menu import PauseMenu
 from title_name import Title
 
-#  Il faut changer l'instance
-
 
 pygame.init()
 pygame.mixer.init()
