@@ -10,7 +10,7 @@ class TitleName:
         self.height = height
         title_image = pygame.image.load('Assets/menu/Chronicles_of_Etheria.png').convert_alpha()
         self.title_image = pygame.transform.scale(title_image, (self.width, self.height))
-        # Charge l'image du titre et la redimensionne
+        # on charge l'image du titre et on la redimensionne
         self.music = Music("sound/music/voyage.mp3")
 
     def draw(self):

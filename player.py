@@ -11,37 +11,40 @@ class Player(pygame.sprite.Sprite):
         from spritesheet import SpriteSheet2
         pygame.sprite.Sprite.__init__(self)
 
-        # Charge la spritesheet du joueur
-        self.sprites = SpriteSheet2("Assets/character/player/Player1.png")
+        # Load the sprite-sheet for this player
+        self.sprites = SpriteSheet2("Assets/character/player/Player.png")
 
-        self.stillRight = self.sprites.image_at((0, 0, 48, 60))
-        self.stillLeft = self.sprites.image_at((0, 64, 48, 64))
+        # Load the frames for each animation
 
-        # Liste des frames de chaque animation
-        self.runningRight = (self.sprites.image_at((48, 0, 50, 64)),
-                             self.sprites.image_at((102, 0, 50, 64)),
-                             self.sprites.image_at((150, 0, 50, 64)),
-                             self.sprites.image_at((251, 0, 50, 64)),
-                             self.sprites.image_at((300, 0, 50, 64)),
-                             self.sprites.image_at((354, 0, 50, 64)),
-                             self.sprites.image_at((402, 0, 50, 64)))
+        self.stillRight = self.sprites.image_at((0, 256, 43, 64))
 
-        self.runningLeft = (self.sprites.image_at((48, 64, 50, 63)),
-                            self.sprites.image_at((102, 64, 50, 63)),
-                            self.sprites.image_at((150, 64, 50, 63)),
-                            self.sprites.image_at((251, 64, 50, 63)),
-                            self.sprites.image_at((300, 64, 50, 63)),
-                            self.sprites.image_at((354, 64, 50, 63)),
-                            self.sprites.image_at((402, 64, 50, 63)))
+        self.stillLeft = self.sprites.image_at((0, 320, 43, 64))
 
-        self.jumpingLeft = \
-            (self.sprites.image_at((61, 128, 50, 64)),
-             self.sprites.image_at((107, 128, 50, 64)),
-             self.sprites.image_at((156, 128, 50, 64)))
+        # List of frames for each animation
+        self.runningRight = (self.sprites.image_at((64, 0, 54, 64)),
+                             self.sprites.image_at((128, 0, 54, 64)),
+                             self.sprites.image_at((192, 0, 54, 64)),
+                             self.sprites.image_at((256, 0, 54, 64)),
+                             self.sprites.image_at((320, 0, 54, 64)),
+                             self.sprites.image_at((384, 0, 54, 64)),
+                             self.sprites.image_at((448, 0, 54, 64)))
 
-        self.jumpingRight = (self.sprites.image_at((49, 192, 48, 64)),
-                             self.sprites.image_at((95, 192, 50, 64)),
-                             self.sprites.image_at((156, 192, 50, 64)))
+        self.runningLeft = (self.sprites.image_at((64, 64, 54, 64)),
+                            self.sprites.image_at((128, 64, 54, 64)),
+                            self.sprites.image_at((192, 64, 54, 64)),
+                            self.sprites.image_at((256, 64, 54, 64)),
+                            self.sprites.image_at((320, 64, 54, 64)),
+                            self.sprites.image_at((384, 64, 54, 64)),
+                            self.sprites.image_at((448, 64, 54, 64)))
+
+        self.jumpingRight = \
+            (self.sprites.image_at((64, 128, 50, 64)),
+             self.sprites.image_at((128, 128, 50, 64)),
+             self.sprites.image_at((192, 128, 50, 64)))
+
+        self.jumpingLeft = (self.sprites.image_at((64, 192, 50, 64)),
+                            self.sprites.image_at((128, 192, 50, 64)),
+                            self.sprites.image_at((192, 192, 50, 64)))
 
         self.image = self.stillRight
 
@@ -74,9 +77,9 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         if self.dashing > 0:
             if self.direction == "right":
-                self.speedX = 10
+                self.speedX = 3 * PLAYER_SPEED
             else:
-                self.speedX = -10
+                self.speedX = -3 * PLAYER_SPEED
             self.dashing -= 1
 
         # Change la camera si le joueur atteint le bord droit de l'écran
@@ -103,7 +106,7 @@ class Player(pygame.sprite.Sprite):
         elif self.rect.top <= (SCREEN_HEIGHT * 0.15):
             self.difference_y = (SCREEN_HEIGHT * 0.15) - self.rect.top
             self.rect.top = (SCREEN_HEIGHT * 0.15)
-        self.currentLevel.shiftLevel(self.difference, self.difference_y)
+        self.currentLevel.shift_level(self.difference, self.difference_y)
         self.difference_y, self.difference = 0, 0
 
     # Collision du joueur
@@ -111,10 +114,10 @@ class Player(pygame.sprite.Sprite):
         # Met à jour la position x du joueur
         self.rect.x += self.speedX
         # Récupère les tuiles de la couche de collision que le joueur est en train de toucher
-        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        tile_hit_list = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
 
         # Déplace le joueur du bon côté du block
-        for tile in tileHitList:
+        for tile in tile_hit_list:
             if self.speedX > 0:
                 self.rect.right = tile.rect.left
             else:
@@ -126,12 +129,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.speedY
 
         # Récupère les tuiles de la couche de collision que le joueur est en train de toucher
-        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        tile_hit_list = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
 
         # S'il y a des tuiles dans cette liste
-        if len(tileHitList) > 0:
+        if len(tile_hit_list) > 0:
             # Dépalce le joueur du bon côté de la tuile, ainsi que sa frame
-            for tile in tileHitList:
+            for tile in tile_hit_list:
                 if self.speedY > 0:
                     self.rect.bottom = tile.rect.top
                     self.speedY = 1
@@ -171,10 +174,10 @@ class Player(pygame.sprite.Sprite):
     def jump(self):
         # Vérifie si le joueur est sur le sol
         self.rect.y += 2
-        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        tile_hit_list = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if len(tileHitList) > 0:
+        if len(tile_hit_list) > 0:
             if self.direction == "right":
                 self.image = self.jumpingRight[0]
             else:
@@ -184,32 +187,32 @@ class Player(pygame.sprite.Sprite):
 
     def dash(self):
         self.rect.y += 2
-        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        tile_hit_list = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if len(tileHitList) > 0 and PLAYER_DASH:
+        if len(tile_hit_list) > 0 and PLAYER_DASH:
             if (pygame.time.get_ticks() - self.dash_time) > PLAYER_DASH_DELAY:
                 self.dashing = 10
                 self.dash_time = pygame.time.get_ticks()
 
     #  Move right
-    def goRight(self):
+    def go_right(self):
         self.rect.y += 2
-        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        tile_hit_list = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if (len(tileHitList) > 0) or PLAYER_AIR_MOVE:
+        if (len(tile_hit_list) > 0) or PLAYER_AIR_MOVE:
             self.direction = "right"
             self.running = True
             self.speedX = PLAYER_SPEED
 
     # Move left
-    def goLeft(self):
+    def go_left(self):
         self.rect.y += 2
-        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        tile_hit_list = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if (len(tileHitList) > 0) or PLAYER_AIR_MOVE:
+        if (len(tile_hit_list) > 0) or PLAYER_AIR_MOVE:
             self.direction = "left"
             self.running = True
             self.speedX = -PLAYER_SPEED
@@ -217,14 +220,14 @@ class Player(pygame.sprite.Sprite):
     # Empêche le joueur d'avancer
     def stop(self):
         self.rect.y += 2
-        tileHitList = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
+        tile_hit_list = pygame.sprite.spritecollide(self, self.currentLevel.layers[MAP_COLLISION_LAYER].tiles, False)
         self.rect.y -= 2
 
-        if len(tileHitList) > 0 and (self.dashing <= 0):
+        if len(tile_hit_list) > 0 and (self.dashing <= 0):
             self.running = False
             self.speedX = 0
 
-    def shoot(self, display, mouse_pos):
+    def shoot(self, mouse_pos):
         if (pygame.time.get_ticks() - self.shoot_time) > PLAYER_SHOOT_DELAY:
             # Calcule les composantes du vecteur direction
             direction_x = ((mouse_pos[0] - self.rect.x) * BULLET_SPEED) / SCREEN_WIDTH

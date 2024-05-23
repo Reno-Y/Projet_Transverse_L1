@@ -14,7 +14,7 @@ player_run = Animation(screen, width, height, 'Assets/character/player/Run.png',
 
 
 def run_level1(boolean):
-    game = Game([(32, 279)], "Assets/levels/", [
+    game = Game([(32, 279), (160, 320)], "Assets/levels/", [
         [(1280, 256), (1280, 64)],
         [],
         [(1152, 288), (1472, 384), (1888, 352), (2080, 224), (1280, 480), (1696, 480)],
